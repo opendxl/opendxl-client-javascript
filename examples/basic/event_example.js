@@ -16,7 +16,7 @@ client.addEventCallback(EVENT_TOPIC,
 
     if (eventCount === TOTAL_EVENTS) {
       console.log('Elapsed time (ms): ' + (Date.now() - start))
-      client.disconnect()
+      client.destroy()
     }
   })
 
