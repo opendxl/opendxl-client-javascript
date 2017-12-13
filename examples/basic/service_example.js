@@ -1,10 +1,12 @@
+'use strict'
+
 var DxlClient = require('../../lib/client')
 var message = require('../../lib/message')
 var Request = require('../../lib/request')
 var Response = require('../../lib/response')
 var ServiceRegistrationInfo = require('../../lib/service_registration_info')
 
-const SERVICE_TOPIC = '/isecg/sample/mybasicservice'
+var SERVICE_TOPIC = '/isecg/sample/mybasicservice'
 
 var client = new DxlClient()
 

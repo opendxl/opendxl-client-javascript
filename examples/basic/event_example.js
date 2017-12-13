@@ -1,8 +1,10 @@
+'use strict'
+
 var DxlClient = require('../../lib/client')
 var Event = require('../../lib/event')
 
-const EVENT_TOPIC = '/isecg/sample/basicevent'
-const TOTAL_EVENTS = 1000
+var EVENT_TOPIC = '/isecg/sample/basicevent'
+var TOTAL_EVENTS = 1000
 
 var eventCount = 0
 

@@ -14,8 +14,11 @@
         "uuid": "^3.1.0"
     },
     "devDependencies": {
+        "eslint": "^4.13.1",
+        "jshint": "^2.9.5",
         "standard": "^10.0.3"
     },
+    "eslintConfig": {},
     "repository": {
         "type": "git",
         "url": "git://github.com/jbarlow-mcafee/opendxl-client-js.git"
