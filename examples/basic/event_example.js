@@ -1,14 +1,17 @@
 'use strict'
 
+var common = require('../common.js')
+var dxlConfig = require('../../lib/config')
 var DxlClient = require('../../lib/client')
 var Event = require('../../lib/event')
 
 var EVENT_TOPIC = '/isecg/sample/basicevent'
 var TOTAL_EVENTS = 1000
 
-var eventCount = 0
+var config = dxlConfig.createDxlConfigFromFile(common.CONFIG_FILE)
+var client = new DxlClient(config)
 
-var client = new DxlClient()
+var eventCount = 0
 var start = Date.now()
 
 client.addEventCallback(EVENT_TOPIC,

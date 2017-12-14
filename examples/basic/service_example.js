@@ -1,5 +1,7 @@
 'use strict'
 
+var common = require('../common.js')
+var dxlConfig = require('../../lib/config')
 var DxlClient = require('../../lib/client')
 var message = require('../../lib/message')
 var Request = require('../../lib/request')
@@ -8,7 +10,8 @@ var ServiceRegistrationInfo = require('../../lib/service_registration_info')
 
 var SERVICE_TOPIC = '/isecg/sample/mybasicservice'
 
-var client = new DxlClient()
+var config = dxlConfig.createDxlConfigFromFile(common.CONFIG_FILE)
+var client = new DxlClient(config)
 
 client.connect(function () {
   var info = new ServiceRegistrationInfo('myService')
