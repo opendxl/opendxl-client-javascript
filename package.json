@@ -1,5 +1,5 @@
 {
-  "name": "opendxl-client-js",
+  "name": "dxl-client",
   "version": "0.0.1",
   "author": "Jeremy Barlow <jeremy_barlow@mcafee.com>",
   "description": "An OpenDXL client library for Javascript",
