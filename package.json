@@ -1,26 +1,26 @@
 {
-    "name": "opendxl-client-js",
-    "version": "0.0.1",
-    "author": "Jeremy Barlow <jeremy_barlow@mcafee.com>",
-    "description": "An OpenDXL client library for Javascript",
-    "engines": {
-        "node": ">=4.0.0"
-    },
-    "dependencies": {
-        "bl": "^1.2.1",
-        "ini": "^1.3.5",
-        "inherits": "^2.0.3",
-        "mqtt": "^2.14.0",
-        "msgpack5": "^3.6.0",
-        "uuid": "^3.1.0"
-    },
-    "devDependencies": {
-        "jshint": "^2.9.5",
-        "standard": "^10.0.3"
-    },
-    "eslintConfig": {},
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/jbarlow-mcafee/opendxl-client-js.git"
-    }
+  "name": "opendxl-client-js",
+  "version": "0.0.1",
+  "author": "Jeremy Barlow <jeremy_barlow@mcafee.com>",
+  "description": "An OpenDXL client library for Javascript",
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "dependencies": {
+    "bl": "^1.2.1",
+    "ini": "^1.3.5",
+    "inherits": "^2.0.3",
+    "mqtt": "^2.14.0",
+    "msgpack5": "^3.6.0",
+    "uuid": "^3.1.0"
+  },
+  "devDependencies": {
+    "jshint": "^2.9.5",
+    "standard": "^10.0.3"
+  },
+  "eslintConfig": {},
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jbarlow-mcafee/opendxl-client-js.git"
+  }
 }
