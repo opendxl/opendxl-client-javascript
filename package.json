@@ -19,6 +19,7 @@
     "standard": "^10.0.3"
   },
   "eslintConfig": {},
+  "main": "dxl.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/jbarlow-mcafee/opendxl-client-js.git"
