@@ -1,8 +1,20 @@
 {
-  "name": "dxl-client",
+  "name": "@opendxl/dxl-client",
   "version": "0.0.1",
-  "author": "Jeremy Barlow <jeremy_barlow@mcafee.com>",
+  "author": "McAfee, Inc.",
   "description": "An OpenDXL client library for Javascript",
+  "license": "Apache-2.0",
+  "keywords": [
+    "opendxl",
+    "dxl",
+    "mcafee",
+    "client"
+  ],
+  "files": [
+    "lib",
+    "examples",
+    "dxl-client.js"
+  ],
   "engines": {
     "node": ">=4.0.0"
   },
@@ -19,9 +31,9 @@
     "standard": "^10.0.3"
   },
   "eslintConfig": {},
-  "main": "dxl.js",
+  "main": "dxl-client.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/jbarlow-mcafee/opendxl-client-js.git"
+    "url": "https://github.com/opendxl/opendxl-client-js.git"
   }
 }
