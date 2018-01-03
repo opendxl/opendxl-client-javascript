@@ -9,7 +9,7 @@ var config = dxl.Config.createDxlConfigFromFile(common.CONFIG_FILE)
 var client = new dxl.Client(config)
 
 client.connect(function () {
-  var info = new dxl.ServiceRegistrationInfo('myService')
+  var info = new dxl.ServiceRegistrationInfo(client, 'myService')
   info.addTopic(SERVICE_TOPIC,
     function (request) {
       console.log('Service received request payload: ' + request.payload)
