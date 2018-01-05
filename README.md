@@ -1,2 +1,2 @@
-# opendxl-client-js
+# opendxl-client-javascript
 OpenDXL JavaScript client
