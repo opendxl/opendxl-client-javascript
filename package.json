@@ -12,7 +12,8 @@
   ],
   "files": [
     "lib",
-    "examples",
+    "LICENSE",
+    "README.md",
     "dxl-client.js"
   ],
   "engines": {
@@ -34,6 +35,6 @@
   "main": "dxl-client.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/opendxl/opendxl-client-js.git"
+    "url": "git://github.com/opendxl/opendxl-client-javascript.git"
   }
 }
