@@ -41,5 +41,8 @@
   "repository": {
     "type": "git",
     "url": "git://github.com/opendxl/opendxl-client-javascript.git"
+  },
+  "scripts": {
+    "doc": "node_modules/.bin/jsdoc -c ./jsdoc-conf.json -r lib/ README.md -u docs/"
   }
 }
