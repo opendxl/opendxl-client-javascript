@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: ServiceRegistrationInfo</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: ServiceRegistrationInfo</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2><span class="attribs"><span class="type-signature"></span></span>ServiceRegistrationInfo<span class="signature">(client, serviceType)</span><span class="type-signature"></span></h2>
+        
+            <div class="class-description"><p>Service registration instances are used to register and expose
+services onto a DXL fabric.</p>
+<p>DXL Services are exposed to the DXL fabric and are invoked in a fashion
+similar to RESTful web services. Communication between an invoking client
+and the DXL service is one-to-one (request/response).</p>
+<p>Each service is identified by the &quot;topics&quot; it responds to. Each of these
+&quot;topics&quot; can be thought of as a method that is being &quot;invoked&quot; on the
+service by the remote client.</p>
+<p>Multiple service &quot;instances&quot; can be registered with the DXL fabric that
+respond to the same &quot;topics&quot;. When this occurs (unless explicitly overridden
+by the client) the fabric will select the particular instance to route the
+request to (by default round-robin). Multiple service instances can be used
+to increase scalability and fault-tolerance.</p>
+<p>The following demonstrates registering a service that responds to a single
+topic with the DXL fabric. After registering the service, the example
+invokes the request via the use of the <a href="Client.html#asyncRequest">Client#asyncRequest</a> method.</p></div>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+    <h2>Constructor</h2>
+    
+
+    
+    <h4 class="name" id="ServiceRegistrationInfo"><span class="type-signature"></span>new ServiceRegistrationInfo<span class="signature">(client, serviceType)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>client</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Client.html">Client</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The <a href="Client.html">Client</a> instance that will expose this
+  service.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>serviceType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A textual name for the service. For example,
+  &quot;/mycompany/myservice&quot;.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="service-registration-info.js.html">service-registration-info.js</a>, <a href="service-registration-info.js.html#line75">line 75</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>// Create service registration object
+var info = new dxl.ServiceRegistrationInfo(client, 'myService')
+// Add a topic for the service to respond to
+info.addTopic(SERVICE_TOPIC,
+  // Handle the receipt of an incoming service request
+  function (request) {
+    // Extract information from request
+    console.log('Service received request payload: ' + request.payload)
+    // Create the response message
+    var response = new dxl.Response(request)
+    // Populate the response payload
+    response.payload = 'pong'
+    // Send the response
+    client.sendResponse(response)
+  })
+// Register the service with the fabric
+client.registerServiceAsync(info,
+  function (error) {
+    // If an error did not occur, invoke the service (send a request)
+    if (!error) {
+      // Create the request message
+      var request = new dxl.Request(SERVICE_TOPIC)
+      // Populate the request payload
+      request.payload = 'ping'
+      // Send the request
+      client.asyncRequest(request,
+        // Handle the response to the request
+        function (error, response) {
+          // Destroy the client - frees up resources so that the
+          // application stops running
+          client.destroy()
+          // Extract information from the response (if an error did not
+          // occur)
+          if (!error) {
+            console.log('Client received response payload: ' +
+              response.payload)
+          }
+        })
+    }
+  })</code></pre>
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="destinationTenantGuids"><span class="type-signature"></span>destinationTenantGuids<span class="type-signature"> :Array.&lt;String></span></h4>
+
+
+
+
+<div class="description">
+    <p>The set of tenant identifiers that the service will be available to.
+Setting this value will limit which tenants can invoke the service.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Array.&lt;String></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy">
+            <li>[]</li>
+        </ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="service-registration-info.js.html">service-registration-info.js</a>, <a href="service-registration-info.js.html#line92">line 92</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="metadata"><span class="type-signature"></span>metadata<span class="type-signature"> :Object</span></h4>
+
+
+
+
+<div class="description">
+    <p>An object of name-value pairs that are sent as part of the service
+registration. Brokers provide a registry service that allows for
+registered services and their associated meta-information to be inspected.
+The metadata is typically used to include information such as the versions
+for products that are exposing DXL services, etc.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy">
+            <li>{}</li>
+        </ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="service-registration-info.js.html">service-registration-info.js</a>, <a href="service-registration-info.js.html#line100">line 100</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="serviceId"><span class="type-signature"></span>serviceId<span class="type-signature"> :String</span></h4>
+
+
+
+
+<div class="description">
+    <p>A unique identifier for the service instance (automatically generated when
+the <a href="ServiceRegistrationInfo.html">ServiceRegistrationInfo</a> object is constructed).</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">String</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="service-registration-info.js.html">service-registration-info.js</a>, <a href="service-registration-info.js.html#line111">line 111</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="serviceType"><span class="type-signature"></span>serviceType<span class="type-signature"> :String</span></h4>
+
+
+
+
+<div class="description">
+    <p>A textual name for the service. For example, &quot;/mycompany/myservice&quot;.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">String</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="service-registration-info.js.html">service-registration-info.js</a>, <a href="service-registration-info.js.html#line86">line 86</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="topics"><span class="type-signature"></span>topics<span class="type-signature"></span></h4>
+
+
+
+
+
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;String></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An array containing the string name of each
+  topic that the service responds to.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="service-registration-info.js.html">service-registration-info.js</a>, <a href="service-registration-info.js.html#line167">line 167</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="ttl"><span class="type-signature"></span>ttl<span class="type-signature"> :Number</span></h4>
+
+
+
+
+<div class="description">
+    <p>The interval (in minutes) at which the client will automatically
+re-register the service with the DXL fabric.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Number</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy">
+            <li>60</li>
+        </ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="service-registration-info.js.html">service-registration-info.js</a>, <a href="service-registration-info.js.html#line118">line 118</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="addTopic"><span class="type-signature"></span>addTopic<span class="signature">(topic, callback)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Registers a topic for the service to respond to along with the request
+ callback that will be invoked.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>topic</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The topic for the service to respond to.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The request callback that will be invoked when
+  a <a href="Request.html">Request</a> message is received. The <a href="Request.html">Request</a> object is
+  supplied as the only parameter to the request callback function.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="service-registration-info.js.html">service-registration-info.js</a>, <a href="service-registration-info.js.html#line136">line 136</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="addTopics"><span class="type-signature"></span>addTopics<span class="signature">(callbacksByTopic)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Registers a set of topics for the service to respond to along with their
+associated request callbacks.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>callbacksByTopic</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Object containing a set of topics for the
+  service to respond to along with their associated request callback
+  instances. Each key in the object should have a string representation of
+  the topic name. Each corresponding value in the object should contain the
+  function to be invoked when a <a href="Request.html">Request</a> message is received. The
+  <a href="Request.html">Request</a> object is supplied as the only parameter to the request
+  callback function.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="service-registration-info.js.html">service-registration-info.js</a>, <a href="service-registration-info.js.html#line157">line 157</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="callbacks"><span class="type-signature"></span>callbacks<span class="signature">(topic)</span><span class="type-signature"> &rarr; {Array.&lt;function()>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Returns an array of functions which should be called upon receipt of a
+<a href="Request.html">Request</a> with the supplied topic.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>topic</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Topic for which to return associated callback
+  functions.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="service-registration-info.js.html">service-registration-info.js</a>, <a href="service-registration-info.js.html#line183">line 183</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Array of callback functions for the topic.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;function()></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Broker.html">Broker</a></li><li><a href="Client.html">Client</a></li><li><a href="Config.html">Config</a></li><li><a href="DxlError.html">DxlError</a></li><li><a href="ErrorResponse.html">ErrorResponse</a></li><li><a href="Event.html">Event</a></li><li><a href="MalformedBrokerError.html">MalformedBrokerError</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageError.html">MessageError</a></li><li><a href="Request.html">Request</a></li><li><a href="Response.html">Response</a></li><li><a href="ServiceRegistrationInfo.html">ServiceRegistrationInfo</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-installation.html">Installation</a></li><li><a href="tutorial-provisioning.html">Provisioning</a></li><li><a href="tutorial-samples.html">Samples</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

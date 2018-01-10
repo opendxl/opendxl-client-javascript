@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Tutorial: Basic Service Sample</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Tutorial: Basic Service Sample</h1>
+
+    <section>
+
+<header>
+    
+
+    <h2>Basic Service Sample</h2>
+</header>
+
+<article>
+    <p>This sample demonstrates how to register a DXL service to receive
+<a href="Request.html">Request</a> messages and send <a href="Response.html">Response</a> messages
+back to an invoking <a href="Client.html">Client</a>.</p>
+<p>Prior to running this sample make sure you have completed the
+<a href="https://github.com/opendxl/opendxl-client-javascript/wiki/Provisioning">client provisioning</a>
+step.</p>
+<h3>Running the Sample</h3><p>To run this sample execute the <code>sample/basic/service-example.js</code> script as
+follows:</p>
+<pre class="prettyprint source lang-sh"><code>$ node sample/basic/service-example.js</code></pre><h3>Output</h3><p>The output should appear similar to the following:</p>
+<pre class="prettyprint source lang-sh"><code>Service received request payload: ping
+Client received response payload: pong</code></pre><p>The code for the sample is broken into two main sections.</p>
+<h3>Register service</h3><p>The first section is responsible for creating a request callback that will be
+invoked for a specific topic associated with the service. The callback will
+send back a <a href="Response.html">Response</a> message with a payload of &quot;pong&quot;
+for any <a href="Request.html">Request</a> messages that are received.</p>
+<p>It then creates a <a href="ServiceRegistrationInfo.html">ServiceRegistrationInfo</a>
+instance and registers the request callback with the client via the
+<a href="ServiceRegistrationInfo.html#addTopic">addTopic</a> method.</p>
+<p>Finally it registers the service with the fabric via the
+<a href="Client.html#registerServiceAsync">registerServiceAsync</a> method of the client.</p>
+<pre class="prettyprint source lang-js"><code>// Create service registration object
+var info = new dxl.ServiceRegistrationInfo(client, 'myService')
+
+// Add a topic for the service to respond to
+info.addTopic(SERVICE_TOPIC,
+  // Handle the receipt of an incoming service request
+  function (request) {
+    // Extract information from request.  The toString() call converts the
+    // payload from a binary Buffer into a string, decoded using UTF-8
+    // character encoding.
+    console.log('Service received request payload: ' +
+      request.payload.toString())
+    // Create the response message
+    var response = new dxl.Response(request)
+    // Populate the response payload
+    response.payload = 'pong'
+    // Send the response
+    client.sendResponse(response)
+  })
+
+// Register the service with the fabric
+client.registerServiceAsync(info,
+  function (error) {
+    if (error) {
+      // Destroy the client - frees up resources so that the application
+      // stops running
+      client.destroy()
+      console.log('Error registering service: ' + error.message)
+      // ...
+    }
+  })</code></pre><h3>Invoke Service</h3><p>After receiving notification of a successful registration of the service, the
+second section sends a <a href="Request.html">Request</a> message to the service that
+contains a payload of &quot;ping&quot; via the <a href="Client.html#asyncRequest">asyncRequest</a>
+method of the client.</p>
+<p>The payloads of the <a href="Request.html">Request</a> and <a href="Response.html">Response</a>
+messages are printed.</p>
+<pre class="prettyprint source lang-js"><code>// Create the request message
+var request = new dxl.Request(SERVICE_TOPIC)
+// Populate the request payload
+request.payload = 'ping'
+// Send the request
+client.asyncRequest(request,
+  // Handle the response to the request
+  function (error, response) {
+    // Destroy the client - frees up resources so that the application
+    // stops running
+    client.destroy()
+    // Display the contents of an error, if one occurred
+    if (error) {
+      console.log('Request error: ' + error.message)
+      if (error instanceof dxl.MessageError) {
+        console.log('Request error code: ' + error.code)
+      }
+    // No error occurred, so extract information from the response. The
+    // toString() call converts the payload from a binary Buffer into a
+    // string, decoded using UTF-8 character encoding.
+    } else {
+      console.log('Client received response payload: ' +
+        response.payload.toString())
+    }
+  })</code></pre>
+</article>
+
+</section>
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Broker.html">Broker</a></li><li><a href="Client.html">Client</a></li><li><a href="Config.html">Config</a></li><li><a href="DxlError.html">DxlError</a></li><li><a href="ErrorResponse.html">ErrorResponse</a></li><li><a href="Event.html">Event</a></li><li><a href="MalformedBrokerError.html">MalformedBrokerError</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageError.html">MessageError</a></li><li><a href="Request.html">Request</a></li><li><a href="Response.html">Response</a></li><li><a href="ServiceRegistrationInfo.html">ServiceRegistrationInfo</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-installation.html">Installation</a></li><li><a href="tutorial-provisioning.html">Provisioning</a></li><li><a href="tutorial-samples.html">Samples</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
