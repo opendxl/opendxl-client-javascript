@@ -28,21 +28,26 @@
     "uuid": "^3.1.0"
   },
   "devDependencies": {
+    "chai": "^4.1.2",
     "jsdoc": "^3.5.5",
     "jshint": "^2.9.5",
+    "mocha": "^4.1.0",
+    "sinon": "^4.1.4",
     "standard": "^10.0.3"
   },
   "eslintConfig": {},
-  "jshintConfig": {
-    "-W033": false,
-    "node": true
-  },
   "main": "dxl-client.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/opendxl/opendxl-client-javascript.git"
   },
   "scripts": {
-    "doc": "node_modules/.bin/jsdoc -c ./jsdoc-conf.json -r lib/ README.md -u docs/"
+    "doc": "node_modules/.bin/jsdoc -c ./jsdoc-conf.json -r lib/ README.md -u docs/",
+    "test": "node_modules/.bin/mocha --recursive"
+  },
+  "standard": {
+    "env": [
+      "mocha"
+    ]
   }
 }
