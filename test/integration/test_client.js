@@ -1,6 +1,7 @@
 'use strict'
 
 var fs = require('fs')
+var inherits = require('inherits')
 var os = require('os')
 var path = require('path')
 var Client = require('../../lib/client')
@@ -25,6 +26,7 @@ function TestClient (test, errorCallback, timeout) {
 
   var configDirs = [ __dirname, os.homedir() ]
   var configFile = null
+
   configDirs.forEach(function (configDir) {
     var candidateConfigFile = path.join(configDir, CLIENT_CONFIG_FILE)
     if (fs.existsSync(candidateConfigFile)) {
@@ -38,12 +40,7 @@ function TestClient (test, errorCallback, timeout) {
       path.join(configDirs[0], CLIENT_CONFIG_FILE))
   }
 
-  /**
-   * The DXL {@link Client} object.
-   * @type {Client}
-   * @name TestClient#client
-   */
-  this.client = new Client(Config.createDxlConfigFromFile(configFile))
+  Client.call(this, Config.createDxlConfigFromFile(configFile))
 
   this._errorCallback = errorCallback
   if (typeof errorCallback === 'undefined') {
@@ -56,7 +53,7 @@ function TestClient (test, errorCallback, timeout) {
     test.timeout(timeout + (timeout / 10))
     this._timeoutHandle = setTimeout(function () {
       that._timeoutHandle = null
-      that.client.destroy(function () {
+      that.destroy(function () {
         that._errorCallback(new Error('Timeout of ' + timeout + 'ms exceeded'))
       })
     }, timeout)
@@ -65,7 +62,8 @@ function TestClient (test, errorCallback, timeout) {
   this._destroyed = false
 
   /**
-   * Destroys the test client and its underlying resources.
+   * Shuts down the test client and its underlying resources (including its
+   * logic to monitor client timeouts).
    * @param {Error} error - Error to deliver to the error callback. If this
    *   function is called before the timeout specified during construction of
    *   the test client is reached, the error callback will not be invoked.
@@ -74,13 +72,13 @@ function TestClient (test, errorCallback, timeout) {
    *   error callback specified at test client construction time will be
    *   invoked instead of the callback specified in this parameter.
    */
-  this.destroy = function (error, callback) {
+  this.shutdown = function (error, callback) {
     if (this._timeoutHandle) {
       clearTimeout(this._timeoutHandle)
       this._timeoutHandle = null
     }
     if (!that._destroyed) {
-      this.client.destroy(function () {
+      this.destroy(function () {
         if (error) {
           if (that._errorCallback) {
             that._errorCallback(error)
@@ -93,5 +91,7 @@ function TestClient (test, errorCallback, timeout) {
     }
   }
 }
+
+inherits(TestClient, Client)
 
 module.exports = TestClient

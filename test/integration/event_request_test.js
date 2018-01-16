@@ -12,18 +12,17 @@ describe('event callbacks @integration', function () {
     var receiveCount = 0
     var events = []
 
-    var testClient = new TestClient(this, done)
-    var dxlClient = testClient.client
-    dxlClient.connect(function () {
+    var client = new TestClient(this, done)
+    client.connect(function () {
       var topic = 'event_request_test_' + util.generateIdAsString()
 
-      dxlClient.addEventCallback(topic, function (event) {
+      client.addEventCallback(topic, function (event) {
         var eventPosition = events.indexOf(event.messageId)
         if (eventPosition >= 0) {
           events.splice(eventPosition, 1)
           receiveCount++
           if (receiveCount === sendCount) {
-            testClient.destroy(null, function () {
+            client.shutdown(null, function () {
               expect(events.length).to.equal(0)
               done()
             })
@@ -34,7 +33,7 @@ describe('event callbacks @integration', function () {
       for (var i = 0; i < sendCount; i++) {
         var event = new Event(topic)
         events.push(event.messageId)
-        dxlClient.sendEvent(event)
+        client.sendEvent(event)
       }
     })
   })

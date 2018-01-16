@@ -16,15 +16,14 @@ describe('async requests @integration', function () {
     var totalResponseCount = 0
     var requests = {}
 
-    var testClient = new TestClient(this, done)
-    var dxlClient = testClient.client
-    dxlClient.connect(function () {
-      var testService = new TestService(dxlClient)
+    var client = new TestClient(this, done)
+    client.connect(function () {
+      var testService = new TestService(client)
       var topic = 'async_request_test_' + util.generateIdAsString()
-      var regInfo = new ServiceRegistrationInfo(dxlClient,
+      var regInfo = new ServiceRegistrationInfo(client,
         'async_request_test_service')
       regInfo.addTopic(topic, testService.callback)
-      dxlClient.registerServiceAsync(regInfo)
+      client.registerServiceAsync(regInfo)
 
       var responseCallback = function (response) {
         if (requests.hasOwnProperty(response.requestMessageId)) {
@@ -32,7 +31,7 @@ describe('async requests @integration', function () {
             requests[response.requestMessageId] + 1
           totalResponseCount++
           if (totalResponseCount === expectedResponseCount) {
-            testClient.destroy(null, function () {
+            client.shutdown(null, function () {
               expect(Object.keys(requests).length).to.be
                 .equal(expectedRequestCount)
               done()
@@ -41,18 +40,18 @@ describe('async requests @integration', function () {
         }
       }
 
-      dxlClient.addResponseCallback('', responseCallback)
+      client.addResponseCallback('', responseCallback)
 
       for (var i = 0; i < requestCount; i++) {
         var request = new Request(topic)
         requests[request.messageId] = 0
-        dxlClient.asyncRequest(request)
+        client.asyncRequest(request)
 
         request = new Request(topic)
         requests[request.messageId] = 0
-        dxlClient.asyncRequest(request, function (error, response) {
+        client.asyncRequest(request, function (error, response) {
           if (error) {
-            testClient.destroy(error)
+            client.shutdown(error)
           } else {
             responseCallback(response)
           }

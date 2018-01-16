@@ -9,14 +9,13 @@ var testHelpers = require('./test_helpers')
 
 describe('broker registry query @integration', function () {
   it('should return a proper response', function (done) {
-    var testClient = new TestClient(this, done)
-    var dxlClient = testClient.client
-    dxlClient.connect(function () {
+    var client = new TestClient(this, done)
+    client.connect(function () {
       var topic = '/mcafee/service/dxl/brokerregistry/query'
       var request = new Request(topic)
       request.payload = '{}'
-      dxlClient.asyncRequest(request, function (error, response) {
-        testClient.destroy(error, function () {
+      client.asyncRequest(request, function (error, response) {
+        client.shutdown(error, function () {
           expect(response).to.be.an.instanceof(Response)
           expect(response.sourceBrokerId).to.not.be.empty
           expect(response.sourceClientId).to.not.be.empty

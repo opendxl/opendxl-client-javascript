@@ -19,18 +19,17 @@ describe('message payload in an async request @integration', function () {
     var requestsReceived = {}
     var requestCount = 3
 
-    var testClient = new TestClient(this, done)
-    var dxlClient = testClient.client
-    dxlClient.connect(function () {
+    var client = new TestClient(this, done)
+    client.connect(function () {
       var topic = 'message_payload_test_' + util.generateIdAsString()
-      var regInfo = new ServiceRegistrationInfo(dxlClient,
+      var regInfo = new ServiceRegistrationInfo(client,
         'message_payload_test_service')
 
       regInfo.addTopic(topic, function (request) {
         if (requestsSent[request.messageId]) {
           requestsReceived[request.messageId] = request
           if (Object.keys(requestsReceived).length === requestCount) {
-            testClient.destroy(null, function () {
+            client.shutdown(null, function () {
               Object.keys(requestsReceived).forEach(function (messageId) {
                 var payload = new BufferList(
                   requestsReceived[messageId].payload
@@ -46,7 +45,7 @@ describe('message payload in an async request @integration', function () {
           }
         }
       })
-      dxlClient.registerServiceAsync(regInfo)
+      client.registerServiceAsync(regInfo)
 
       for (var index = 0; index < requestCount; index++) {
         var request = new Request(topic)
@@ -62,7 +61,7 @@ describe('message payload in an async request @integration', function () {
           expectedBuffer: expectedBuffer
         }
 
-        dxlClient.asyncRequest(request)
+        client.asyncRequest(request)
       }
     })
   })
