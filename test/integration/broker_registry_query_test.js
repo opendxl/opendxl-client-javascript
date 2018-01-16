@@ -19,7 +19,7 @@ describe('broker registry query @integration', function () {
           expect(response).to.be.an.instanceof(Response)
           expect(response.sourceBrokerId).to.not.be.empty
           expect(response.sourceClientId).to.not.be.empty
-          expect(testHelpers.messagePayloadAsJson(response)).to
+          expect(testHelpers.jsonPayloadToObject(response)).to
             .be.an.instanceof(Object)
           done()
         })
