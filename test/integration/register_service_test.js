@@ -9,7 +9,7 @@ var ServiceRegistrationInfo = require('../../lib/service_registration_info')
 var TestClient = require('./test_client')
 var testHelpers = require('./test_helpers')
 
-describe('registered services', function () {
+describe('registered services @integration', function () {
   var DXL_SERVICE_REGISTER_EVENT_TOPIC =
     '/mcafee/event/dxl/svcregistry/register'
   var DXL_SERVICE_UNREGISTER_EVENT_TOPIC =
