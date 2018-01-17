@@ -7,6 +7,7 @@ var ServiceRegistrationInfo = require('../../lib/service_registration_info')
 var util = require('../../lib/util')
 var TestClient = require('./test_client')
 var TestService = require('./test_service')
+var testHelpers = require('./test_helpers')
 
 describe('async requests @integration', function () {
   it('should receive a response for every request made', function (done) {
@@ -49,13 +50,9 @@ describe('async requests @integration', function () {
 
         request = new Request(topic)
         requests[request.messageId] = 0
-        client.asyncRequest(request, function (error, response) {
-          if (error) {
-            client.shutdown(error)
-          } else {
-            responseCallback(response)
-          }
-        })
+        testHelpers.asyncRequest(client, request, client.shutdown.bind(client),
+          function (response) { responseCallback(response) }
+        )
       }
     })
   })

@@ -89,14 +89,10 @@ describe('registered services @integration', function () {
         var request = new Request(regInfo.topics[0])
         request.payload = 'Test'
         client.asyncRequest(request, function (error, response) {
-          if (error) {
-            client.shutdown(error)
-          } else {
-            client.shutdown(null, function () {
-              expect(testHelpers.decodePayload(response)).to.equal('Ok')
-              done()
-            })
-          }
+          client.shutdown(error, function () {
+            expect(testHelpers.decodePayload(response)).to.equal('Ok')
+            done()
+          })
         })
       })
     })
