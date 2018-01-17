@@ -54,7 +54,7 @@ function TestClient (test, errorCallback, timeout) {
     this._timeoutHandle = setTimeout(function () {
       that._timeoutHandle = null
       that.destroy(function () {
-        that._errorCallback(new Error('Timeout of ' + timeout + 'ms exceeded'))
+        that._errorCallback(new Error('Timeout of ' + timeout + ' ms exceeded'))
       })
     }, timeout)
   }
