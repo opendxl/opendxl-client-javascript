@@ -27,6 +27,27 @@ describe('Client @integration', function () {
     }
   )
 
+  it('should set current broker while connected',
+    function (done) {
+      var client = new TestClient(this, done)
+      var currentBrokerBeforeConnected = client.currentBroker
+      client.connect(function () {
+        var currentBrokerWhileConnected = client.currentBroker
+        client.disconnect(function () {
+          var currentBrokerAfterDisconnected = client.currentBroker
+          client.shutdown(null, function () {
+            expect(currentBrokerBeforeConnected).to.be.null
+            expect(client.config.brokers).to.include(
+              currentBrokerWhileConnected
+            )
+            expect(currentBrokerAfterDisconnected).to.be.null
+            done()
+          })
+        })
+      })
+    }
+  )
+
   it('should subscribe and unsubscribe to a topic without error',
     function (done) {
       var client = new TestClient(this, done)
