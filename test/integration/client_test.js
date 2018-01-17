@@ -66,11 +66,12 @@ describe('Client @integration', function () {
     }
   )
 
-  it('should properly receive an error response from a service',
+  it('should receive an error response from a registered service',
     function (done) {
       var errorCode = 9090
       var errorMessage = 'My error message'
-      var topic = 'client_test_error_message_' + util.generateIdAsString()
+      var topic = 'client_test_error_message_registered_service_' +
+        util.generateIdAsString()
 
       var client = new TestClient(this, done)
       client.connect()
@@ -93,6 +94,28 @@ describe('Client @integration', function () {
             expect(error.detail).to.be.an.instanceof(ErrorResponse)
             done()
           })
+        })
+      })
+    }
+  )
+
+  it('should receive an error response for a request to an unknown service',
+    function (done) {
+      var topic = 'client_test_error_message_unknown_service_' +
+        util.generateIdAsString()
+      var client = new TestClient(this, done)
+      client.connect()
+
+      var request = new Request(topic)
+      request.serviceId = util.generateIdAsString()
+
+      client.asyncRequest(request, function (error, response) {
+        client.shutdown(null, function () {
+          expect(response).to.be.null
+          expect(error).to.be.an.instanceof(MessageError)
+          expect(error.detail).to.be.an.instanceof(ErrorResponse)
+          expect(error.detail.serviceId).to.equal(request.serviceId)
+          done()
         })
       })
     }
