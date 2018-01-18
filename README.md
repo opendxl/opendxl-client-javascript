@@ -12,9 +12,9 @@ invoking/providing services.
 
 ## Documentation
 
-See the
-[Python Client SDK Wiki](https://github.com/opendxl/opendxl-client-python/wiki/Data-Exchange-Layer-%28DXL%29-Overview)
-for an overview of the Data Exchange Layer (DXL).
+See the [Wiki](https://github.com/opendxl/opendxl-client-javascript/wiki)
+for an overview of the Data Exchange Layer (DXL), the OpenDXL JavaScript client,
+and examples.
 
 See the
 [JavaScript Client SDK Documentation](https://opendxl.github.io/opendxl-client-javascript)
@@ -76,9 +76,32 @@ following functionality is currently missing from the JavaScript client:
   > error with the following text when your client attempts to connect to the
   > broker:
 
-  > ``Error: unable to get issuer certificate``.
+  ```sh
+  Error: unable to get issuer certificate
+  ```
 
   > No workaround for this issue on the older Node.js versions is known at this time.
+
+* An OpenSSL version used by Node.js that supports TLSv1.2 (Version 1.0.1 or
+  greater).
+
+  To check the version of OpenSSL used by Node.js, type the following statement:
+
+  ```sh
+  $ node -pe process.versions.openssl
+  ```
+
+  The output should appear similar to the following:
+
+  ```sh
+  1.0.2n
+  ```
+
+  The version must be 1.0.1 or greater. Unfortunately, even the latest versions
+  of OSX (Mac) still have version 0.9.8 installed by default. If you wish to use
+  the JavaScript SDK with OSX, one possible workaround is to use a third party
+  package manager (such as [Homebrew](http://brew.sh/)) to install a compatible
+  Node.js and OpenSSL version.
 
 ## Installation
 
