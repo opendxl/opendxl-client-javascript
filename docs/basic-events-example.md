@@ -53,7 +53,7 @@ client.addEventCallback(EVENT_TOPIC,
     // Print the payload for the received event
     console.log('Received event: ' + event.payload)
     // Increment the count
-    eventCount += 1
+    eventCount++
 
     // Wait until all events have been received
     if (eventCount === TOTAL_EVENTS) {
