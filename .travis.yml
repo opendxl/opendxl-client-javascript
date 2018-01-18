@@ -1,0 +1,32 @@
+sudo: false
+
+language: node_js
+
+node_js:
+  - '4'
+  - '6'
+  - '7'
+  - '8'
+  - '9'
+
+services:
+  - docker
+
+before_install:
+  - docker pull opendxl/opendxl-broker
+  - docker run -d -p 127.0.0.1:8883:8883 --volume "$PWD/dxlbroker-volume:/dxlbroker-volume" opendxl/opendxl-broker
+  - docker ps -a
+  - cp test/integration/client_config.cfg.travis test/integration/client_config.cfg
+
+env:
+  - CXX=g++-4.8
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-4.8
+
+script:
+  - npm test
