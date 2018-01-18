@@ -18,7 +18,7 @@ describe('ErrorResponse', function () {
       expect(errorResponse.errorMessage).to.be.empty
 
       var encodedResponse = errorResponse._toBytes()
-      expect(encodedResponse).to.be.an.instanceOf(Buffer)
+      expect(Buffer.isBuffer(encodedResponse)).to.be.true
 
       var decodedResponse = decodeMessage(encodedResponse)
       decodedResponse.destinationTopic = errorResponse.destinationTopic
@@ -60,7 +60,7 @@ describe('ErrorResponse', function () {
       errorResponse.destinationTenantGuids = [ util.generateIdAsString() ]
 
       var encodedResponse = errorResponse._toBytes()
-      expect(encodedResponse).to.be.an.instanceOf(Buffer)
+      expect(Buffer.isBuffer(encodedResponse)).to.be.true
 
       var decodedResponse = decodeMessage(encodedResponse)
       decodedResponse.destinationTopic = errorResponse.destinationTopic

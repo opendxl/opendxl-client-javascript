@@ -17,7 +17,7 @@ describe('Request', function () {
       expect(request.destinationTopic).to.equal(topic)
 
       var encodedRequest = request._toBytes()
-      expect(encodedRequest).to.be.an.instanceOf(Buffer)
+      expect(Buffer.isBuffer(encodedRequest)).to.be.true
 
       var decodedRequest = decodeMessage(encodedRequest)
       decodedRequest.destinationTopic = request.destinationTopic
@@ -44,7 +44,7 @@ describe('Request', function () {
       request.destinationTenantGuids = [ util.generateIdAsString() ]
 
       var encodedRequest = request._toBytes()
-      expect(encodedRequest).to.be.an.instanceOf(Buffer)
+      expect(Buffer.isBuffer(encodedRequest)).to.be.true
 
       var decodedRequest = decodeMessage(encodedRequest)
       decodedRequest.destinationTopic = request.destinationTopic

@@ -15,7 +15,7 @@ describe('Response', function () {
       var response = new Response()
 
       var encodedResponse = response._toBytes()
-      expect(encodedResponse).to.be.an.instanceOf(Buffer)
+      expect(Buffer.isBuffer(encodedResponse)).to.be.true
 
       var decodedResponse = decodeMessage(encodedResponse)
       decodedResponse.destinationTopic = response.destinationTopic
@@ -49,7 +49,7 @@ describe('Response', function () {
       response.destinationTenantGuids = [ util.generateIdAsString() ]
 
       var encodedResponse = response._toBytes()
-      expect(encodedResponse).to.be.an.instanceOf(Buffer)
+      expect(Buffer.isBuffer(encodedResponse)).to.be.true
 
       var decodedResponse = decodeMessage(encodedResponse)
       decodedResponse.destinationTopic = response.destinationTopic

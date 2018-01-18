@@ -17,7 +17,7 @@ describe('Event', function () {
       expect(event.destinationTopic).to.equal(topic)
 
       var encodedEvent = event._toBytes()
-      expect(encodedEvent).to.be.an.instanceOf(Buffer)
+      expect(Buffer.isBuffer(encodedEvent)).to.be.true
 
       var decodedEvent = decodeMessage(encodedEvent)
       decodedEvent.destinationTopic = event.destinationTopic
@@ -39,7 +39,7 @@ describe('Event', function () {
       event.destinationTenantGuids = [ util.generateIdAsString() ]
 
       var encodedEvent = event._toBytes()
-      expect(encodedEvent).to.be.an.instanceOf(Buffer)
+      expect(Buffer.isBuffer(encodedEvent)).to.be.true
 
       var decodedEvent = decodeMessage(encodedEvent)
       decodedEvent.destinationTopic = event.destinationTopic
