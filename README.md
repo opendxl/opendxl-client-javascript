@@ -1,5 +1,6 @@
 # OpenDXL JavaScript Client
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 ## Overview
 
@@ -18,6 +19,51 @@ for an overview of the Data Exchange Layer (DXL).
 See the
 [JavaScript Client SDK Documentation](https://opendxl.github.io/opendxl-client-javascript)
 for API documentation.
+
+## Differences from the OpenDXL Python Client
+
+The OpenDXL JavaScript Client does not have complete feature parity with the
+[OpenDXL Python Client](https://github.com/opendxl/opendxl-client-python). The
+following functionality is currently missing from the JavaScript client:
+
+* Synchronous client APIs &mdash; including
+  [sync_request](https://opendxl.github.io/opendxl-client-python/pydoc/dxlclient.client.html#dxlclient.client.DxlClient.sync_request)
+  and
+  [register_service_sync](https://opendxl.github.io/opendxl-client-python/pydoc/dxlclient.client.html#dxlclient.client.DxlClient.register_service_sync)
+  &mdash; are not available in the JavaScript client. Unlike with the Python
+  client, communication with the broker for JavaScript client methods like
+  [connect](https://opendxl.github.io/opendxl-client-javascript/Client.html#connect)
+  and
+  [subscribe](https://opendxl.github.io/opendxl-client-javascript/Client.html#subscribe)
+  is all done asynchronously as well. Due to the asynchronous nature of
+  JavaScript and a lack of underlying support for synchronous MQTT operations in
+  the [MQTT.js](https://github.com/mqttjs/MQTT.js) library that the OpenDXL
+  JavaScript client depends upon, it is unlikely that synchronous forms of these
+  APIs will ever be added to the JavaScript client.
+* Unlike the Python client, the JavaScript client does not provide a method to
+  configure a separate thread pool for handling incoming messages in parallel
+  &mdash; including the [incoming_message_thread_pool_size](https://opendxl.github.io/opendxl-client-python/pydoc/dxlclient.client_config.html#dxlclient.client_config.DxlClientConfig.incoming_message_thread_pool_size)
+  setting. Message callbacks received by the JavaScript client are processed
+  one at a time via the [event loop](https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop). 
+* Client provisioning via a Node.js-based command line interface. Note that the
+  JavaScript client can, however, make use of a configuration provisioned with
+  the [OpenDXL Python CLI](https://opendxl.github.io/opendxl-client-python/pydoc/basiccliprovisioning.html).
+* The Python client randomizes the delay between client reconnect attempts.  The
+  JavaScript client currently uses a fixed [reconnect_delay](https://opendxl.github.io/opendxl-client-javascript/Config.html)
+  for reconnect attempts.
+* Unlike the Python client, the JavaScript client does not currently provide a
+  way to configure the maximum number of
+  [connect_retries](https://opendxl.github.io/opendxl-client-python/pydoc/dxlclient.client_config.html#dxlclient.client_config.DxlClientConfig.connect_retries)
+  for a client connection. The JavaScript client will indefinitely retry
+  failed connection attempts until a call to either
+  [disconnect](https://opendxl.github.io/opendxl-client-javascript/Client.html#disconnect)
+  or
+  [destroy](https://opendxl.github.io/opendxl-client-javascript/Client.html#destroy)
+  is made.
+* The JavaScript client only sparingly logs messages &mdash; for successful
+  and failed connections &mdash; and only to the [console log](https://developer.mozilla.org/en-US/docs/Web/API/Console/log).
+  Support for more complete logging, log levels, and pluggable use of logging
+  frameworks will be considered for a future release.
 
 ## Prerequisites
 
