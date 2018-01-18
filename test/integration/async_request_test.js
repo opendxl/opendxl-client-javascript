@@ -7,7 +7,7 @@ var ServiceRegistrationInfo = require('../../lib/service_registration_info')
 var util = require('../../lib/util')
 var TestClient = require('./test_client')
 var TestService = require('./test_service')
-var testHelpers = require('./test_helpers')
+var testHelpers = require('../test_helpers')
 
 describe('async requests @integration', function () {
   it('should receive a response for every request made', function (done) {

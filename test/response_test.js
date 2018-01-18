@@ -7,7 +7,7 @@ var decodeMessage = require('../lib/decode_message')
 var Request = require('../lib/request')
 var Response = require('../lib/response')
 var util = require('../lib/util')
-var testHelpers = require('./integration/test_helpers')
+var testHelpers = require('./test_helpers')
 
 describe('Response', function () {
   context('when fields are mostly set to defaults', function () {
