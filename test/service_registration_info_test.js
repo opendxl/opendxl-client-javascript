@@ -3,10 +3,14 @@
 
 var expect = require('chai').expect
 var ServiceRegistrationInfo = require('../lib/service_registration_info')
-var TestClient = require('./integration/test_client')
+var Client = require('../lib/client')
+var Config = require('../lib/config')
 
 describe('ServiceRegistrationInfo', function () {
-  var client = new TestClient(this)
+  var client = new Client(
+    new Config('fake bundle', 'fake cert', 'fake key', [])
+  )
+
   context('constructor', function () {
     it('should store the parameter as the service type', function () {
       var expectedServiceType = 'my service type'
