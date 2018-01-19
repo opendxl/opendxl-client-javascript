@@ -29,5 +29,5 @@ addons:
       - g++-4.8
 
 script:
-  - npm run-script standard
+  - npm run snazzy
   - npm test
