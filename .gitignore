@@ -2,3 +2,4 @@ node_modules/
 package-lock.json
 out/
 test/integration/client_config.cfg
+npm-debug.log

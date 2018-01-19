@@ -34,6 +34,7 @@
     "mocha": "^4.1.0",
     "safe-buffer": "^5.1.1",
     "sinon": "^4.1.4",
+    "snazzy": "^7.0.0",
     "standard": "^10.0.3"
   },
   "eslintConfig": {},
@@ -44,6 +45,7 @@
   },
   "scripts": {
     "doc": "node_modules/.bin/jsdoc -c ./jsdoc-conf.json -r lib/ README.md -u docs/",
+    "standard": "node_modules/.bin/standard | node_modules/.bin/snazzy",
     "test": "node_modules/.bin/mocha --recursive"
   },
   "standard": {
