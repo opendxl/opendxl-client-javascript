@@ -43,6 +43,7 @@ describe('async requests @integration', function () {
 
       client.addResponseCallback('', responseCallback)
 
+      var responseHandler = function (response) { responseCallback(response) }
       for (var i = 0; i < requestCount; i++) {
         var request = new Request(topic)
         requests[request.messageId] = 0
@@ -51,7 +52,7 @@ describe('async requests @integration', function () {
         request = new Request(topic)
         requests[request.messageId] = 0
         testHelpers.asyncRequest(client, request, client.shutdown.bind(client),
-          function (response) { responseCallback(response) }
+          responseHandler
         )
       }
     })
