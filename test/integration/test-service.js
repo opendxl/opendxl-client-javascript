@@ -1,7 +1,8 @@
 'use strict'
 
-var ErrorResponse = require('../../lib/error-response')
-var Response = require('../../lib/response')
+var dxl = require('../../dxl-client')
+var ErrorResponse = dxl.ErrorResponse
+var Response = dxl.Response
 
 /**
  * @classdesc Test service for integration testing

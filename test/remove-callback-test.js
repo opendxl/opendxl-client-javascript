@@ -2,12 +2,13 @@
 /* eslint no-unused-expressions: "off" */ // for chai expect assertions
 
 var expect = require('chai').expect
-var Client = require('../lib/client')
-var Config = require('../lib/config')
-var ErrorResponse = require('../lib/error-response')
-var Event = require('../lib/event')
-var Request = require('../lib/request')
-var Response = require('../lib/response')
+var dxl = require('../dxl-client')
+var Client = dxl.Client
+var Config = dxl.Config
+var ErrorResponse = dxl.ErrorResponse
+var Event = dxl.Event
+var Request = dxl.Request
+var Response = dxl.Response
 
 describe('remove callback call to client', function () {
   var client = new Client(

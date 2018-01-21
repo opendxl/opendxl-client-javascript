@@ -2,7 +2,7 @@
 /* eslint no-unused-expressions: "off" */ // for chai expect assertions
 
 var expect = require('chai').expect
-var Broker = require('../lib/broker')
+var Broker = require('../dxl-client').Broker
 
 describe('Broker', function () {
   context('.parse', function () {

@@ -2,8 +2,9 @@
 /* eslint no-unused-expressions: "off" */ // for chai expect assertions
 
 var expect = require('chai').expect
-var Request = require('../../lib/request')
-var Response = require('../../lib/response')
+var dxl = require('../../dxl-client')
+var Request = dxl.Request
+var Response = dxl.Response
 var TestClient = require('./test-client')
 var testHelpers = require('../test-helpers')
 

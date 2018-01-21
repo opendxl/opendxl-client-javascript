@@ -4,9 +4,10 @@
 var expect = require('chai').expect
 var fs = require('fs')
 var sinon = require('sinon')
-var Broker = require('../lib/broker')
-var Config = require('../lib/config')
-var MalformedBrokerError = require('../lib/malformed-broker-error')
+var dxl = require('../dxl-client')
+var Broker = dxl.Broker
+var Config = dxl.Config
+var MalformedBrokerError = dxl.MalformedBrokerError
 
 describe('Config', function () {
   context('when built from a config file', function () {

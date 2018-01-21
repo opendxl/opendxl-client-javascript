@@ -3,9 +3,10 @@
 
 var expect = require('chai').expect
 var util = require('../../lib/util')
-var Request = require('../../lib/request')
-var Response = require('../../lib/response')
-var ServiceRegistrationInfo = require('../../lib/service-registration-info')
+var dxl = require('../../dxl-client')
+var Request = dxl.Request
+var Response = dxl.Response
+var ServiceRegistrationInfo = dxl.ServiceRegistrationInfo
 var TestClient = require('./test-client')
 var testHelpers = require('../test-helpers')
 

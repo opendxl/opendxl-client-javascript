@@ -2,9 +2,10 @@
 /* eslint no-unused-expressions: "off" */ // for chai expect assertions
 
 var expect = require('chai').expect
-var ServiceRegistrationInfo = require('../lib/service-registration-info')
-var Client = require('../lib/client')
-var Config = require('../lib/config')
+var dxl = require('../dxl-client')
+var ServiceRegistrationInfo = dxl.ServiceRegistrationInfo
+var Client = dxl.Client
+var Config = dxl.Config
 
 describe('ServiceRegistrationInfo', function () {
   var client = new Client(

@@ -4,7 +4,7 @@
 var expect = require('chai').expect
 var Buffer = require('safe-buffer').Buffer
 var decodeMessage = require('../lib/decode-message')
-var Event = require('../lib/event')
+var Event = require('../dxl-client').Event
 var util = require('../lib/util')
 var testHelpers = require('./test-helpers')
 

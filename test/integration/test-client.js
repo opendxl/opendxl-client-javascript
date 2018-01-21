@@ -4,9 +4,10 @@ var fs = require('fs')
 var inherits = require('inherits')
 var os = require('os')
 var path = require('path')
-var Client = require('../../lib/client')
-var Config = require('../../lib/config')
-var DxlError = require('../../lib/dxl-error')
+var dxl = require('../../dxl-client')
+var Client = dxl.Client
+var Config = dxl.Config
+var DxlError = dxl.DxlError
 
 var DEFAULT_TIMEOUT = 5000
 var CLIENT_CONFIG_FILE = 'client_config.cfg'
