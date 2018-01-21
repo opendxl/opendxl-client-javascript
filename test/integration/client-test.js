@@ -2,13 +2,13 @@
 /* eslint no-unused-expressions: "off" */ // for chai expect assertions
 
 var expect = require('chai').expect
-var MessageError = require('../../lib/message_error')
-var ErrorResponse = require('../../lib/error_response')
+var MessageError = require('../../lib/message-error')
+var ErrorResponse = require('../../lib/error-response')
 var Request = require('../../lib/request')
-var ServiceRegistrationInfo = require('../../lib/service_registration_info')
+var ServiceRegistrationInfo = require('../../lib/service-registration-info')
 var util = require('../../lib/util')
-var TestClient = require('./test_client')
-var TestService = require('./test_service')
+var TestClient = require('./test-client')
+var TestService = require('./test-service')
 
 describe('Client @integration', function () {
   it('should connect and disconnect to a broker without error',

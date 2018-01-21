@@ -3,8 +3,8 @@
 
 var expect = require('chai').expect
 var Event = require('../../lib/event')
-var TestClient = require('./test_client')
-var testHelpers = require('../test_helpers')
+var TestClient = require('./test-client')
+var testHelpers = require('../test-helpers')
 
 describe('callbacks subscribed with wildcard topics @integration', function () {
   it('should be invoked for a matching event', function (done) {

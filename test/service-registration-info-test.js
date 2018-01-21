@@ -2,7 +2,7 @@
 /* eslint no-unused-expressions: "off" */ // for chai expect assertions
 
 var expect = require('chai').expect
-var ServiceRegistrationInfo = require('../lib/service_registration_info')
+var ServiceRegistrationInfo = require('../lib/service-registration-info')
 var Client = require('../lib/client')
 var Config = require('../lib/config')
 

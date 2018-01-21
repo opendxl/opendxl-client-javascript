@@ -9,11 +9,11 @@ step.
 
 ### Running the Sample
 
-To run this sample execute the ``examples/basic/event_example.js`` script as
+To run this sample execute the ``examples/basic/event-example.js`` script as
 follows:
 
 ```sh
-$ node examples/basic/event_example.js
+$ node examples/basic/event-example.js
 ```
 
 ### Output

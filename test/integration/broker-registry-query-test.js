@@ -4,8 +4,8 @@
 var expect = require('chai').expect
 var Request = require('../../lib/request')
 var Response = require('../../lib/response')
-var TestClient = require('./test_client')
-var testHelpers = require('../test_helpers')
+var TestClient = require('./test-client')
+var testHelpers = require('../test-helpers')
 
 describe('broker registry query @integration', function () {
   it('should return a proper response', function (done) {

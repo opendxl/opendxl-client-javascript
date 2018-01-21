@@ -5,9 +5,9 @@ var expect = require('chai').expect
 var util = require('../../lib/util')
 var Request = require('../../lib/request')
 var Response = require('../../lib/response')
-var ServiceRegistrationInfo = require('../../lib/service_registration_info')
-var TestClient = require('./test_client')
-var testHelpers = require('../test_helpers')
+var ServiceRegistrationInfo = require('../../lib/service-registration-info')
+var TestClient = require('./test-client')
+var testHelpers = require('../test-helpers')
 
 describe('registered services @integration', function () {
   var DXL_SERVICE_REGISTER_EVENT_TOPIC =

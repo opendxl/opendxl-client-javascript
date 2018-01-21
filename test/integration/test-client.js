@@ -6,7 +6,7 @@ var os = require('os')
 var path = require('path')
 var Client = require('../../lib/client')
 var Config = require('../../lib/config')
-var DxlError = require('../../lib/dxl_error')
+var DxlError = require('../../lib/dxl-error')
 
 var DEFAULT_TIMEOUT = 5000
 var CLIENT_CONFIG_FILE = 'client_config.cfg'

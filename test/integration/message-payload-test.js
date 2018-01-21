@@ -6,10 +6,10 @@ var BufferList = require('bl')
 var expect = require('chai').expect
 var msgpack = require('msgpack5')()
 var Request = require('../../lib/request')
-var ServiceRegistrationInfo = require('../../lib/service_registration_info')
+var ServiceRegistrationInfo = require('../../lib/service-registration-info')
 var util = require('../../lib/util')
-var TestClient = require('./test_client')
-var testHelpers = require('../test_helpers')
+var TestClient = require('./test-client')
+var testHelpers = require('../test-helpers')
 
 describe('message payload in an async request @integration', function () {
   context('with buffers of various sizes', function () {

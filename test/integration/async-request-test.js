@@ -3,11 +3,11 @@
 
 var expect = require('chai').expect
 var Request = require('../../lib/request')
-var ServiceRegistrationInfo = require('../../lib/service_registration_info')
+var ServiceRegistrationInfo = require('../../lib/service-registration-info')
 var util = require('../../lib/util')
-var TestClient = require('./test_client')
-var TestService = require('./test_service')
-var testHelpers = require('../test_helpers')
+var TestClient = require('./test-client')
+var TestService = require('./test-service')
+var testHelpers = require('../test-helpers')
 
 describe('async requests @integration', function () {
   it('should receive a response for every request made', function (done) {

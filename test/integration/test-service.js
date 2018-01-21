@@ -1,6 +1,6 @@
 'use strict'
 
-var ErrorResponse = require('../../lib/error_response')
+var ErrorResponse = require('../../lib/error-response')
 var Response = require('../../lib/response')
 
 /**

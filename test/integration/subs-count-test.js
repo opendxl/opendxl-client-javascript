@@ -4,8 +4,8 @@
 var expect = require('chai').expect
 var Request = require('../../lib/request')
 var util = require('../../lib/util')
-var TestClient = require('./test_client')
-var testHelpers = require('../test_helpers')
+var TestClient = require('./test-client')
+var testHelpers = require('../test-helpers')
 
 describe('broker subs count @integration', function () {
   it('should return expected values for topic subscriptions', function (done) {

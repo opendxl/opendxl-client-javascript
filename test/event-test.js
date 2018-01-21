@@ -3,10 +3,10 @@
 
 var expect = require('chai').expect
 var Buffer = require('safe-buffer').Buffer
-var decodeMessage = require('../lib/decode_message')
+var decodeMessage = require('../lib/decode-message')
 var Event = require('../lib/event')
 var util = require('../lib/util')
-var testHelpers = require('./test_helpers')
+var testHelpers = require('./test-helpers')
 
 describe('Event', function () {
   context('when fields are mostly set to defaults', function () {

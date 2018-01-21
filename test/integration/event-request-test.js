@@ -4,7 +4,7 @@
 var expect = require('chai').expect
 var Event = require('../../lib/event')
 var util = require('../../lib/util')
-var TestClient = require('./test_client')
+var TestClient = require('./test-client')
 
 describe('event callbacks @integration', function () {
   it('should be received for every event request made', function (done) {

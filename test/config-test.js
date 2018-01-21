@@ -6,7 +6,7 @@ var fs = require('fs')
 var sinon = require('sinon')
 var Broker = require('../lib/broker')
 var Config = require('../lib/config')
-var MalformedBrokerError = require('../lib/malformed_broker_error')
+var MalformedBrokerError = require('../lib/malformed-broker-error')
 
 describe('Config', function () {
   context('when built from a config file', function () {
