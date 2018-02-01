@@ -98,4 +98,20 @@ describe('registered services @integration', function () {
       })
     })
   })
+
+  context('when disconnect called before service can be registered',
+    function () {
+      it('should successfully disconnect', function (done) {
+        var client = new TestClient(this, done)
+        var regInfo = getTestService(client)
+        client.registerServiceAsync(regInfo)
+        client.connect()
+        client.shutdown(null, function () {
+          expect(client.subscriptions).to.be.empty
+          expect(client.connected).to.be.false
+          done()
+        })
+      })
+    }
+  )
 })

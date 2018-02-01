@@ -13,7 +13,6 @@ describe('callbacks subscribed with wildcard topics @integration', function () {
     var eventPayload = 'Unit test payload'
 
     var client = new TestClient(this, done)
-    client.connect()
     client.addEventCallback(topic + '/#',
       function (event) {
         client.shutdown(null, function () {
@@ -22,9 +21,10 @@ describe('callbacks subscribed with wildcard topics @integration', function () {
         })
       }
     )
-
-    var event = new Event(topic + '/foo')
-    event.payload = eventPayload
-    client.sendEvent(event)
+    client.connect(function () {
+      var event = new Event(topic + '/foo')
+      event.payload = eventPayload
+      client.sendEvent(event)
+    })
   })
 })

@@ -5,10 +5,12 @@ var expect = require('chai').expect
 var dxl = require('../../dxl-client')
 var MessageError = dxl.MessageError
 var ErrorResponse = dxl.ErrorResponse
+var Event = dxl.Event
 var Request = dxl.Request
 var ServiceRegistrationInfo = dxl.ServiceRegistrationInfo
 var util = require('../../lib/util')
 var TestClient = require('./test-client')
+var testHelpers = require('../test-helpers')
 var TestService = require('./test-service')
 
 describe('Client @integration', function () {
@@ -24,6 +26,17 @@ describe('Client @integration', function () {
             done()
           })
         })
+      })
+    }
+  )
+
+  it('should be able to request a disconnect while still connecting',
+    function (done) {
+      var client = new TestClient(this.done)
+      client.connect()
+      client.disconnect(function () {
+        expect(client.connected).to.be.false
+        done()
       })
     }
   )
@@ -105,20 +118,46 @@ describe('Client @integration', function () {
       var topic = 'client_test_error_message_unknown_service_' +
         util.generateIdAsString()
       var client = new TestClient(this, done)
-      client.connect()
+      client.connect(function () {
+        var request = new Request(topic)
+        request.serviceId = util.generateIdAsString()
 
-      var request = new Request(topic)
-      request.serviceId = util.generateIdAsString()
-
-      client.asyncRequest(request, function (error, response) {
-        client.shutdown(null, function () {
-          expect(response).to.be.null
-          expect(error).to.be.an.instanceof(MessageError)
-          expect(error.detail).to.be.an.instanceof(ErrorResponse)
-          expect(error.detail.serviceId).to.equal(request.serviceId)
-          done()
+        client.asyncRequest(request, function (error, response) {
+          client.shutdown(null, function () {
+            expect(response).to.be.null
+            expect(error).to.be.an.instanceof(MessageError)
+            expect(error.detail).to.be.an.instanceof(ErrorResponse)
+            expect(error.detail.serviceId).to.equal(request.serviceId)
+            done()
+          })
         })
       })
     }
   )
+
+  it('should be able to receive an event after reconnecting', function (done) {
+    var topic = 'client_test_event_after_reconnect_' +
+      util.generateIdAsString()
+    var eventPayloadToSend = 'sent after reconnect'
+    var client = new TestClient(this, done)
+    var clientWasDisconnectedAfterFirstConnect = false
+    client.addEventCallback(topic, function (event) {
+      client.shutdown(null, function () {
+        expect(clientWasDisconnectedAfterFirstConnect).to.be.true
+        var eventPayloadReceived = testHelpers.decodePayload(event)
+        expect(eventPayloadReceived).to.equal(eventPayloadToSend)
+        done()
+      })
+    })
+    client.connect(function () {
+      client.disconnect(function () {
+        clientWasDisconnectedAfterFirstConnect = !client.connected
+        client.connect(function () {
+          var event = new Event(topic)
+          event.payload = eventPayloadToSend
+          client.sendEvent(event)
+        })
+      })
+    })
+  })
 })
