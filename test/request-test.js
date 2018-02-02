@@ -52,4 +52,47 @@ describe('Request', function () {
       expect(decodedRequest).to.be.eql(request)
     })
   })
+
+  context('payload', function () {
+    context('when set to a binary buffer', function () {
+      it('should be preserved through serialization', function () {
+        var request = new Request('')
+        request.payload = Buffer.from([0x01, 0xD1, 0x9A])
+
+        var encodedRequest = request._toBytes()
+        expect(Buffer.isBuffer(encodedRequest)).to.be.true
+
+        var decodedRequest = decodeMessage(encodedRequest)
+        expect(decodedRequest.payload).to.be.eql(request.payload)
+      })
+    })
+
+    context('when set to an object', function () {
+      it('should be serialized as a string', function () {
+        var request = new Request('')
+        request.payload = {'hello': 'how are you', 'fine': 'thanks'}
+
+        var encodedRequest = request._toBytes()
+        expect(Buffer.isBuffer(encodedRequest)).to.be.true
+
+        var decodedRequest = decodeMessage(encodedRequest)
+        expect(testHelpers.jsonPayloadToObject(
+          decodedRequest)).to.be.eql(request.payload)
+      })
+    })
+
+    context('when set to a number', function () {
+      it('should be serialized as a string', function () {
+        var request = new Request('')
+        request.payload = 42
+
+        var encodedRequest = request._toBytes()
+        expect(Buffer.isBuffer(encodedRequest)).to.be.true
+
+        var decodedRequest = decodeMessage(encodedRequest)
+        expect(Number(testHelpers.decodePayload(
+          decodedRequest))).to.be.equal(request.payload)
+      })
+    })
+  })
 })
