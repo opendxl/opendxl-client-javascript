@@ -118,18 +118,18 @@ describe('Client @integration', function () {
       var topic = 'client_test_error_message_unknown_service_' +
         util.generateIdAsString()
       var client = new TestClient(this, done)
-      client.connect(function () {
-        var request = new Request(topic)
-        request.serviceId = util.generateIdAsString()
+      client.connect()
 
-        client.asyncRequest(request, function (error, response) {
-          client.shutdown(null, function () {
-            expect(response).to.be.null
-            expect(error).to.be.an.instanceof(MessageError)
-            expect(error.detail).to.be.an.instanceof(ErrorResponse)
-            expect(error.detail.serviceId).to.equal(request.serviceId)
-            done()
-          })
+      var request = new Request(topic)
+      request.serviceId = util.generateIdAsString()
+
+      client.asyncRequest(request, function (error, response) {
+        client.shutdown(null, function () {
+          expect(response).to.be.null
+          expect(error).to.be.an.instanceof(MessageError)
+          expect(error.detail).to.be.an.instanceof(ErrorResponse)
+          expect(error.detail.serviceId).to.equal(request.serviceId)
+          done()
         })
       })
     }
