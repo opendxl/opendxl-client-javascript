@@ -48,8 +48,11 @@ var info = new dxl.ServiceRegistrationInfo(client, 'myService')
 info.addTopic(SERVICE_TOPIC,
   // Handle the receipt of an incoming service request
   function (request) {
-    // Extract information from request
-    console.log('Service received request payload: ' + request.payload)
+    // Extract information from request.  The toString() call converts the
+    // payload from a binary Buffer into a string, decoded using UTF-8
+    // character encoding.
+    console.log('Service received request payload: ' +
+      request.payload.toString())
     // Create the response message
     var response = new dxl.Response(request)
     // Populate the response payload
@@ -99,10 +102,12 @@ client.asyncRequest(request,
       if (error instanceof dxl.MessageError) {
         console.log('Request error code: ' + error.code)
       }
-    // No error occurred, so extract information from the response
+    // No error occurred, so extract information from the response. The
+    // toString() call converts the payload from a binary Buffer into a
+    // string, decoded using UTF-8 character encoding.
     } else {
       console.log('Client received response payload: ' +
-        response.payload)
+        response.payload.toString())
     }
   })
 ```

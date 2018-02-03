@@ -50,8 +50,10 @@ the client will, by default, also subscribe to the topic.
 // Create and add event listener
 client.addEventCallback(EVENT_TOPIC,
   function (event) {
-    // Print the payload for the received event
-    console.log('Received event: ' + event.payload)
+    // Print the payload for the received event. The toString() call converts
+    // the payload from a binary Buffer into a string, decoded using UTF-8
+    // character encoding.
+    console.log('Received event: ' + event.payload.toString())
     // Increment the count
     eventCount++
 
