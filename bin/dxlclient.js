@@ -4,7 +4,7 @@
 
 var program = require('commander')
 var cli = require('../lib/_cli')
-var util = require('../lib/_cli/util')
+var util = require('../lib/_cli/cli-util')
 
 process.on('uncaughtException', function (err) {
   var verbosity = util.getProgramVerbosity(program)
