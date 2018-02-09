@@ -11,6 +11,7 @@
     "client"
   ],
   "files": [
+    "bin",
     "lib",
     "LICENSE",
     "README.md"
@@ -48,6 +49,9 @@
   "repository": {
     "type": "git",
     "url": "git://github.com/opendxl/opendxl-client-javascript.git"
+  },
+  "bin": {
+    "dxlclient": "./bin/dxlclient.js"
   },
   "scripts": {
     "predist": "npm install && rimraf *.tgz",
