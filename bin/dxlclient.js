@@ -10,10 +10,10 @@ process.on('uncaughtException', function (err) {
   var verbosity = util.getProgramVerbosity(program)
   switch (verbosity) {
     case 0:
-      process.exit(1)
+      process.exit(1) // jshint ignore:line
     case 1:
       util.logError(err.message)
-      process.exit(1)
+      process.exit(1) // jshint ignore:line
     default:
       throw err
   }
