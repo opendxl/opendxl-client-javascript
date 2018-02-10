@@ -20,8 +20,8 @@ process.on('uncaughtException', function (err) {
 })
 
 program
-  .option('-s, --silent', 'show only errors (no info/debug/messages) while a ' +
-    'command is running')
+  .option('-q, --quiet',
+    'show only errors (no info/debug/messages) while a command is running')
   .option('-v, --verbose', 'Verbose mode. Additional v characters increase ' +
     'verbosity level, e.g., -vv, -vvv.',
     function (_, total) { return total + 1 }, 1)
