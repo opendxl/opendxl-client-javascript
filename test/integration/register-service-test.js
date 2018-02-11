@@ -3,7 +3,7 @@
 
 var expect = require('chai').expect
 var util = require('../../lib/util')
-var dxl = require('../../dxl-client')
+var dxl = require('../..')
 var Request = dxl.Request
 var Response = dxl.Response
 var ServiceRegistrationInfo = dxl.ServiceRegistrationInfo

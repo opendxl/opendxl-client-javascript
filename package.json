@@ -38,7 +38,7 @@
     "standard": "^10.0.3"
   },
   "eslintConfig": {},
-  "main": "dxl-client.js",
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/opendxl/opendxl-client-javascript.git"

@@ -1,6 +1,6 @@
 'use strict'
 
-var dxl = require('../../dxl-client')
+var dxl = require('../..')
 var ErrorResponse = dxl.ErrorResponse
 var Response = dxl.Response
 

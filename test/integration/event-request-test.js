@@ -2,7 +2,7 @@
 /* eslint no-unused-expressions: "off" */ // for chai expect assertions
 
 var expect = require('chai').expect
-var Event = require('../../dxl-client').Event
+var Event = require('../..').Event
 var util = require('../../lib/util')
 var TestClient = require('./test-client')
 
