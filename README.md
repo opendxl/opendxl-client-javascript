@@ -25,7 +25,7 @@ for API documentation.
 ## Bugs and Feedback
 
 For bugs, questions and discussions please use the
-[Github Issues](https://github.com/opendxl/opendxl-client-javascript/issues).
+[GitHub Issues](https://github.com/opendxl/opendxl-client-javascript/issues).
 
 ## LICENSE
 

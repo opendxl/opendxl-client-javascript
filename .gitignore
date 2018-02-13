@@ -3,3 +3,9 @@ package-lock.json
 out/
 test/integration/client_config.cfg
 npm-debug.log
+*.tgz
+*.zip
+*.csr
+*.crt
+*.key
+*.pem

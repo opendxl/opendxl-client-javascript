@@ -28,10 +28,12 @@
     "uuid": "^3.1.0"
   },
   "devDependencies": {
+    "archiver": "^2.1.1",
     "chai": "^4.1.2",
     "jsdoc": "^3.5.5",
     "jshint": "^2.9.5",
     "mocha": "^4.1.0",
+    "rimraf": "^2.6.2",
     "safe-buffer": "^5.1.1",
     "sinon": "^4.1.4",
     "snazzy": "^7.0.0",
@@ -44,13 +46,16 @@
     "url": "git://github.com/opendxl/opendxl-client-javascript.git"
   },
   "scripts": {
+    "predist": "npm install && rimraf *.tgz",
+    "dist": "npm pack && npm run doc && node scripts/dist.js",
     "test": "mocha --recursive",
     "lint": "npm run lint:jshint && npm run lint:standard",
-    "lint:jshint": "jshint lib test",
+    "lint:jshint": "jshint lib scripts test",
     "lint:standard": "standard | snazzy",
     "preci": "npm run lint",
     "ci": "npm run test",
-    "doc": "jsdoc -c ./jsdoc-conf.json -r lib/ README.md -u docs/"
+    "predoc": "rimraf out/*",
+    "doc": "jsdoc -c ./doc/conf.json doc/index.md -r lib/ -u doc/sdk"
   },
   "standard": {
     "env": [

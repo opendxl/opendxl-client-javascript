@@ -1,0 +1,22 @@
+{
+  "overview": {
+    "title": "Overview"
+  },
+  "installation": {
+    "title": "Installation"
+  },
+  "provisioning": {
+    "title": "Provisioning"
+  },
+  "samples": {
+    "title": "Samples",
+    "children": {
+      "basic-service-sample": {
+        "title": "Basic Service Sample"
+      },
+      "basic-events-sample": {
+        "title": "Basic Events Sample"
+      }
+    }
+  }
+}

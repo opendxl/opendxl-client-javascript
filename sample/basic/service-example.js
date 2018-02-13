@@ -4,7 +4,7 @@
  // messages and send Response messages back to an invoking client.
 
 var common = require('../common')
-var dxl = require('../..')
+var dxl = common.requireDxlClient()
 
 // The topic for the service to respond to
 var SERVICE_TOPIC = '/isecg/sample/mybasicservice'

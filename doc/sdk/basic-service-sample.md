@@ -8,11 +8,11 @@ step.
 
 ### Running the Sample
 
-To run this sample execute the ``examples/basic/service-example.js`` script as
+To run this sample execute the ``sample/basic/service-example.js`` script as
 follows:
 
 ```sh
-$ node examples/basic/service-example.js
+$ node sample/basic/service-example.js
 ```
 
 ### Output

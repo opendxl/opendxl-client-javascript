@@ -6,7 +6,7 @@
  // received by the callback.
 
 var common = require('../common')
-var dxl = require('../..')
+var dxl = common.requireDxlClient()
 
 // The topic to publish to
 var EVENT_TOPIC = '/isecg/sample/basicevent'

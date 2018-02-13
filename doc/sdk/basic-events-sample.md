@@ -9,11 +9,11 @@ step.
 
 ### Running the Sample
 
-To run this sample execute the ``examples/basic/event-example.js`` script as
+To run this sample execute the ``sample/basic/event-example.js`` script as
 follows:
 
 ```sh
-$ node examples/basic/event-example.js
+$ node sample/basic/event-example.js
 ```
 
 ### Output
@@ -37,7 +37,7 @@ Received event: 998
 Received event: 999
 Elapsed time (ms): 420
 ```
-    
+
 The code for the sample is broken into two main sections.
 
 ### Register Callback to Receive Events
@@ -89,7 +89,7 @@ client.connect(function () {
 })
 ```
 
-The example waits for all of the events to be received by the event 
+The example waits for all of the events to be received by the event
 callback that was previously registered. After outputting the elapsed time,
 the example calls the [destroy](Client.html#destroy) method of the client to
 tear down client resources and end the example.
