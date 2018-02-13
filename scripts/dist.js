@@ -18,7 +18,7 @@ var TARBALL_NAME = PACKAGE_NAME.replace(/^@/, '').replace('/', '-') +
   '-' + VERSION + '.tgz'
 var RELEASE_ZIP = 'dxlclient-javascript-sdk-' + VERSION + '.zip'
 
-var DOC_SOURCE_DIR = 'out'
+var DOC_SOURCE_DIR = 'out/jsdoc'
 var DOC_TARGET_DIR = 'doc'
 var SAMPLE_DIR = 'sample'
 
@@ -53,18 +53,7 @@ fs.readdirSync(SAMPLE_DIR).forEach(function (sampleFile) {
   }
 })
 
-fs.readdirSync(DOC_SOURCE_DIR).forEach(function (sampleFile) {
-  var sourcePath = path.join(DOC_SOURCE_DIR, sampleFile)
-  var targetPath = path.join(DOC_TARGET_DIR, sampleFile)
-  if (!sampleFile.match(/^\./)) {
-    if (fs.statSync(sourcePath).isDirectory()) {
-      archive.directory(sourcePath, targetPath)
-    } else {
-      archive.file(sourcePath, {name: targetPath})
-    }
-  }
-})
-
+archive.directory(DOC_SOURCE_DIR, DOC_TARGET_DIR)
 archive.file('doc/README.html', {name: 'README.html'})
 archive.file(TARBALL_NAME, {name: 'lib/' + TARBALL_NAME})
 archive.finalize()

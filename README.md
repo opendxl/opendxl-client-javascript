@@ -19,7 +19,7 @@ for an overview of the Data Exchange Layer (DXL), the OpenDXL JavaScript client,
 and examples.
 
 See the
-[JavaScript Client SDK Documentation](https://opendxl.github.io/opendxl-client-javascript)
+[JavaScript Client SDK Documentation](https://opendxl.github.io/opendxl-client-javascript/jsdoc)
 for API documentation.
 
 ## Bugs and Feedback

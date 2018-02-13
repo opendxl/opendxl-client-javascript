@@ -54,8 +54,8 @@
     "lint:standard": "standard | snazzy",
     "preci": "npm run lint",
     "ci": "npm run test",
-    "predoc": "rimraf out/*",
-    "doc": "jsdoc -c ./doc/conf.json doc/index.md -r lib/ -u doc/sdk"
+    "predoc": "rimraf out/jsdoc",
+    "doc": "jsdoc -c ./doc/conf.json doc/index.md -r lib/ -u doc/sdk -d out/jsdoc"
   },
   "standard": {
     "env": [
