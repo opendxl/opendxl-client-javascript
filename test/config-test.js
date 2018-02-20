@@ -10,6 +10,15 @@ var Config = dxl.Config
 var MalformedBrokerError = dxl.MalformedBrokerError
 
 describe('Config', function () {
+  after(function () {
+    if (fs.existsSync.restore) {
+      fs.existsSync.restore()
+    }
+    if (fs.readFileSync.restore) {
+      fs.readFileSync.restore()
+    }
+  })
+
   context('when built from a config file', function () {
     var fileName = 'dxlclient.config'
     var configFile = [
