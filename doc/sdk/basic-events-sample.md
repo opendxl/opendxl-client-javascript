@@ -4,8 +4,7 @@ registered, the sample sends a set number of [Event](Event.html) messages to
 the fabric and waits for them all to be received by the callback.
 
 Prior to running this sample make sure you have completed the
-[client provisioning](https://github.com/opendxl/opendxl-client-javascript/wiki/Provisioning)
-step.
+[client provisioning]{@tutorial provisioning} step.
 
 ### Running the Sample
 
