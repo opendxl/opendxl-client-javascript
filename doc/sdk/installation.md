@@ -19,6 +19,31 @@ be satisfied:
   > No workaround for this issue on the older Node.js versions is known at this
   > time.
 
+* If you intend to use the
+  [OpenDXL JavaScript CLI tool]{@tutorial basic-cli-provisioning} for
+  provisioning, you must ensure that an OpenSSL executable (separate from
+  Node.js itself) is installed. The CLI tool uses OpenSSL to generate private
+  keys and certificate signing requests.
+
+  For Windows, OpenSSL can be downloaded from the following location:
+
+  <http://www.slproweb.com/products/Win32OpenSSL.html>
+
+  Select the Win32 OpenSSL Light or Win64 OpenSSL Light package, depending on
+  your architecture (32-bit or 64-bit).
+
+  If a message occurs during setup indicating `...critical component is
+  missing: Microsoft Visual C++ 2008 Redistributables`, cancel the setup
+  and download one of the following packages (based on your architecture):
+
+  * Visual C++ 2008 Redistributables (x86), available at:
+
+    <http://www.microsoft.com/downloads/details.aspx?familyid=9B2DA534-3E03-4391-8A4D-074B9F2BC1BF>
+
+  * Visual C++ 2008 Redistributables (x64), available at:
+
+    <http://www.microsoft.com/downloads/details.aspx?familyid=bd2a6171-e2d6-4230-b809-9a8d7548c1b6>
+
 ### Installation
 
 Before installing the OpenDXL JavaScript Client (Node.js), change to the
