@@ -1,6 +1,7 @@
 'use strict'
 /* eslint no-unused-expressions: "off" */ // for chai expect assertions
 
+var childProcess = require('child_process')
 var expect = require('chai').expect
 var fs = require('fs')
 var path = require('path')
@@ -22,6 +23,12 @@ describe('generatecsr CLI command @cli', function () {
   })
 
   afterEach(function () {
+    if (fs.existsSync.restore) {
+      fs.existsSync.restore()
+    }
+    if (childProcess.spawnSync.restore) {
+      childProcess.spawnSync.restore()
+    }
     rimraf.sync(tmpDir)
   })
 
@@ -100,6 +107,32 @@ describe('generatecsr CLI command @cli', function () {
         done()
       }
       command.parse(cliArgs(['client', '-P', 'itsasecret']))
+    }
+  )
+
+  it('should use an explicit path to the openssl command when specified',
+    function (done) {
+      var dummySslBinPath = path.join(tmpDir, 'openssl.exe')
+      var csrFileName = path.join(tmpDir, 'client.csr')
+      var privateKeyFileName = path.join(tmpDir, 'client.key')
+      var expectedText = 'Written by custom openssl'
+      sinon.stub(fs, 'existsSync').withArgs(dummySslBinPath).returns(true)
+      sinon.stub(childProcess, 'spawnSync').callsFake(
+        function () {
+          fs.writeFileSync(csrFileName, expectedText)
+          fs.writeFileSync(privateKeyFileName, expectedText)
+          return {status: 0}
+        })
+      command.doneCallback = function () {
+        fs.existsSync.restore()
+        expect(fs.existsSync(csrFileName)).to.be.true
+        expect(fs.readFileSync(csrFileName, 'utf-8')).to.equal(expectedText)
+        expect(fs.existsSync(privateKeyFileName)).to.be.true
+        expect(fs.readFileSync(privateKeyFileName, 'utf-8')).to.equal(
+          expectedText)
+        done()
+      }
+      command.parse(cliArgs(['client', '--opensslbin', dummySslBinPath]))
     }
   )
 })
