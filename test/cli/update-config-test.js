@@ -64,6 +64,13 @@ describe('updateconfig CLI command @cli', function () {
   }
 
   it('should update a ca bundle and config from the server', function (done) {
+    // A DXL client config file with a single broker entry, 'oldbroker', is
+    // stored before making the updateconfig request. This test confirms that
+    // the 'oldbroker' entry is replaced with the new broker list that the
+    // management service returns - and that the CA certificate bundle file
+    // is also updated to the latest bundle returned by the server. Comment
+    // lines in the original DXL client config file should be preserved
+    // after the update.
     var configBeforeBrokers = ['[Certs]',
       '# This is the cert chain',
       'BrokerCertChain=ca-bundle.crt',
@@ -102,6 +109,9 @@ describe('updateconfig CLI command @cli', function () {
       .concat(configAfterBrokers).join(cliHelpers.LINE_SEPARATOR))
     stubUpdateCommands(expectedBrokersInHttpResponse, expectedCookie)
     command.doneCallback = function () {
+      // Validate that the 'CA certificate bundle' returned by the management
+      // service stub was stored. This stub sets the content of the bundle
+      // to the full request for convenience in testing.
       var caBundleFileName = path.join(tmpDir, 'ca-bundle.crt')
       expect(fs.existsSync(caBundleFileName)).to.be.true
       var expectedRequest = {
@@ -117,6 +127,9 @@ describe('updateconfig CLI command @cli', function () {
       expectedRequest.path = CLIENT_CA_BUNDLE_COMMAND + '?:output=json'
       expect(caBundleRequest).to.eql(expectedRequest)
 
+      // The management service stub stores the content of the broker list
+      // request in a separate file. Confirm from the contents of that file
+      // that the request had the expected content.
       expectedRequest.path = BROKER_LIST_COMMAND + '?%3Aoutput=json'
       expect(fs.existsSync(tmpBrokerRequestFile)).to.be.true
       expect(JSON.parse(fs.readFileSync(tmpBrokerRequestFile, 'utf-8'))).to

@@ -59,13 +59,20 @@ describe('provisionconfig CLI command @cli', function () {
     var expectedCookie = util.generateIdAsString()
     stubProvisionCommand(expectedClientCert, expectedBrokers, expectedCookie)
     command.doneCallback = function () {
+      // Validate that a CSR with the expected common name was generated
       var csrFileName = path.join(tmpDir, 'client3.csr')
       expect(fs.existsSync(csrFileName)).to.be.true
       expect(cliHelpers.getCsrSubject(csrFileName)).to.equal('/CN=client2')
+      // Validate that a proper RSA private key was generated
       var privateKeyFileName = path.join(tmpDir, 'client3.key')
       cliHelpers.validateRsaPrivateKey(privateKeyFileName)
+      // Validate that the 'CA certificate bundle' returned by the management
+      // service stub was stored. This stub sets the content of the bundle
+      // to the full request for convenience in testing.
       var caBundleFileName = path.join(tmpDir, 'ca-bundle.crt')
       expect(fs.existsSync(caBundleFileName)).to.be.true
+      // Validate that the request to the provisioning endpoint contained
+      // the expected content.
       var actualRequestData = JSON.parse(querystring.unescape(fs.readFileSync(
         caBundleFileName)))
       expect({
@@ -78,10 +85,14 @@ describe('provisionconfig CLI command @cli', function () {
         requestCert: false,
         headers: {cookie: expectedCookie}
       }).to.eql(actualRequestData)
+      // Validate that the 'client certificate' returned by the management
+      // service stub was stored.
       var certFileName = path.join(tmpDir, 'client3.crt')
       expect(fs.existsSync(certFileName)).to.be.true
       expect(fs.readFileSync(certFileName, 'utf-8')).to.equal(
         expectedClientCert)
+      // Validate that the DXL client config file stored from the management
+      // service request contained the expected content.
       var configFile = path.join(tmpDir, 'dxlclient.config')
       expect(fs.existsSync(configFile)).to.be.true
       var expectedConfigFile = ['[Certs]',
@@ -106,8 +117,12 @@ describe('provisionconfig CLI command @cli', function () {
     fs.writeFileSync(csrFileName, csrText)
     stubProvisionCommand()
     command.doneCallback = function () {
+      // Validate that the CSR file still has the same contents as it did
+      // before the CLI command was run - i.e., that it was not regenerated.
       expect(fs.existsSync(csrFileName)).to.be.true
       expect(fs.readFileSync(csrFileName, 'utf-8')).to.equal(csrText)
+      // Validate that the CSR sent to the management service was the one
+      // specified as a command line argument.
       var caBundleFileName = path.join(tmpDir, 'ca-bundle.crt')
       expect(fs.existsSync(caBundleFileName)).to.be.true
       var actualRequestData = JSON.parse(querystring.unescape(fs.readFileSync(
@@ -127,8 +142,6 @@ describe('provisionconfig CLI command @cli', function () {
     fs.writeFileSync(trustedCaCert, trustedCaText)
     stubProvisionCommand()
     command.doneCallback = function () {
-      var csrFileName = path.join(tmpDir, 'client.csr')
-      expect(fs.existsSync(csrFileName)).to.be.true
       var caBundleFileName = path.join(tmpDir, 'ca-bundle.crt')
       expect(fs.existsSync(caBundleFileName)).to.be.true
       var actualRequestData = JSON.parse(querystring.unescape(fs.readFileSync(
