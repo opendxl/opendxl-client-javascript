@@ -156,4 +156,28 @@ describe('provisionconfig CLI command @cli', function () {
     command.parse(cliArgs(['-t', '9443', '-e', trustedCaCert, '-u', 'myuser',
       '-p', 'mypass', 'myhost', 'client']))
   })
+
+  it('should prompt for server username and password options with no value',
+    function (done) {
+      var userName = 'testuser'
+      var password = 'testpassword'
+      stubProvisionCommand()
+      var stdinStub = new cliHelpers.StdinStub([userName, password])
+      var stdoutStub = new cliHelpers.StdoutStub()
+      command.doneCallback = function () {
+        stdinStub.restore()
+        stdoutStub.restore()
+        expect(stdoutStub.data).to.equal(
+          'Enter server user: Enter server password: ')
+        var caBundleFileName = path.join(tmpDir, 'ca-bundle.crt')
+        expect(fs.existsSync(caBundleFileName)).to.be.true
+        var actualRequestData = JSON.parse(querystring.unescape(fs.readFileSync(
+          caBundleFileName)))
+        expect(actualRequestData).to.have.property('auth',
+          userName + ':' + password)
+        done()
+      }
+      command.parse(cliArgs(['myhost', 'client']))
+    }
+  )
 })

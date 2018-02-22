@@ -179,4 +179,40 @@ describe('updateconfig CLI command @cli', function () {
     command.parse(cliArgs(['-t', '9443', '-e', trustedCaCert, '-u', 'admin',
       '-p', 'password', tmpDir, 'somehost']))
   })
+
+  it('should prompt for server username and password options with no value',
+    function (done) {
+      var userName = 'thetestuser'
+      var password = 'thetestpassword'
+      stubUpdateCommands()
+      var stdinStub = new cliHelpers.StdinStub([userName, password])
+      var stdoutStub = new cliHelpers.StdoutStub()
+      var originalConfig = ['[Certs]',
+        'BrokerCertChain=ca-bundle.crt',
+        '',
+        '[Brokers]',
+        '']
+      var configFile = path.join(tmpDir, 'dxlclient.config')
+      fs.writeFileSync(configFile, originalConfig.join(
+        cliHelpers.LINE_SEPARATOR))
+      command.doneCallback = function () {
+        stdinStub.restore()
+        stdoutStub.restore()
+        expect(stdoutStub.data).to.equal(
+          'Enter server user: Enter server password: ')
+        var caBundleFileName = path.join(tmpDir, 'ca-bundle.crt')
+        expect(fs.existsSync(caBundleFileName)).to.be.true
+        var caBundleRequest = JSON.parse(querystring.unescape(fs.readFileSync(
+          caBundleFileName)))
+        expect(caBundleRequest).to.have.property('auth',
+          userName + ':' + password)
+        var brokerRequest = JSON.parse(fs.readFileSync(tmpBrokerRequestFile,
+          'utf-8'))
+        expect(brokerRequest).to.have.property('auth',
+          userName + ':' + password)
+        done()
+      }
+      command.parse(cliArgs([tmpDir, 'myhost']))
+    }
+  )
 })
