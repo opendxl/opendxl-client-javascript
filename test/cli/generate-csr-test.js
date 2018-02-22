@@ -91,24 +91,52 @@ describe('generatecsr CLI command @cli', function () {
 
   it('should encrypt a private key with a specified passphrase',
     function (done) {
+      var passphrase = 'itsasecret'
       command.doneCallback = function () {
         var privateKeyFileName = path.join(tmpDir, 'client.key')
         var stderrStub = sinon.stub(console, 'error')
         // Validate that supplying no decryption password throws an error
-        expect(cliHelpers.validateRsaPrivateKey.bind(null,
-          privateKeyFileName)).to.throw(CliError)
+        expect(cliHelpers.validateRsaPrivateKey.bind(null, privateKeyFileName))
+          .to.throw(CliError)
         // Validate that supplying the wrong decryption password throws an error
         expect(cliHelpers.validateRsaPrivateKey.bind(null, privateKeyFileName,
           'mybadpass')).to.throw(CliError)
         stderrStub.restore()
         // Validate that supplying the right password is successful
-        cliHelpers.validateRsaPrivateKey.bind(null, privateKeyFileName,
-          'itsasecret')
+        cliHelpers.validateRsaPrivateKey(privateKeyFileName, passphrase)
         done()
       }
-      command.parse(cliArgs(['client', '-P', 'itsasecret']))
+      command.parse(cliArgs(['client', '-P', passphrase]))
     }
   )
+
+  it('should prompt for passphrase option with no value', function (done) {
+    var passphrase = 'supersecret'
+    var stdinStub = new cliHelpers.StdinStub(['', passphrase + 'nomatch1',
+      passphrase + 'nomatch2', passphrase, passphrase])
+    var stdoutStub = new cliHelpers.StdoutStub()
+    command.doneCallback = function () {
+      stdinStub.restore()
+      stdoutStub.restore()
+      expect(stdoutStub.data).to.equal('Enter private key passphrase: ' +
+        'Value cannot be empty. Try again.\n' +
+        'Enter private key passphrase: ' +
+        'Confirm private key passphrase: ' +
+        'Values for private key passphrase do not match. Try again.\n' +
+        'Enter private key passphrase: ' +
+        'Confirm private key passphrase: ')
+      var privateKeyFileName = path.join(tmpDir, 'client.key')
+      var stderrStub = sinon.stub(console, 'error')
+      // Validate that supplying no decryption password throws an error
+      expect(cliHelpers.validateRsaPrivateKey.bind(
+        null, privateKeyFileName)).to.throw(CliError)
+      stderrStub.restore()
+      // Validate that supplying the right password is successful
+      cliHelpers.validateRsaPrivateKey(privateKeyFileName, passphrase)
+      done()
+    }
+    command.parse(cliArgs(['client', '-P']))
+  })
 
   it('should use an explicit path to the openssl command when specified',
     function (done) {
