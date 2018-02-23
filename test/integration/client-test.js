@@ -127,6 +127,10 @@ describe('Client @integration', function () {
         client.shutdown(null, function () {
           expect(response).to.be.null
           expect(error).to.be.an.instanceof(MessageError)
+          expect(testHelpers.normalizedErrorCode(error)).to.equal(
+            testHelpers.DXL_SERVICE_UNAVAILABLE_ERROR_CODE)
+          expect(error.message).to.equal(
+            testHelpers.DXL_SERVICE_UNAVAILABLE_ERROR_MESSAGE)
           expect(error.detail).to.be.an.instanceof(ErrorResponse)
           expect(error.detail.serviceId).to.equal(request.serviceId)
           done()

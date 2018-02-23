@@ -8,11 +8,13 @@ var Response = dxl.Response
 var TestClient = require('./test-client')
 var testHelpers = require('../test-helpers')
 
+var DXL_BROKER_REGISTRY_QUERY_TOPIC = '/mcafee/service/dxl/brokerregistry/query'
+
 describe('broker registry query @integration', function () {
   it('should return a proper response', function (done) {
     var client = new TestClient(this, done)
     client.connect(function () {
-      var topic = '/mcafee/service/dxl/brokerregistry/query'
+      var topic = DXL_BROKER_REGISTRY_QUERY_TOPIC
       var request = new Request(topic)
       request.payload = '{}'
       client.asyncRequest(request, function (error, response) {
