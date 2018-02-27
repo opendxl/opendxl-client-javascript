@@ -21,11 +21,11 @@ satisfied:
 
 ### Installation
 
-To install the JavaScript client via the
-[npm package registry](https://www.npmjs.com/package/@opendxl/dxl-client), run:
+Before installing the JavaScript client, change to the directory which you
+extracted from the SDK zip file. For example:
 
 ```sh
-npm install @opendxl/dxl-client --save
+cd {@releasezipname}
 ```
 
 To install the JavaScript client from a local tarball for a Mac or
@@ -39,4 +39,11 @@ To install the JavaScript client from a local tarball for Windows, run:
 
 ```sh
 npm install lib\opendxl-dxl-client-<version>.tgz --save
+```
+
+To install the JavaScript client via the
+[npm package registry](https://www.npmjs.com/package/@opendxl/dxl-client), run:
+
+```sh
+npm install @opendxl/dxl-client --save
 ```

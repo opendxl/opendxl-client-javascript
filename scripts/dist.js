@@ -10,7 +10,7 @@ var VERSION = process.env.npm_package_version
 var PACKAGE_NAME = process.env.npm_package_name
 if (!VERSION || !PACKAGE_NAME) {
   console.error('Unable to determine package version or name. Try running ' +
-    "this script via 'npm run dist'.")
+    "this script via 'npm run " + path.basename(__filename, '.js') + "'.")
   process.exit(1)
 }
 

@@ -55,7 +55,8 @@
     "preci": "npm run lint",
     "ci": "npm run test",
     "predoc": "rimraf out/jsdoc",
-    "doc": "jsdoc -c ./doc/conf.json doc/index.md -r lib/ -u doc/sdk -d out/jsdoc"
+    "doc": "jsdoc -c ./doc/conf.json doc/index.md -r lib/ -u doc/sdk -d out/jsdoc",
+    "postdoc": "node scripts/postdoc.js"
   },
   "standard": {
     "env": [
