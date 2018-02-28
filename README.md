@@ -1,4 +1,4 @@
-# OpenDXL JavaScript Client
+# OpenDXL JavaScript Client (Node.js)
 [![Latest NPM Version](https://img.shields.io/npm/v/@opendxl/dxl-client.svg)](https://www.npmjs.com/package/@opendxl/dxl-client)
 [![Build Status](https://img.shields.io/travis/opendxl/opendxl-client-javascript/master.svg)](https://travis-ci.org/opendxl/opendxl-client-javascript)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
@@ -6,8 +6,8 @@
 
 ## Overview
 
-The OpenDXL JavaScript Client (Node.js) enables the development of applications that
-connect to the
+The OpenDXL JavaScript Client (Node.js) enables the development of applications
+that connect to the
 [McAfee Data Exchange Layer](http://www.mcafee.com/us/solutions/data-exchange-layer.aspx)
 messaging fabric for the purposes of sending/receiving events and
 invoking/providing services.
@@ -15,11 +15,11 @@ invoking/providing services.
 ## Documentation
 
 See the [Wiki](https://github.com/opendxl/opendxl-client-javascript/wiki)
-for an overview of the Data Exchange Layer (DXL), the OpenDXL JavaScript client,
-and examples.
+for an overview of the Data Exchange Layer (DXL), the OpenDXL JavaScript Client
+(Node.js), and examples.
 
 See the
-[JavaScript Client SDK Documentation](https://opendxl.github.io/opendxl-client-javascript/jsdoc)
+[JavaScript Client (Node.js) SDK Documentation](https://opendxl.github.io/opendxl-client-javascript/jsdoc)
 for API documentation.
 
 ## Bugs and Feedback
