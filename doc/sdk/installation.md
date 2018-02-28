@@ -32,13 +32,13 @@ To install the JavaScript client from a local tarball for a Mac or
 Linux-based operating system, run the following command:
 
 ```sh
-npm install lib/opendxl-dxl-client-<version>.tgz --save
+npm install lib/{@releasetarballname} --save
 ```
 
 To install the JavaScript client from a local tarball for Windows, run:
 
 ```sh
-npm install lib\opendxl-dxl-client-<version>.tgz --save
+npm install lib\{@releasetarballname} --save
 ```
 
 To install the JavaScript client via the
