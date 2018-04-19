@@ -1,7 +1,7 @@
 {
   "name": "@opendxl/dxl-client",
   "version": "0.0.1",
-  "author": "McAfee, Inc.",
+  "author": "McAfee LLC",
   "description": "An OpenDXL client library for Javascript",
   "license": "Apache-2.0",
   "keywords": [
@@ -13,8 +13,7 @@
   "files": [
     "lib",
     "LICENSE",
-    "README.md",
-    "dxl-client.js"
+    "README.md"
   ],
   "engines": {
     "node": ">=4.0.0"
