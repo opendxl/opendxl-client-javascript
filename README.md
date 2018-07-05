@@ -22,6 +22,16 @@ See the
 [JavaScript Client (Node.js) SDK Documentation](https://opendxl.github.io/opendxl-client-javascript/jsdoc)
 for API documentation.
 
+## Installation
+
+To start using the OpenDXL JavaScript Client (Node.js):
+
+* Download the [Latest Release](https://github.com/opendxl/opendxl-client-javascript/releases/latest)
+* Extract the release .zip file
+* View the `README.html` file located at the root of the extracted files.
+  * The `README` links to the SDK documentation which includes installation instructions, API details, and samples.
+  * The SDK documentation is also available on-line [here](https://opendxl.github.io/opendxl-client-javascript/jsdoc).
+
 ## Bugs and Feedback
 
 For bugs, questions and discussions please use the
