@@ -43,6 +43,7 @@ var Response = require('./response')
  *   response for.
  * @param {Number} [errorCode=0] - The numeric error code.
  * @param {String=} errorMessage - The textual error message.
+ * @augments Response
  * @constructor
  */
 function ErrorResponse (request, errorCode, errorMessage) {
