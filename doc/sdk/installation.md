@@ -32,13 +32,13 @@ To install the client from a local tarball for a Mac or Linux-based operating
 system, run the following command:
 
 ```sh
-npm install lib/{@releasetarballname} --save
+npm install ./lib/{@releasetarballname} --save
 ```
 
 To install the client from a local tarball for Windows, run:
 
 ```sh
-npm install lib\{@releasetarballname} --save
+npm install .\lib\{@releasetarballname} --save
 ```
 
 To install the client via the
