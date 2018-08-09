@@ -31,7 +31,10 @@
         <h2><span class="attribs"><span class="type-signature"></span></span>Event<span class="signature">(destinationTopic)</span><span class="type-signature"></span></h2>
         
             <div class="class-description"><p>Event messages are sent using the <a href="Client.html#sendEvent">Client#sendEvent</a> method
-  of a client instance.</p></div>
+  of a client instance. Event messages are sent by one publisher and received
+  by one or more recipients that are currently subscribed to the
+  <a href="Message.html#destinationTopic">Message#destinationTopic</a> associated with the event (otherwise
+  known as one-to-many).</p></div>
         
     
 </header>
@@ -143,7 +146,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="event.js.html">event.js</a>, <a href="event.js.html#line13">line 13</a>
+        <a href="event.js.html">event.js</a>, <a href="event.js.html#line16">line 16</a>
     </li></ul></dd>
     
 
