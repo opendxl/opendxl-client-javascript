@@ -8,7 +8,11 @@ exports.ErrorResponse = require('./lib/error-response')
 exports.Event = require('./lib/event')
 exports.MalformedBrokerError = require('./lib/malformed-broker-error')
 exports.Message = require('./lib/message')
-exports.MessageError = require('./lib/message-error')
 exports.Request = require('./lib/request')
+exports.RequestError = require('./lib/request-error')
 exports.Response = require('./lib/response')
+exports.ResponseErrorCode = require('./lib/response-error-code')
 exports.ServiceRegistrationInfo = require('./lib/service-registration-info')
+
+// Leaving this for backward compatibility for now
+exports.MessageError = exports.RequestError

@@ -3,10 +3,11 @@
 
 var expect = require('chai').expect
 var dxl = require('../..')
-var MessageError = dxl.MessageError
 var ErrorResponse = dxl.ErrorResponse
 var Event = dxl.Event
 var Request = dxl.Request
+var RequestError = dxl.RequestError
+var ResponseErrorCode = dxl.ResponseErrorCode
 var ServiceRegistrationInfo = dxl.ServiceRegistrationInfo
 var util = require('../../lib/util')
 var TestClient = require('./test-client')
@@ -102,10 +103,10 @@ describe('Client @integration', function () {
         client.asyncRequest(new Request(topic), function (error, response) {
           client.shutdown(null, function () {
             expect(response).to.be.null
-            expect(error).to.be.an.instanceof(MessageError)
-            expect(error.code).to.equal(errorCode)
+            expect(error).to.be.an.instanceof(RequestError)
             expect(error.message).to.equal(errorMessage)
-            expect(error.detail).to.be.an.instanceof(ErrorResponse)
+            expect(error.dxlErrorResponse).to.be.an.instanceof(ErrorResponse)
+            expect(error.dxlErrorResponse.errorCode).to.equal(errorCode)
             done()
           })
         })
@@ -126,13 +127,12 @@ describe('Client @integration', function () {
       client.asyncRequest(request, function (error, response) {
         client.shutdown(null, function () {
           expect(response).to.be.null
-          expect(error).to.be.an.instanceof(MessageError)
-          expect(testHelpers.normalizedErrorCode(error)).to.equal(
-            testHelpers.DXL_SERVICE_UNAVAILABLE_ERROR_CODE)
+          expect(error).to.be.an.instanceof(RequestError)
+          expect(error.code).to.equal(ResponseErrorCode.SERVICE_UNAVAILABLE)
           expect(error.message).to.equal(
             testHelpers.DXL_SERVICE_UNAVAILABLE_ERROR_MESSAGE)
-          expect(error.detail).to.be.an.instanceof(ErrorResponse)
-          expect(error.detail.serviceId).to.equal(request.serviceId)
+          expect(error.dxlErrorResponse).to.be.an.instanceof(ErrorResponse)
+          expect(error.dxlErrorResponse.serviceId).to.equal(request.serviceId)
           done()
         })
       })
