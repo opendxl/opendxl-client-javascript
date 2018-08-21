@@ -6,6 +6,7 @@ var dxl = require('../..')
 var ErrorResponse = dxl.ErrorResponse
 var Message = dxl.Message
 var MessageError = dxl.MessageError
+var MessageErrorCode = dxl.MessageErrorCode
 var Request = dxl.Request
 var Response = dxl.Response
 var ServiceRegistrationInfo = dxl.ServiceRegistrationInfo
@@ -388,12 +389,11 @@ describe('broker service registry @integration', function () {
                             expect(requestReceived).to.be.false
                             expect(response).to.be.null
                             expect(error).to.be.an.instanceof(MessageError)
-                            expect(testHelpers.normalizedErrorCode(error)).to
-                              .equal(
-                                testHelpers.DXL_SERVICE_UNAVAILABLE_ERROR_CODE)
+                            expect(error.code).to.equal(
+                              MessageErrorCode.SERVICE_UNAVAILABLE)
                             expect(error.message).to.equal(
                               testHelpers.DXL_SERVICE_UNAVAILABLE_ERROR_MESSAGE)
-                            expect(error.detail).to.be.an.instanceof(
+                            expect(error.dxlMessage).to.be.an.instanceof(
                               ErrorResponse)
                             // Validate that the service was initially
                             // registered with the broker.
@@ -464,12 +464,11 @@ describe('broker service registry @integration', function () {
                             expect(requestReceived).to.be.false
                             expect(response).to.be.null
                             expect(error).to.be.an.instanceof(MessageError)
-                            expect(testHelpers.normalizedErrorCode(error)).to
-                              .equal(
-                                testHelpers.DXL_SERVICE_UNAVAILABLE_ERROR_CODE)
+                            expect(error.code).to.equal(
+                              MessageErrorCode.SERVICE_UNAVAILABLE)
                             expect(error.message).to.equal(
                               testHelpers.DXL_SERVICE_UNAVAILABLE_ERROR_MESSAGE)
-                            expect(error.detail).to.be.an.instanceof(
+                            expect(error.dxlMessage).to.be.an.instanceof(
                               ErrorResponse)
                             // Validate that the service was initially
                             // registered with the broker.

@@ -4,6 +4,7 @@
 var expect = require('chai').expect
 var dxl = require('../..')
 var MessageError = dxl.MessageError
+var MessageErrorCode = dxl.MessageErrorCode
 var ErrorResponse = dxl.ErrorResponse
 var Event = dxl.Event
 var Request = dxl.Request
@@ -103,9 +104,9 @@ describe('Client @integration', function () {
           client.shutdown(null, function () {
             expect(response).to.be.null
             expect(error).to.be.an.instanceof(MessageError)
-            expect(error.code).to.equal(errorCode)
+            expect(error.dxlErrorCode).to.equal(errorCode)
             expect(error.message).to.equal(errorMessage)
-            expect(error.detail).to.be.an.instanceof(ErrorResponse)
+            expect(error.dxlMessage).to.be.an.instanceof(ErrorResponse)
             done()
           })
         })
@@ -127,12 +128,11 @@ describe('Client @integration', function () {
         client.shutdown(null, function () {
           expect(response).to.be.null
           expect(error).to.be.an.instanceof(MessageError)
-          expect(testHelpers.normalizedErrorCode(error)).to.equal(
-            testHelpers.DXL_SERVICE_UNAVAILABLE_ERROR_CODE)
+          expect(error.code).to.equal(MessageErrorCode.SERVICE_UNAVAILABLE)
           expect(error.message).to.equal(
             testHelpers.DXL_SERVICE_UNAVAILABLE_ERROR_MESSAGE)
-          expect(error.detail).to.be.an.instanceof(ErrorResponse)
-          expect(error.detail.serviceId).to.equal(request.serviceId)
+          expect(error.dxlMessage).to.be.an.instanceof(ErrorResponse)
+          expect(error.dxlMessage.serviceId).to.equal(request.serviceId)
           done()
         })
       })

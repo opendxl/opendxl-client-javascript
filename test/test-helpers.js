@@ -51,19 +51,5 @@ module.exports = {
     })
   },
   DXL_SERVICE_UNAVAILABLE_ERROR_CODE: 0x80000001,
-  DXL_SERVICE_UNAVAILABLE_ERROR_MESSAGE: 'unable to locate service for request',
-  /**
-   * Returns a normalized representation of the error code in a
-   * {@link MessageError}. A negative error code value would be converted to a
-   * 32-bit unsigned number.
-   * @param {MessageError} error - The error containing the code.
-   * @returns {Number} The error code (normalized as an unsigned 32-bit number).
-   */
-  normalizedErrorCode: function (error) {
-    var errorCode = 0
-    if ('code' in error) {
-      errorCode = error.code < 0 ? 0xFFFFFFFF + error.code + 1 : error.code
-    }
-    return errorCode
-  }
+  DXL_SERVICE_UNAVAILABLE_ERROR_MESSAGE: 'unable to locate service for request'
 }
