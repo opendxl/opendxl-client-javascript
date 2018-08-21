@@ -62,8 +62,15 @@ client.connect(function () {
             // Display the contents of an error, if one occurred
             if (error) {
               console.log('Request error: ' + error.message)
-              if (error instanceof dxl.MessageError) {
+              // The 'code' property, if set, typically has a string
+              // representation of the error code.
+              if (error.code) {
                 console.log('Request error code: ' + error.code)
+              // If no string representation is available for the error code
+              // but the error is a DXL 'ErrorResponse', a numeric error
+              // code should be available in the 'dxlErrorCode' property.
+              } else if (error.hasOwnProperty('dxlErrorCode')) {
+                console.log('Request error code: ' + error.dxlErrorCode)
               }
             // No error occurred, so extract information from the response. The
             // toString() call converts the payload from a binary Buffer into a
