@@ -1,6 +1,9 @@
 'use strict'
 
-/** @module TestHelpers */
+/**
+ * @module TestHelpers
+ * @private
+ * */
 
 var Buffer = require('safe-buffer').Buffer
 

@@ -3,8 +3,7 @@ This sample demonstrates how to register a DXL service to receive
 back to an invoking [Client](Client.html).
 
 Prior to running this sample make sure you have completed the
-[client provisioning](https://github.com/opendxl/opendxl-client-javascript/wiki/Provisioning)
-step.
+[client provisioning]{@tutorial provisioning} step.
 
 ### Running the Sample
 
