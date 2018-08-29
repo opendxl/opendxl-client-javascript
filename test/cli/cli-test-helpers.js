@@ -12,7 +12,7 @@ var events = require('events')
 var inherits = require('inherits')
 var os = require('os')
 var querystring = require('querystring')
-var pki = require('../../lib/_cli/pki')
+var pki = require('../../lib/_provisioning/pki')
 var stream = require('stream')
 
 var CLI_OUTPUT_VERBOSITY = 0
@@ -142,13 +142,13 @@ module.exports = {
    * Constructs a Commander command object with subcommands registered.
    * @returns {Command}
    */
-  cliCommand: function () {
+  cliCommand: function (doneCallback) {
     var command = new program.Command()
     command.verbose = CLI_OUTPUT_VERBOSITY
     if (!CLI_OUTPUT_VERBOSITY) {
       command.quiet = true
     }
-    cli(command)
+    cli(command, doneCallback)
     return command
   },
   /**
@@ -227,6 +227,7 @@ module.exports = {
     return function (requestOptions, responseCallback) {
       var response = new HttpResponseStub()
       var responseData = ''
+
       // Validate the cookie in the request. If the cookie is present and
       // matches the expected value, the request is considered authorized.
       // If the cookie is not present, redirect to a 'login' URL which
@@ -242,16 +243,14 @@ module.exports = {
             response.statusCode = 200
             responseData = 'OK:\r\n' + JSON.stringify(
               requestStubs[pathMatch[1]](requestOptions))
-            responseCallback(response)
           } else {
             response.statusCode = 404
             responseData = 'Unknown request path: ' + pathMatch[1]
           }
         } else {
           response.statusCode = 403
-          responseCallback(response)
-          response.emit('data', 'Unexpected cookie received in request: ' +
-            requestOptions.headers.cookie)
+          responseData = 'Unexpected cookie received in request: ' +
+            requestOptions.headers.cookie
         }
       } else {
         response.statusCode = 302
@@ -263,9 +262,11 @@ module.exports = {
           response.headers.location = '/login?next=' +
             querystring.escape(requestOptions.path)
         }
-        responseCallback(response)
       }
-      response.emit('data', responseData)
+      responseCallback(response)
+      if (responseData) {
+        response.emit('data', responseData)
+      }
       response.emit('end')
       return new HttpRequestStub()
     }

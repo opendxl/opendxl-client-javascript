@@ -4,20 +4,25 @@
 
 var program = require('commander')
 var cli = require('../lib/_cli')
-var util = require('../lib/_cli/cli-util')
+var cliUtil = require('../lib/_cli/cli-util')
+var provisionUtil = require('../lib/_provisioning/provision-util')
 
-process.on('uncaughtException', function (err) {
-  var verbosity = util.getProgramVerbosity(program)
-  switch (verbosity) {
-    case 0:
-      process.exit(1) // jshint ignore:line
-    case 1:
-      util.logError(err.message)
-      process.exit(1) // jshint ignore:line
-    default:
-      throw err
+function processError (error) {
+  if (error) {
+    var verbosity = cliUtil.getProgramVerbosity(program)
+    switch (verbosity) {
+      case 0:
+        process.exit(1) // jshint ignore:line
+      case 1:
+        provisionUtil.logError(error.message)
+        process.exit(1) // jshint ignore:line
+      default:
+        throw error
+    }
   }
-})
+}
+
+process.on('uncaughtException', processError)
 
 program
   .option('-q, --quiet',
@@ -26,5 +31,5 @@ program
     'verbosity level, e.g., -vv, -vvv.',
     function (_, total) { return total + 1 }, 1)
 
-cli(program)
+cli(program, processError)
 program.parse(process.argv)

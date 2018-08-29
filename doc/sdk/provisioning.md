@@ -16,7 +16,7 @@ The following options are available for a provisioning a client:
   that will sign the client's certificate.
 
   > **Note:** ePO-managed environments must have 4.0 (or newer) versions of
-  >  DXL ePO extensions installed.`
+  >  DXL ePO extensions installed.
 
 * [OpenDXL Broker Management Console](https://opendxl.github.io/opendxl-client-python/pydoc/openconsoleprovisioning.html)
 
