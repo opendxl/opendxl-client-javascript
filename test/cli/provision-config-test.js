@@ -4,6 +4,7 @@
 var expect = require('chai').expect
 var fs = require('fs')
 var https = require('https')
+var os = require('os')
 var path = require('path')
 var querystring = require('querystring')
 var rimraf = require('rimraf')
@@ -12,8 +13,7 @@ var tmp = require('tmp')
 var DxlError = require('../..').DxlError
 var util = require('../../lib/util')
 var cliHelpers = require('./cli-test-helpers')
-
-var PROVISION_COMMAND = '/remote/DxlBrokerMgmt.generateOpenDXLClientProvisioningPackageCmd'
+var pkiHelpers = require('../pki-test-helpers')
 
 describe('provisionconfig CLI command @cli', function () {
   var tmpDirSync
@@ -36,23 +36,12 @@ describe('provisionconfig CLI command @cli', function () {
   }
 
   function stubProvisionCommand (clientCert, brokers, cookie) {
-    if (typeof clientCert === 'undefined') {
-      clientCert = 'clientcert'
-    }
-    if (typeof brokers === 'undefined') {
-      brokers = ['local=local;8883;localhost']
-    }
-    var requestHandlers = {}
-    requestHandlers[PROVISION_COMMAND] = function (requestOptions) {
-      return [querystring.escape(JSON.stringify(requestOptions)),
-        clientCert, brokers.join('\n')].join(',')
-    }
-    sinon.stub(https, 'get').callsFake(cliHelpers.createManagementServiceStub(
-      requestHandlers, cookie))
+    sinon.stub(https, 'get').callsFake(pkiHelpers.createProvisionCommandStub(
+      clientCert, brokers, cookie))
   }
 
   it('should store a config provisioned from the server', function (done) {
-    var expectedClientCert = 'myclientcert' + cliHelpers.LINE_SEPARATOR
+    var expectedClientCert = 'myclientcert' + os.EOL
     var expectedBrokers = ['local=local;8883;localhost;127.0.0.1',
       'external=external;8883;127.0.0.1;127.0.0.1']
     var expectedCookie = util.generateIdAsString()
@@ -63,10 +52,10 @@ describe('provisionconfig CLI command @cli', function () {
         // Validate that a CSR with the expected common name was generated
         var csrFileName = path.join(tmpDir, 'client3.csr')
         expect(fs.existsSync(csrFileName)).to.be.true
-        expect(cliHelpers.getCsrSubject(csrFileName)).to.equal('/CN=client2')
+        expect(pkiHelpers.getCsrSubject(csrFileName)).to.equal('/CN=client2')
         // Validate that a proper RSA private key was generated
         var privateKeyFileName = path.join(tmpDir, 'client3.key')
-        cliHelpers.validateRsaPrivateKey(privateKeyFileName)
+        pkiHelpers.validateRsaPrivateKey(privateKeyFileName)
         // Validate that the 'CA certificate bundle' returned by the management
         // service stub was stored. This stub sets the content of the bundle
         // to the full request for convenience in testing.
@@ -76,11 +65,13 @@ describe('provisionconfig CLI command @cli', function () {
         // the expected content.
         var actualRequestData = JSON.parse(querystring.unescape(fs.readFileSync(
           caBundleFileName)))
+        var expectedRequestPath = pkiHelpers.PROVISION_COMMAND +
+          '?csrString=' + querystring.escape(fs.readFileSync(csrFileName)) +
+          '&%3Aoutput=json'
         expect({
           hostname: 'myhost',
           port: '8443',
-          path: PROVISION_COMMAND + '?csrString=' +
-            querystring.escape(fs.readFileSync(csrFileName)) + '&%3Aoutput=json',
+          path: expectedRequestPath,
           auth: 'myuser:mypass',
           rejectUnauthorized: false,
           requestCert: false,
@@ -104,7 +95,7 @@ describe('provisionconfig CLI command @cli', function () {
           '[Brokers]']
         Array.prototype.push.apply(expectedConfigFile, expectedBrokers)
         expectedConfigFile.push('')
-        expectedConfigFile = expectedConfigFile.join(cliHelpers.LINE_SEPARATOR)
+        expectedConfigFile = expectedConfigFile.join(os.EOL)
         expect(fs.readFileSync(configFile, 'utf-8')).to.equal(expectedConfigFile)
         done()
       }
@@ -131,9 +122,9 @@ describe('provisionconfig CLI command @cli', function () {
         expect(fs.existsSync(caBundleFileName)).to.be.true
         var actualRequestData = JSON.parse(querystring.unescape(fs.readFileSync(
           caBundleFileName)))
-        expect(actualRequestData).to.have.property('path',
-          PROVISION_COMMAND + '?csrString=' + querystring.escape(csrText) +
-          '&%3Aoutput=json')
+        var expectedRequestPath = pkiHelpers.PROVISION_COMMAND +
+          '?csrString=' + querystring.escape(csrText) + '&%3Aoutput=json'
+        expect(actualRequestData).to.have.property('path', expectedRequestPath)
         done()
       }
     )
@@ -192,12 +183,12 @@ describe('provisionconfig CLI command @cli', function () {
     }
   )
 
-  it('should return 404 error if management service endpoints cannot be found',
+  it('should return 404 error if the management endpoints cannot be found',
     function (done) {
       // Management service with no request stubs should generate an HTTP 404
       // error
       sinon.stub(https, 'get').callsFake(
-        cliHelpers.createManagementServiceStub([]))
+        pkiHelpers.createManagementServiceStub([]))
       var command = cliHelpers.cliCommand(
         function (error) {
           expect(error).to.be.an.instanceof(DxlError)

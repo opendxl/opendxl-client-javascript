@@ -4,6 +4,7 @@
 var expect = require('chai').expect
 var fs = require('fs')
 var https = require('https')
+var os = require('os')
 var path = require('path')
 var querystring = require('querystring')
 var rimraf = require('rimraf')
@@ -12,6 +13,7 @@ var tmp = require('tmp')
 var DxlError = require('../..').DxlError
 var util = require('../../lib/util')
 var cliHelpers = require('./cli-test-helpers')
+var pkiHelpers = require('../pki-test-helpers')
 
 var BROKER_LIST_COMMAND = '/remote/DxlClientMgmt.getBrokerList'
 var CLIENT_CA_BUNDLE_COMMAND = '/remote/DxlClientMgmt.createClientCaBundle'
@@ -58,7 +60,7 @@ describe('updateconfig CLI command @cli', function () {
       return JSON.stringify(requestOptions)
     }
 
-    sinon.stub(https, 'get').callsFake(cliHelpers.createManagementServiceStub(
+    sinon.stub(https, 'get').callsFake(pkiHelpers.createManagementServiceStub(
       requestHandlers, cookie))
   }
 
@@ -101,11 +103,11 @@ describe('updateconfig CLI command @cli', function () {
 
     var expectedConfigFile = configBeforeBrokers
       .concat(expectedBrokersInConfig)
-      .concat(configAfterBrokers).join(cliHelpers.LINE_SEPARATOR)
+      .concat(configAfterBrokers).join(os.EOL)
     var expectedCookie = util.generateIdAsString()
     var configFile = path.join(tmpDir, 'dxlclient.config')
     fs.writeFileSync(configFile, configBeforeBrokers.concat(brokersBeforeUpdate)
-      .concat(configAfterBrokers).join(cliHelpers.LINE_SEPARATOR))
+      .concat(configAfterBrokers).join(os.EOL))
     stubUpdateCommands(expectedBrokersInHttpResponse, expectedCookie)
     var command = cliHelpers.cliCommand(
       function (error) {
@@ -158,7 +160,7 @@ describe('updateconfig CLI command @cli', function () {
       '[Brokers]',
       '']
     var configFile = path.join(tmpDir, 'dxlclient.config')
-    fs.writeFileSync(configFile, originalConfig.join(cliHelpers.LINE_SEPARATOR))
+    fs.writeFileSync(configFile, originalConfig.join(os.EOL))
     stubUpdateCommands()
     var command = cliHelpers.cliCommand(
       function (error) {
@@ -199,7 +201,7 @@ describe('updateconfig CLI command @cli', function () {
         '']
       var configFile = path.join(tmpDir, 'dxlclient.config')
       fs.writeFileSync(configFile, originalConfig.join(
-        cliHelpers.LINE_SEPARATOR))
+        os.EOL))
       var command = cliHelpers.cliCommand(
         function (error) {
           expect(error).to.be.null
@@ -229,7 +231,7 @@ describe('updateconfig CLI command @cli', function () {
       // Management service with no request stubs should generate an HTTP 404
       // error
       sinon.stub(https, 'get').callsFake(
-        cliHelpers.createManagementServiceStub([]))
+        pkiHelpers.createManagementServiceStub([]))
 
       var command = cliHelpers.cliCommand(
         function (error) {
@@ -248,12 +250,12 @@ describe('updateconfig CLI command @cli', function () {
     function (done) {
       var configFile = path.join(tmpDir, 'dxlclient.config')
       var config = ['[Certs]', 'BrokerCertChain=ca-bundle.crt']
-      fs.writeFileSync(configFile, config.join(cliHelpers.LINE_SEPARATOR))
+      fs.writeFileSync(configFile, config.join(os.EOL))
 
       // Management service with no request stubs should generate an HTTP 404
       // error
       sinon.stub(https, 'get').callsFake(
-        cliHelpers.createManagementServiceStub([]))
+        pkiHelpers.createManagementServiceStub([]))
 
       var command = cliHelpers.cliCommand(
         function (error) {

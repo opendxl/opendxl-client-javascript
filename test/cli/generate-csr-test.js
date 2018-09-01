@@ -10,6 +10,7 @@ var sinon = require('sinon')
 var tmp = require('tmp')
 var DxlError = require('../..').DxlError
 var cliHelpers = require('./cli-test-helpers')
+var pkiHelpers = require('../pki-test-helpers')
 
 describe('generatecsr CLI command @cli', function () {
   var tmpDirSync
@@ -40,9 +41,9 @@ describe('generatecsr CLI command @cli', function () {
         expect(error).to.be.null
         var csrFileName = path.join(tmpDir, 'client.csr')
         expect(fs.existsSync(csrFileName)).to.be.true
-        expect(cliHelpers.getCsrSubject(csrFileName)).to.equal('/CN=client1')
+        expect(pkiHelpers.getCsrSubject(csrFileName)).to.equal('/CN=client1')
         var privateKeyFileName = path.join(tmpDir, 'client.key')
-        cliHelpers.validateRsaPrivateKey(privateKeyFileName)
+        pkiHelpers.validateRsaPrivateKey(privateKeyFileName)
         done()
       }
     )
@@ -56,9 +57,9 @@ describe('generatecsr CLI command @cli', function () {
           expect(error).to.be.null
           var csrFileName = path.join(tmpDir, 'client3.csr')
           expect(fs.existsSync(csrFileName)).to.be.true
-          expect(cliHelpers.getCsrSubject(csrFileName)).to.equal('/CN=client2')
+          expect(pkiHelpers.getCsrSubject(csrFileName)).to.equal('/CN=client2')
           var privateKeyFileName = path.join(tmpDir, 'client3.key')
-          cliHelpers.validateRsaPrivateKey(privateKeyFileName)
+          pkiHelpers.validateRsaPrivateKey(privateKeyFileName)
           done()
         }
       )
@@ -71,7 +72,7 @@ describe('generatecsr CLI command @cli', function () {
       var command = cliHelpers.cliCommand(
         function (error) {
           expect(error).to.be.null
-          expect(cliHelpers.getCsrSubject(path.join(tmpDir, 'client.csr'))).to
+          expect(pkiHelpers.getCsrSubject(path.join(tmpDir, 'client.csr'))).to
             .equal('/CN=client/C=US/ST=OR/L=Hillsboro/O=McAfee' +
               '/OU=DXL Team/emailAddress=jane.doe@mcafee.com')
           done()
@@ -90,7 +91,7 @@ describe('generatecsr CLI command @cli', function () {
       var command = cliHelpers.cliCommand(
         function (error) {
           expect(error).to.be.null
-          expect(cliHelpers.getSubjectAlternativeNames(path.join(tmpDir,
+          expect(pkiHelpers.getSubjectAlternativeNames(path.join(tmpDir,
             'client.csr'))).to.eql(['DNS:host1.com', 'DNS:host2.com'])
           done()
         }
@@ -108,14 +109,14 @@ describe('generatecsr CLI command @cli', function () {
           var privateKeyFileName = path.join(tmpDir, 'client.key')
           var stderrStub = sinon.stub(console, 'error')
           // Validate that supplying no decryption password throws an error
-          expect(cliHelpers.validateRsaPrivateKey.bind(null, privateKeyFileName))
+          expect(pkiHelpers.validateRsaPrivateKey.bind(null, privateKeyFileName))
             .to.throw(DxlError)
           // Validate that supplying the wrong decryption password throws an error
-          expect(cliHelpers.validateRsaPrivateKey.bind(null, privateKeyFileName,
+          expect(pkiHelpers.validateRsaPrivateKey.bind(null, privateKeyFileName,
             'mybadpass')).to.throw(DxlError)
           stderrStub.restore()
           // Validate that supplying the right password is successful
-          cliHelpers.validateRsaPrivateKey(privateKeyFileName, passphrase)
+          pkiHelpers.validateRsaPrivateKey(privateKeyFileName, passphrase)
           done()
         }
       )
@@ -144,11 +145,11 @@ describe('generatecsr CLI command @cli', function () {
         var privateKeyFileName = path.join(tmpDir, 'client.key')
         var stderrStub = sinon.stub(console, 'error')
         // Validate that supplying no decryption password throws an error
-        expect(cliHelpers.validateRsaPrivateKey.bind(
+        expect(pkiHelpers.validateRsaPrivateKey.bind(
           null, privateKeyFileName)).to.throw(DxlError)
         stderrStub.restore()
         // Validate that supplying the right password is successful
-        cliHelpers.validateRsaPrivateKey(privateKeyFileName, passphrase)
+        pkiHelpers.validateRsaPrivateKey(privateKeyFileName, passphrase)
         done()
       }
     )
