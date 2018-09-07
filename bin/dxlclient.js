@@ -10,19 +10,12 @@ var provisionUtil = require('../lib/_provisioning/provision-util')
 function processError (error) {
   if (error) {
     var verbosity = cliUtil.getProgramVerbosity(program)
-    switch (verbosity) {
-      case 0:
-        process.exit(1) // jshint ignore:line
-      case 1:
-        provisionUtil.logError(error.message)
-        process.exit(1) // jshint ignore:line
-      default:
-        throw error
+    if (verbosity) {
+      provisionUtil.logError(error, {verbosity: verbosity})
     }
+    process.exit(1)
   }
 }
-
-process.on('uncaughtException', processError)
 
 program
   .option('-q, --quiet',
