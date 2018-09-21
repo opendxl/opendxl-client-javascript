@@ -14,9 +14,8 @@ services:
 
 before_install:
   - docker pull opendxl/opendxl-broker
-  - docker run -d -p 127.0.0.1:8883:8883 --volume "$PWD/dxlbroker-volume:/dxlbroker-volume" opendxl/opendxl-broker
+  - docker run -d -p 127.0.0.1:8883:8883 -p 127.0.0.1:8443:8443 opendxl/opendxl-broker
   - docker ps -a
-  - cp test/integration/client_config.cfg.travis test/integration/client_config.cfg
 
 env:
   - CXX=g++-4.8
@@ -27,6 +26,11 @@ addons:
       - ubuntu-toolchain-r-test
     packages:
       - g++-4.8
+
+before_script:
+  - bin/dxlclient.js provisionconfig -u admin -p password test/integration 127.0.0.1 client
+  - cp test/integration/dxlclient.config test/integration/client_config.cfg
+  - cat test/integration/client_config.cfg
 
 script:
   - npm run ci

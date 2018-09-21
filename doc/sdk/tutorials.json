@@ -6,16 +6,27 @@
     "title": "Installation"
   },
   "provisioning": {
-    "title": "Provisioning"
+    "title": "Provisioning",
+    "children": {
+      "basic-cli-provisioning": {
+        "title": "Command Line Provisioning (Basic)"
+      },
+      "advanced-cli-provisioning": {
+        "title": "Command Line Provisioning (Advanced)"
+      },
+      "updating-config-from-cli": {
+        "title": "Client Configuration Update via Command Line"
+      }
+    }
   },
   "samples": {
     "title": "Samples",
     "children": {
-      "basic-service-sample": {
-        "title": "Basic Service Sample"
-      },
       "basic-events-sample": {
         "title": "Basic Events Sample"
+      },
+      "basic-service-sample": {
+        "title": "Basic Service Sample"
       }
     }
   }
