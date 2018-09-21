@@ -5,9 +5,10 @@ var expect = require('chai').expect
 var dxl = require('../..')
 var ErrorResponse = dxl.ErrorResponse
 var Message = dxl.Message
-var MessageError = dxl.MessageError
 var Request = dxl.Request
 var Response = dxl.Response
+var ResponseErrorCode = dxl.ResponseErrorCode
+var RequestError = dxl.RequestError
 var ServiceRegistrationInfo = dxl.ServiceRegistrationInfo
 var util = require('../../lib/util')
 var TestClient = require('./test-client')
@@ -387,13 +388,12 @@ describe('broker service registry @integration', function () {
                             // topic it previously registered for the service.
                             expect(requestReceived).to.be.false
                             expect(response).to.be.null
-                            expect(error).to.be.an.instanceof(MessageError)
-                            expect(testHelpers.normalizedErrorCode(error)).to
-                              .equal(
-                                testHelpers.DXL_SERVICE_UNAVAILABLE_ERROR_CODE)
+                            expect(error).to.be.an.instanceof(RequestError)
+                            expect(error.code).to.equal(
+                              ResponseErrorCode.SERVICE_UNAVAILABLE)
                             expect(error.message).to.equal(
                               testHelpers.DXL_SERVICE_UNAVAILABLE_ERROR_MESSAGE)
-                            expect(error.detail).to.be.an.instanceof(
+                            expect(error.dxlErrorResponse).to.be.an.instanceof(
                               ErrorResponse)
                             // Validate that the service was initially
                             // registered with the broker.
@@ -463,13 +463,12 @@ describe('broker service registry @integration', function () {
                             // to an internally registered service.
                             expect(requestReceived).to.be.false
                             expect(response).to.be.null
-                            expect(error).to.be.an.instanceof(MessageError)
-                            expect(testHelpers.normalizedErrorCode(error)).to
-                              .equal(
-                                testHelpers.DXL_SERVICE_UNAVAILABLE_ERROR_CODE)
+                            expect(error).to.be.an.instanceof(RequestError)
+                            expect(error.code).to.equal(
+                              ResponseErrorCode.SERVICE_UNAVAILABLE)
                             expect(error.message).to.equal(
                               testHelpers.DXL_SERVICE_UNAVAILABLE_ERROR_MESSAGE)
-                            expect(error.detail).to.be.an.instanceof(
+                            expect(error.dxlErrorResponse).to.be.an.instanceof(
                               ErrorResponse)
                             // Validate that the service was initially
                             // registered with the broker.
