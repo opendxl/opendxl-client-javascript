@@ -1323,7 +1323,8 @@ remote DXL service via the <a href="Client.html#asyncRequest">Client#asyncReques
 <div class="description">
     <p>Sends a <a href="Request.html">Request</a> message to a remote DXL service asynchronously. An
 optional response callback can be specified. This callback will be invoked
-when the corresponding <a href="Response.html">Response</a> message is received by the client.</p>
+when the corresponding <a href="Response.html">Response</a> message (or an error) is received by
+the client.</p>
 </div>
 
 
@@ -1350,8 +1351,6 @@ when the corresponding <a href="Response.html">Response</a> message is received 
         <th>Attributes</th>
         
 
-        
-        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -1385,10 +1384,6 @@ when the corresponding <a href="Response.html">Response</a> message is received 
                 </td>
             
 
-            
-                <td class="default">
-                
-                </td>
             
 
             <td class="description last"><p>The request message to send to a remote DXL
@@ -1424,16 +1419,16 @@ when the corresponding <a href="Response.html">Response</a> message is received 
             
 
             
-                <td class="default">
-                
-                    null
-                
-                </td>
-            
 
             <td class="description last"><p>An optional response callback
-  that will be invoked when the corresponding <a href="Response.html">Response</a> message is
-  received by the client.</p></td>
+  that will be invoked with the result of the request.</p>
+<p>  If an error occurs during the request, the first parameter supplied to the
+  callback contains an Error with failure details. If the response
+  from the DXL fabric to the request includes an <a href="ErrorResponse.html">ErrorResponse</a>, the
+  first parameter is a <a href="RequestError.html">RequestError</a> (which contains the error
+  response in its <a href="RequestError.html#dxlErrorResponse">RequestError#dxlErrorResponse</a> property).</p>
+<p>  If the request is successful, the second parameter includes a
+  <a href="Response.html">Response</a> message.</p></td>
         </tr>
 
     
@@ -1474,7 +1469,7 @@ when the corresponding <a href="Response.html">Response</a> message is received 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client.js.html">client.js</a>, <a href="client.js.html#line562">line 562</a>
+        <a href="client.js.html">client.js</a>, <a href="client.js.html#line571">line 571</a>
     </li></ul></dd>
     
 
@@ -1853,7 +1848,7 @@ the client.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client.js.html">client.js</a>, <a href="client.js.html#line663">line 663</a>
+        <a href="client.js.html">client.js</a>, <a href="client.js.html#line672">line 672</a>
     </li></ul></dd>
     
 
@@ -2010,7 +2005,7 @@ the client.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client.js.html">client.js</a>, <a href="client.js.html#line628">line 628</a>
+        <a href="client.js.html">client.js</a>, <a href="client.js.html#line637">line 637</a>
     </li></ul></dd>
     
 
@@ -2207,7 +2202,7 @@ service that is to be registered.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client.js.html">client.js</a>, <a href="client.js.html#line602">line 602</a>
+        <a href="client.js.html">client.js</a>, <a href="client.js.html#line611">line 611</a>
     </li></ul></dd>
     
 
@@ -2827,7 +2822,7 @@ delivered to remote clients, etc.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client.js.html">client.js</a>, <a href="client.js.html#line574">line 574</a>
+        <a href="client.js.html">client.js</a>, <a href="client.js.html#line583">line 583</a>
     </li></ul></dd>
     
 
@@ -2994,7 +2989,7 @@ client who sent the corresponding <a href="Request.html">Request</a>.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client.js.html">client.js</a>, <a href="client.js.html#line586">line 586</a>
+        <a href="client.js.html">client.js</a>, <a href="client.js.html#line595">line 595</a>
     </li></ul></dd>
     
 
@@ -3372,7 +3367,7 @@ about the service that is to be removed.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="client.js.html">client.js</a>, <a href="client.js.html#line618">line 618</a>
+        <a href="client.js.html">client.js</a>, <a href="client.js.html#line627">line 627</a>
     </li></ul></dd>
     
 
@@ -3552,7 +3547,7 @@ about the service that is to be removed.</p>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Broker.html">Broker</a></li><li><a href="Client.html">Client</a></li><li><a href="Config.html">Config</a></li><li><a href="DxlError.html">DxlError</a></li><li><a href="ErrorResponse.html">ErrorResponse</a></li><li><a href="Event.html">Event</a></li><li><a href="MalformedBrokerError.html">MalformedBrokerError</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageError.html">MessageError</a></li><li><a href="Request.html">Request</a></li><li><a href="Response.html">Response</a></li><li><a href="ServiceRegistrationInfo.html">ServiceRegistrationInfo</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-installation.html">Installation</a></li><li><a href="tutorial-provisioning.html">Provisioning</a></li><li><a href="tutorial-samples.html">Samples</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-ResponseErrorCode.html">ResponseErrorCode</a></li></ul><h3>Classes</h3><ul><li><a href="Broker.html">Broker</a></li><li><a href="Client.html">Client</a></li><li><a href="Config.html">Config</a></li><li><a href="DxlError.html">DxlError</a></li><li><a href="ErrorResponse.html">ErrorResponse</a></li><li><a href="Event.html">Event</a></li><li><a href="MalformedBrokerError.html">MalformedBrokerError</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageError.html">MessageError</a></li><li><a href="Request.html">Request</a></li><li><a href="RequestError.html">RequestError</a></li><li><a href="Response.html">Response</a></li><li><a href="ServiceRegistrationInfo.html">ServiceRegistrationInfo</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-installation.html">Installation</a></li><li><a href="tutorial-provisioning.html">Provisioning</a></li><li><a href="tutorial-samples.html">Samples</a></li></ul>
 </nav>
 
 <br class="clear">

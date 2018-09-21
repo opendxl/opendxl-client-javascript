@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Tutorial: Command Line Provisioning (Advanced)</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Tutorial: Command Line Provisioning (Advanced)</h1>
+
+    <section>
+
+<header>
+    
+
+    <h2>Command Line Provisioning (Advanced)</h2>
+</header>
+
+<article>
+    <p>This page contain details regarding the advanced usage of the <code>provisionconfig</code>
+operation.</p>
+<p>Refer to <a href="tutorial-basic-cli-provisioning.html">Command Line Provisioning (Basic)</a> for basic usage details.</p>
+<h3>Additional Certificate Signing Request (CSR) Information</h3><p>Attributes other than the Common Name (CN) may also optionally be provided for
+the CSR subject.</p>
+<p>For example:</p>
+<pre class="prettyprint source lang-sh"><code>node_modules/.bin/dxlclient provisionconfig config myserver client1 --country US --state-or-province Oregon --locality Hillsboro --organization Engineering --organizational-unit &quot;DXL Team&quot; --email-address dxl@mcafee.com</code></pre><p>By default, the CSR does not include any Subject Alternative Names. To include
+one or more entries of type <code>DNS Name</code>, provide the <code>-s</code> option.</p>
+<p>For example:</p>
+<pre class="prettyprint source lang-sh"><code>node_modules/.bin/dxlclient provisionconfig config myserver client1 -s client1.myorg.com -s client1.myorg.net</code></pre><h3>Encrypting the Client's Private Key</h3><p>The private key file which the <code>provisionconfig</code> operation generates can
+optionally be encrypted with a passphrase.</p>
+<p>For example:</p>
+<pre class="prettyprint source lang-sh"><code>node_modules/.bin/dxlclient provisionconfig config myserver client1 --passphrase</code></pre><p>If the passphrase is specified with no trailing option (as above), the
+provision operation prompts for the passphrase to be used:</p>
+<pre class="prettyprint source lang-sh"><code>Enter private key passphrase:</code></pre><p>The passphrase can alternatively be specified as an additional argument
+following the <code>--passphrase</code> argument, in which case no prompt is displayed.</p>
+<p>For example:</p>
+<pre class="prettyprint source lang-sh"><code>node_modules/.bin/dxlclient provisionconfig config myserver client1 --passphrase itsasecret</code></pre><blockquote>
+<p><strong>Note:</strong> The OpenDXL JavaScript client does not currently provide a method
+to specify the passphrase to be used for decrypting the private key used when
+connecting to a DXL fabric.</p>
+</blockquote>
+<h3>Additional Options</h3><p>The provision operation assumes that the default web server port is 8443, the
+default port under which the ePO web interface and OpenDXL Broker Management
+Console is hosted.</p>
+<p>A custom port can be specified via the <code>-t</code> option.</p>
+<p>For example:</p>
+<pre class="prettyprint source lang-sh"><code>node_modules/.bin/dxlclient provisionconfig config myserver client1 -t 443</code></pre><p>The provision operation stores each of the certificate artifacts (private key,
+CSR, certificate, etc.) with a base name of <code>client</code> by default. To use an
+alternative base name for the stored files, use the <code>-f</code> option.</p>
+<p>For example:</p>
+<pre class="prettyprint source lang-sh"><code>node_modules/.bin/dxlclient provisionconfig config myserver client1 -f theclient</code></pre><p>The output of the command above should appear similar to the following:</p>
+<pre class="prettyprint source lang-sh"><code>Saving private key file to config/theclient.key
+Saving csr file to config/theclient.csr
+Saving DXL config file to config/dxlclient.config
+Saving ca bundle file to config/ca-bundle.crt
+Saving client certificate file to config/theclient.crt</code></pre><p>If the management server's CA certificate is stored in a local CA truststore
+file &mdash; one or more PEM-formatted certificates concatenated together into a
+single file &mdash; the provision operation can be configured to validate the
+management server's certificate against that truststore during TLS session
+negotiation by supplying the <code>-e</code> option.</p>
+<p>The name of the truststore file should be supplied along with the option:</p>
+<pre class="prettyprint source lang-sh"><code>node_modules/.bin/dxlclient provisionconfig config myserver -e config/ca-bundle.crt</code></pre><h3>Generating the CSR Separately from Signing the Certificate</h3><p>By default, the <code>provisionconfig</code> command generates a CSR and immediately sends
+it to a management server for signing. Certificate generation and signing could
+alternatively be performed as separate steps &mdash; for example, to enable a
+workflow where the CSR is signed by a certificate authority at a later time.</p>
+<p>The <code>generatecsr</code> operation can be used to generate the CSR and private key
+without sending the CSR to the server.</p>
+<p>For example:</p>
+<pre class="prettyprint source lang-sh"><code>node_modules/.bin/dxlclient generatecsr config client1</code></pre><p>The output of the command above should appear similar to the following:</p>
+<pre class="prettyprint source lang-sh"><code>Saving private key file to config/client.key
+Saving csr file to config/client.csr</code></pre><p>Note that the <code>generatecsr</code> operation has options similar to those available
+in the <code>provisionconfig</code> operation for including additional subject attributes
+and/or subject alternative names in the generated CSR and for encrypting the
+private key.</p>
+<p>See the &quot;Additional Certificate Signing Request (CSR) Information&quot; and
+&quot;Encrypting the Client's Private Key&quot; sections above for more information.</p>
+<p>If the <code>provisionconfig</code> operation includes a <code>-r</code> option, the
+<code>common_or_csrfile_name</code> argument is interpreted as the name of a CSR file to
+load from disk rather than the Common Name to insert into a new CSR file.</p>
+<p>For example:</p>
+<pre class="prettyprint source lang-sh"><code>node_modules/.bin/dxlclient provisionconfig config myserver config/client.csr -r</code></pre><p>In this case, the command line output shows that the certificate and
+configuration-related files received from the server are stored but no
+new private key or CSR file is generated:</p>
+<pre class="prettyprint source lang-sh"><code>Saving DXL config file to config/dxlclient.config
+Saving ca bundle file to config/ca-bundle.crt
+Saving client certificate file to config/client.crt</code></pre>
+</article>
+
+</section>
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-ResponseErrorCode.html">ResponseErrorCode</a></li></ul><h3>Classes</h3><ul><li><a href="Broker.html">Broker</a></li><li><a href="Client.html">Client</a></li><li><a href="Config.html">Config</a></li><li><a href="DxlError.html">DxlError</a></li><li><a href="ErrorResponse.html">ErrorResponse</a></li><li><a href="Event.html">Event</a></li><li><a href="MalformedBrokerError.html">MalformedBrokerError</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageError.html">MessageError</a></li><li><a href="Request.html">Request</a></li><li><a href="RequestError.html">RequestError</a></li><li><a href="Response.html">Response</a></li><li><a href="ServiceRegistrationInfo.html">ServiceRegistrationInfo</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-installation.html">Installation</a></li><li><a href="tutorial-provisioning.html">Provisioning</a></li><li><a href="tutorial-samples.html">Samples</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

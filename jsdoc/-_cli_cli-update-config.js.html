@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: malformed-broker-error.js</title>
+    <title>JSDoc: Source: _cli/cli-update-config.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: malformed-broker-error.js</h1>
+    <h1 class="page-title">Source: _cli/cli-update-config.js</h1>
 
     
 
@@ -26,25 +26,56 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>'use strict'
+            <pre class="prettyprint source linenums"><code>/**
+ * @module CliUpdateConfig
+ * @private
+ */
 
-var inherits = require('inherits')
-var errorUtil = require('./error-util')
+'use strict'
+
+var cliUtil = require('./cli-util')
+var provisionUtil = require('../_provisioning/provision-util')
+var updateConfig = require('../_provisioning/update-config')
 
 /**
- * @classdesc An exception raised when a URL related to a DXL broker is
- *   malformed.
- * @param {String} message - The error message.
- * @augments Error
- * @constructor
+ * Action function invoked for the updateconfig subcommand.
+ * @param {String} configDir - Directory in which to store the private key
+ *   and CSR file.
+ * @param {String} hostname - Name of the management service host.
+ * @param {Command} command - The Commander command to append options onto.
  */
-function MalformedBrokerError (message) {
-  errorUtil.initializeError(this, message)
+function cliUpdateConfig (configDir, hostname, command) {
+  cliUtil.fillEmptyServerCredentialsFromPrompt(command,
+    function (error) {
+      if (error) {
+        provisionUtil.invokeCallback(error, command.doneCallback,
+          command.verbosity)
+      } else {
+        updateConfig(configDir,
+          cliUtil.pullHostInfoFromCommand(hostname, command),
+          command)
+      }
+    }
+  )
 }
 
-inherits(MalformedBrokerError, Error)
-
-module.exports = MalformedBrokerError
+/**
+ * Subcommand for updating the DXL client configuration in the dxlclient.config
+ * file, specifically the ca bundle and broker configuration. See
+ * {@link module:UpdateConfig} for more details on what this subcommand does.
+ * @param {Program} program - Commander program onto which to add the options
+ *   for this subcommand.
+ * @returns {Command} The Commander command which was added to the program
+ *   for this subcommand.
+ * @private
+ */
+module.exports = function (program) {
+  var command = program
+    .command('updateconfig &lt;config_dir> &lt;host_name>')
+    .description('update the DXL client configuration')
+  return [cliUtil.appendManagementServiceCommandOptions(command),
+    cliUpdateConfig]
+}
 </code></pre>
         </article>
     </section>

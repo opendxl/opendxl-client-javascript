@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Tutorial: Samples</title>
+    <title>JSDoc: Source: error-util.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,33 +17,52 @@
 
 <div id="main">
 
-    <h1 class="page-title">Tutorial: Samples</h1>
+    <h1 class="page-title">Source: error-util.js</h1>
 
+    
+
+
+
+    
     <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict'
 
-<header>
-    
-    <ul>
-        <li><a href="tutorial-basic-events-sample.html">Basic Events Sample</a></li>
-    
-        <li><a href="tutorial-basic-service-sample.html">Basic Service Sample</a></li>
-    </ul>
-    
+/**
+ * @module ErrorUtil
+ * @private
+ */
 
-    <h2>Samples</h2>
-</header>
+module.exports = {
+  /**
+   * Initialize the supplied object with the standard information which appears
+   * on an {@link Error} function. This function is used to allow a function
+   * to derive from the {@link Error} function.
+   * @param {Object} obj - The object to initialize error data onto.
+   * @param {String} [message] - An error message.
+   * @param {String} [code] - An error code.
+   */
+  initializeError: function (obj, message, code) {
+    Error.call(obj, message)
+    if (Error.hasOwnProperty('captureStackTrace')) {
+      Error.captureStackTrace(obj, obj.constructor)
+    }
+    obj.name = obj.constructor.name
+    if (code) {
+      obj.code = code
+      obj.name += ' [' + code + ']'
+    } else {
+      obj.code = ''
+    }
+    obj.message = message
+  }
+}
+</code></pre>
+        </article>
+    </section>
 
-<article>
-    <p>Prior to running any of the examples, you must complete the following:</p>
-<ul>
-<li>Install the OpenDXL JavaScript Client (Node.js) (<a href="tutorial-installation.html">Installation</a>)</li>
-<li>Provision the client to use with the samples (<a href="tutorial-provisioning.html">Provisioning</a>)</li>
-</ul>
-<p>The <code>dxlclient.config</code> file located in the <code>sample</code> sub-directory of the
-JavaScript DXL SDK must be populated.</p>
-</article>
 
-</section>
+
 
 </div>
 

@@ -217,7 +217,7 @@ brokers that are available to connect to on the fabric.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="config.js.html">config.js</a>, <a href="config.js.html#line113">line 113</a>
+        <a href="config.js.html">config.js</a>, <a href="config.js.html#line106">line 106</a>
     </li></ul></dd>
     
 
@@ -333,7 +333,7 @@ client.connect()</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="config.js.html">config.js</a>, <a href="config.js.html#line114">line 114</a>
+        <a href="config.js.html">config.js</a>, <a href="config.js.html#line107">line 107</a>
     </li></ul></dd>
     
 
@@ -406,7 +406,7 @@ DXL fabric.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="config.js.html">config.js</a>, <a href="config.js.html#line132">line 132</a>
+        <a href="config.js.html">config.js</a>, <a href="config.js.html#line125">line 125</a>
     </li></ul></dd>
     
 
@@ -478,7 +478,7 @@ DXL fabric.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="config.js.html">config.js</a>, <a href="config.js.html#line120">line 120</a>
+        <a href="config.js.html">config.js</a>, <a href="config.js.html#line113">line 113</a>
     </li></ul></dd>
     
 
@@ -558,7 +558,7 @@ the rate at which the client will send ping messages to the
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="config.js.html">config.js</a>, <a href="config.js.html#line146">line 146</a>
+        <a href="config.js.html">config.js</a>, <a href="config.js.html#line139">line 139</a>
     </li></ul></dd>
     
 
@@ -630,7 +630,7 @@ the rate at which the client will send ping messages to the
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="config.js.html">config.js</a>, <a href="config.js.html#line126">line 126</a>
+        <a href="config.js.html">config.js</a>, <a href="config.js.html#line119">line 119</a>
     </li></ul></dd>
     
 
@@ -707,7 +707,7 @@ the rate at which the client will send ping messages to the
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="config.js.html">config.js</a>, <a href="config.js.html#line139">line 139</a>
+        <a href="config.js.html">config.js</a>, <a href="config.js.html#line132">line 132</a>
     </li></ul></dd>
     
 
@@ -846,7 +846,7 @@ mybroker2=mybroker2;8883;mybroker2.mcafee.com;192.168.1.13</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="config.js.html">config.js</a>, <a href="config.js.html#line189">line 189</a>
+        <a href="config.js.html">config.js</a>, <a href="config.js.html#line182">line 182</a>
     </li></ul></dd>
     
 
@@ -961,6 +961,958 @@ mybroker2=mybroker2;8883;mybroker2.mcafee.com;192.168.1.13</code></pre>
 
 
         
+            
+
+    
+
+    
+    <h4 class="name" id=".provisionConfig"><span class="type-signature">(static) </span>provisionConfig<span class="signature">(configDir, commonOrCsrFileName, hostInfo, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Provisions a DXL client by performing the following steps:</p>
+<ul>
+<li><p>Either generates a certificate signing request and private key, storing
+each to a file (the default), or reads the certificate signing request
+from a file (if the <code>certRequestFile</code> property under the <code>options</code> object
+is present and has a truthy value).</p>
+</li>
+<li><p>Sends the certificate signing request to a signing endpoint on a
+management server. If the request is successfully authenticated and
+authorized, the management server is expected to respond with the following
+data:</p>
+<ul>
+<li>[ca bundle] - a concatenation of one or more PEM-encoded CA
+certificates</li>
+<li>[signed client cert] - a PEM-encoded certificate signed from the
+certificate request</li>
+<li>[broker config] - zero or more lines, each delimited by a line feed
+character, for each of the brokers known to the management service.
+Each line contains a key and value, delimited by an equal sign. The
+key contains a broker guid. The value contains other metadata for the
+broker, e.g., the broker guid, port, hostname, and ip address. For
+example: &quot;[guid1]=[guid1];8883;broker;10.10.1.1\n[guid2]=[guid2]...&quot;.</li>
+</ul>
+</li>
+<li><p>Saves the [ca bundle] and [signed client cert] to separate files.</p>
+</li>
+<li><p>Creates a &quot;dxlclient.config&quot; file with the following sections:</p>
+<ul>
+<li>A &quot;Certs&quot; section with certificate configuration which refers to the
+locations of the private key, ca bundle, and certificate files.</li>
+<li>A &quot;Brokers&quot; section with the content of the [broker config] provided
+by the management service.</li>
+</ul>
+</li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>configDir</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Directory in which to store the configuration
+  data.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>commonOrCsrFileName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>A string representing either
+  a common name (CN) to add into the generated file or the path to the
+  location of an existing CSR file. The parameter is interpreted as a path
+  to an existing CSR file if a property named certRequestFile exists on the
+  command object and has a truthy value. If the parameter represents a path
+  to an existing CSR file, this function does not generate a new CSR file.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>hostInfo</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Info for the management service host.</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>user</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Username to run remote commands as.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>password</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Password for the management service user.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>port</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    8443
+                
+                </td>
+            
+
+            <td class="description last"><p>Port at which the management service
+  resides.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>truststore</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Location of a file of CA certificates
+  to use when verifying the management service's certificate. If no value is
+  specified, no validation of the management service's certificate is
+  performed.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Additional options for the provision operation.</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>certRequestFile</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>If present and truthy,
+  interprets the commonOrCsrFileName parameter as the name of an existing CSR
+  file.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>filePrefix</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    client
+                
+                </td>
+            
+
+            <td class="description last"><p>Prefix of the private key, CSR,
+  and certificate to store.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>opensslbin</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Path to the openssl executable. If not
+  specified, the function attempts to find the openssl executable from the
+  environment path.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>passphrase</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Password to use for encrypting the
+  private key.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>san</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;String></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>List of subject alternative names to
+  add to the CSR.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>country</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Country (C) to use in the CSR's Subject
+  DN.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>stateOrProvince</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>State or province (ST) to use in
+  the CSR's Subject DN.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>locality</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Locality (L) to use in the CSR's Subject
+  DN.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>organization</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Organization (O) to use in the CSR's
+  Subject DN.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>organizationalUnit</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Organizational Unit (OU) to
+  use in the CSR's Subject DN.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>emailAddress</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>E-mail address to use in the CSR's
+  Subject DN.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>doneCallback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Callback to invoke once the
+  provisioned configuration has been stored. If an error occurs, the first
+  parameter supplied to the <code>doneCallback</code> is an <code>Error</code> instance
+  containing failure details.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="config.js.html">config.js</a>, <a href="config.js.html#line307">line 307</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
     
 
     
@@ -976,7 +1928,7 @@ mybroker2=mybroker2;8883;mybroker2.mcafee.com;192.168.1.13</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Broker.html">Broker</a></li><li><a href="Client.html">Client</a></li><li><a href="Config.html">Config</a></li><li><a href="DxlError.html">DxlError</a></li><li><a href="ErrorResponse.html">ErrorResponse</a></li><li><a href="Event.html">Event</a></li><li><a href="MalformedBrokerError.html">MalformedBrokerError</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageError.html">MessageError</a></li><li><a href="Request.html">Request</a></li><li><a href="Response.html">Response</a></li><li><a href="ServiceRegistrationInfo.html">ServiceRegistrationInfo</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-installation.html">Installation</a></li><li><a href="tutorial-provisioning.html">Provisioning</a></li><li><a href="tutorial-samples.html">Samples</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-ResponseErrorCode.html">ResponseErrorCode</a></li></ul><h3>Classes</h3><ul><li><a href="Broker.html">Broker</a></li><li><a href="Client.html">Client</a></li><li><a href="Config.html">Config</a></li><li><a href="DxlError.html">DxlError</a></li><li><a href="ErrorResponse.html">ErrorResponse</a></li><li><a href="Event.html">Event</a></li><li><a href="MalformedBrokerError.html">MalformedBrokerError</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageError.html">MessageError</a></li><li><a href="Request.html">Request</a></li><li><a href="RequestError.html">RequestError</a></li><li><a href="Response.html">Response</a></li><li><a href="ServiceRegistrationInfo.html">ServiceRegistrationInfo</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-installation.html">Installation</a></li><li><a href="tutorial-provisioning.html">Provisioning</a></li><li><a href="tutorial-samples.html">Samples</a></li></ul>
 </nav>
 
 <br class="clear">

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Tutorial: Samples</title>
+    <title>JSDoc: Source: response-error-code.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,33 +17,44 @@
 
 <div id="main">
 
-    <h1 class="page-title">Tutorial: Samples</h1>
+    <h1 class="page-title">Source: response-error-code.js</h1>
 
+    
+
+
+
+    
     <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module ResponseErrorCode
+ * @description Constants for error codes associated with a
+ * {@link RequestError#code}.
+ **/
 
-<header>
-    
-    <ul>
-        <li><a href="tutorial-basic-events-sample.html">Basic Events Sample</a></li>
-    
-        <li><a href="tutorial-basic-service-sample.html">Basic Service Sample</a></li>
-    </ul>
-    
+'use strict'
 
-    <h2>Samples</h2>
-</header>
+module.exports = {
+  /**
+   * Error code returned by the broker when it is unable to locate a service
+   * for a request
+   */
+  SERVICE_UNAVAILABLE: 'ERR_DXL_SERVICE_UNAVAILABLE',
+  /**
+   * Error code returned by the broker when it is overloaded.
+   */
+  SERVICE_OVERLOADED: 'ERR_DXL_SERVICE_OVERLOADED',
+  /**
+   * Error code returned in a response when a request timed out.
+   */
+  RESPONSE_TIMEOUT: 'ERR_DXL_RESPONSE_TIMEOUT'
+}
+</code></pre>
+        </article>
+    </section>
 
-<article>
-    <p>Prior to running any of the examples, you must complete the following:</p>
-<ul>
-<li>Install the OpenDXL JavaScript Client (Node.js) (<a href="tutorial-installation.html">Installation</a>)</li>
-<li>Provision the client to use with the samples (<a href="tutorial-provisioning.html">Provisioning</a>)</li>
-</ul>
-<p>The <code>dxlclient.config</code> file located in the <code>sample</code> sub-directory of the
-JavaScript DXL SDK must be populated.</p>
-</article>
 
-</section>
+
 
 </div>
 

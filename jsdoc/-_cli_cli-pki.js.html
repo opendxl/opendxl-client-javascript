@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: _cli/cli-pki.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: _cli/cli-pki.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module CliPki
+ * @description Helpers for processing PKI-related options specified when
+ * using the cli tools.
+ * @private
+ */
+
+'use strict'
+
+var pki = require('../_provisioning/pki')
+var cliUtil = require('./cli-util')
+var provisionUtil = require('../_provisioning/provision-util')
+
+/**
+ * Converts a camelCase field name to lowercase hyphen-delimited format for
+ * use as a command-line option. For example, this method would convert
+ * 'optionName' to 'option-name'.
+ * @param {String} field - Name of the field to convert.
+ * @returns {String} Field name in lowercase hyphen-delimited format.
+ */
+function fieldAsOption (field) {
+  var option = ''
+  for (var i = 0; i &lt; field.length; i++) {
+    var c = field.charAt(i)
+    if (c &lt; 'a') {
+      option = option + '-' + c.toLowerCase()
+    } else {
+      option += c
+    }
+  }
+  return option
+}
+
+/**
+ * Function used by a Commander command to append a subject alternative name
+ * to the list of names specified on the command line.
+ * @param {String} san - Subject alternative name to add to the list.
+ * @param {Array&lt;String>} sans - List of subject alternative names to append
+ *   the san parameter to.
+ * @returns {Array&lt;String>} The sans parameter, with the san parameter appended.
+ */
+function sanOption (san, sans) {
+  sans.push(san)
+  return sans
+}
+
+module.exports = {
+  /**
+   * Appends options related to the use of PKI utilities to a Commander-based
+   *   command.
+   * @param {Command} command - The Commander command to append options
+   *   onto.
+   * @returns {Command}
+   */
+  appendPkiCommandOptions: function (command) {
+    command.option('--opensslbin &lt;file>',
+      'Location of the OpenSSL executable that the command uses. If not ' +
+      'specified, the command attempts to find an OpenSSL executable in ' +
+      'the current environment path.')
+    command.option('-s, --san [value]',
+      'add Subject Alternative Name(s) to the CSR', sanOption, [])
+    command.option('-P, --passphrase [pass]',
+      'Password for the private key. If specified with no value, prompts ' +
+      'for the value.')
+    Object.keys(pki.SUBJECT_ATTRIBUTES).forEach(function (key) {
+      var attributeInfo = pki.SUBJECT_ATTRIBUTES[key]
+      var optionName = fieldAsOption(key)
+      var optionValue = attributeInfo.optionValue || optionName.toLowerCase()
+      command.option('--' + fieldAsOption(key) + ' &lt;' + optionValue + '>',
+        attributeInfo.description)
+    })
+    return command
+  },
+  /**
+   * Process the private key passphrase from the supplied Commander-based
+   * command.
+   * @param {Command} command - Commander-based command which contains options
+   *   to use in generating the CSR and private key.
+   * @param {(String|Boolean)} [command.passphrase] - If `true`, prompt from
+   *   the command line for the private key passphrase to use and store the
+   *   entered value back to the `command.passphrase` property.
+   * @param {Function} [responseCallback] - Function to invoke with the result
+   *   from private key passphrase processing. The first parameter in the
+   *   callback is an `Error` instance if the attempt to obtain the passphrase
+   *   fails.
+   */
+  processPrivateKeyPassphrase: function (command, responseCallback) {
+    if (command.passphrase === true) {
+      cliUtil.getValueFromPrompt('private key passphrase', true,
+        function (error, passphrase) {
+          if (error) {
+            provisionUtil.invokeCallback(error, responseCallback,
+              command.verbosity)
+          } else {
+            command.passphrase = passphrase
+            provisionUtil.invokeCallback(null, responseCallback)
+          }
+        }
+      )
+    } else {
+      provisionUtil.invokeCallback(null, responseCallback)
+    }
+  }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-ResponseErrorCode.html">ResponseErrorCode</a></li></ul><h3>Classes</h3><ul><li><a href="Broker.html">Broker</a></li><li><a href="Client.html">Client</a></li><li><a href="Config.html">Config</a></li><li><a href="DxlError.html">DxlError</a></li><li><a href="ErrorResponse.html">ErrorResponse</a></li><li><a href="Event.html">Event</a></li><li><a href="MalformedBrokerError.html">MalformedBrokerError</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageError.html">MessageError</a></li><li><a href="Request.html">Request</a></li><li><a href="RequestError.html">RequestError</a></li><li><a href="Response.html">Response</a></li><li><a href="ServiceRegistrationInfo.html">ServiceRegistrationInfo</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-installation.html">Installation</a></li><li><a href="tutorial-provisioning.html">Provisioning</a></li><li><a href="tutorial-samples.html">Samples</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

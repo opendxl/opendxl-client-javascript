@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Tutorial: Command Line Provisioning (Basic)</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Tutorial: Command Line Provisioning (Basic)</h1>
+
+    <section>
+
+<header>
+    
+
+    <h2>Command Line Provisioning (Basic)</h2>
+</header>
+
+<article>
+    <p>The OpenDXL JavaScript Client's command line interface supports the
+<code>provisionconfig</code> operation which generates the information necessary for a
+client to connect to a DXL fabric (certificates, keys, and broker information).</p>
+<p>As part of the provisioning process, a remote call will be made to a
+provisioning server (ePO or OpenDXL Broker) which contains the Certificate
+Authority (CA) that will sign the client's certificate.</p>
+<blockquote>
+<p><strong>Note:</strong> ePO-managed environments must have 4.0 (or newer) versions of
+DXL ePO extensions installed.</p>
+</blockquote>
+<p>Here is an example usage of <code>provisionconfig</code> operation for a Mac or Linux-based
+operating system:</p>
+<pre class="prettyprint source lang-sh"><code>node_modules/.bin/dxlclient config myserver client1</code></pre><p>For Windows, the equivalent command would be:</p>
+<pre class="prettyprint source lang-sh"><code>node_modules\.bin\dxlclient config myserver client1</code></pre><p>The parameters are as follows:</p>
+<ul>
+<li><code>config</code> is the directory to contain the results of the provisioning
+operation.</li>
+<li><code>myserver</code> is the host name or IP address of the server (ePO or OpenDXL
+Broker) that will be used to provision the client.</li>
+<li><code>client1</code> is the value for the Common Name (CN) attribute stored in the
+subject of the client's certificate.</li>
+</ul>
+<blockquote>
+<p><strong>Note:</strong> If a non-standard port (not 8443) is being used for ePO or the
+management interface of the OpenDXL Broker, an additional &quot;port&quot; argument
+must be specified. For example <code>-t 443</code> could be specified as part of the
+provision operation to connect to the server on port 443.</p>
+</blockquote>
+<p>If you encounter an error with the message
+<code>Unable to find openssl from system path</code>, ensure that you have installed
+OpenSSL per the instructions in the
+<a href="tutorial-installation.html">prerequisites section</a>. The CLI tool attempts to
+locate the openssl executable from your environment variable <code>PATH</code>. If you
+have installed openssl in a location which is not listed in your <code>PATH</code>
+environment variable, you can also provide the path to the openssl executable
+as a separate parameter. For example:</p>
+<pre class="prettyprint source lang-sh"><code>node_modules\.bin\dxlclient --opensslbin D:\custom\openssl.exe config myserver client1</code></pre><p>When prompted, provide credentials for the OpenDXL Broker Management Console
+or ePO (the ePO user must be an administrator):</p>
+<pre class="prettyprint source lang-sh"><code>Enter server username:
+Enter server password:</code></pre><p>On success, output similar to the following should be displayed:</p>
+<pre class="prettyprint source lang-sh"><code>Saving private key file to config/client.key
+Saving csr file to config/client.csr
+Saving DXL config file to config/dxlclient.config
+Saving ca bundle file to config/ca-bundle.crt
+Saving client certificate file to config/client.crt</code></pre><p>As an alternative to prompting, the username and password values can be
+specified via command line options:</p>
+<pre class="prettyprint source lang-sh"><code>node_modules/.bin/dxlclient provisionconfig config myserver client1 -u myuser -p mypass</code></pre><p>See the <a href="tutorial-advanced-cli-provisioning.html">Command Line Provisioning (Advanced)</a> section for advanced
+<code>provisionconfig</code> operation options.</p>
+</article>
+
+</section>
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-ResponseErrorCode.html">ResponseErrorCode</a></li></ul><h3>Classes</h3><ul><li><a href="Broker.html">Broker</a></li><li><a href="Client.html">Client</a></li><li><a href="Config.html">Config</a></li><li><a href="DxlError.html">DxlError</a></li><li><a href="ErrorResponse.html">ErrorResponse</a></li><li><a href="Event.html">Event</a></li><li><a href="MalformedBrokerError.html">MalformedBrokerError</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageError.html">MessageError</a></li><li><a href="Request.html">Request</a></li><li><a href="RequestError.html">RequestError</a></li><li><a href="Response.html">Response</a></li><li><a href="ServiceRegistrationInfo.html">ServiceRegistrationInfo</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-installation.html">Installation</a></li><li><a href="tutorial-provisioning.html">Provisioning</a></li><li><a href="tutorial-samples.html">Samples</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

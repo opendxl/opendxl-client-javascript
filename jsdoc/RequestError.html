@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: MessageError</title>
+    <title>JSDoc: Class: RequestError</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: MessageError</h1>
+    <h1 class="page-title">Class: RequestError</h1>
 
     
 
@@ -28,11 +28,10 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>MessageError<span class="signature">(message)</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>RequestError<span class="signature">(errorResponse)</span><span class="type-signature"></span></h2>
         
-            <div class="class-description"><p>An exception which wraps an error-type DXL <a href="Message.html">Message</a> - for
-  example, <a href="ErrorResponse.html">ErrorResponse</a>. This is used for communicating a DXL
-  error as an object which derives from Error.</p></div>
+            <div class="class-description"><p>An exception which can be passed in a response callback to
+  a failed <a href="Client.html#asyncRequest">Client#asyncRequest</a> call.</p></div>
         
     
 </header>
@@ -47,7 +46,7 @@
     
 
     
-    <h4 class="name" id="MessageError"><span class="type-signature"></span>new MessageError<span class="signature">(message)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="RequestError"><span class="type-signature"></span>new RequestError<span class="signature">(errorResponse)</span><span class="type-signature"></span></h4>
     
 
     
@@ -87,13 +86,13 @@
 
         <tr>
             
-                <td class="name"><code>message</code></td>
+                <td class="name"><code>errorResponse</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="Message.html">Message</a></span>
+<span class="param-type"><a href="ErrorResponse.html">ErrorResponse</a></span>
 
 
             
@@ -103,8 +102,8 @@
 
             
 
-            <td class="description last"><p>The DXL <a href="Message.html">Message</a> which this exception
-  wraps.</p></td>
+            <td class="description last"><p>The DXL <a href="ErrorResponse.html">ErrorResponse</a>
+  returned from the DXL fabric for the failed request.</p></td>
         </tr>
 
     
@@ -145,7 +144,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="message-error.js.html">message-error.js</a>, <a href="message-error.js.html#line15">line 15</a>
+        <a href="request-error.js.html">request-error.js</a>, <a href="request-error.js.html#line21">line 21</a>
     </li></ul></dd>
     
 
@@ -177,6 +176,17 @@
     </div>
 
     
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li>Error</li>
+    </ul>
+
+
+    
 
     
 
@@ -193,124 +203,15 @@
 
         
             
-<h4 class="name" id="code"><span class="type-signature"></span>code<span class="type-signature"></span></h4>
-
-
-
-
-
-
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
-    <thead>
-    <tr>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Error code associated with the DXL <a href="Message.html">Message</a>.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-default">Default Value:</dt>
-    <dd class="tag-default"><ul class="dummy">
-            <li>0</li>
-        </ul></dd>
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="message-error.js.html">message-error.js</a>, <a href="message-error.js.html#line36">line 36</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="detail"><span class="type-signature"></span>detail<span class="type-signature"> :<a href="Message.html">Message</a></span></h4>
+<h4 class="name" id="code"><span class="type-signature"></span>code<span class="type-signature"> :String</span></h4>
 
 
 
 
 <div class="description">
-    <p>The DXL <a href="Message.html">Message</a> with more detail for the error.</p>
+    <p>String label that identifies the kind of error. See
+<a href="module-ResponseErrorCode.html">ResponseErrorCode</a>
+for a list of possible string constants.</p>
 </div>
 
 
@@ -319,7 +220,7 @@
     <ul>
         <li>
             
-<span class="param-type"><a href="Message.html">Message</a></span>
+<span class="param-type">String</span>
 
 
         </li>
@@ -358,7 +259,153 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="message-error.js.html">message-error.js</a>, <a href="message-error.js.html#line26">line 26</a>
+        <a href="request-error.js.html">request-error.js</a>, <a href="request-error.js.html#line38">line 38</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="detail"><span class="type-signature"></span>detail<span class="type-signature"> :<a href="ErrorResponse.html">ErrorResponse</a></span></h4>
+
+
+
+
+<div class="description">
+    <p>The DXL <a href="ErrorResponse.html">ErrorResponse</a> with more detail for the error.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="ErrorResponse.html">ErrorResponse</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <dt class="important tag-deprecated">Deprecated:</dt><dd><ul class="dummy"><li>in favor of <a href="RequestError.html#dxlErrorResponse">RequestError#dxlErrorResponse</a></li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="request-error.js.html">request-error.js</a>, <a href="request-error.js.html#line59">line 59</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="dxlErrorResponse"><span class="type-signature"></span>dxlErrorResponse<span class="type-signature"> :<a href="ErrorResponse.html">ErrorResponse</a></span></h4>
+
+
+
+
+<div class="description">
+    <p>The DXL <a href="ErrorResponse.html">ErrorResponse</a> with more detail for the error.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="ErrorResponse.html">ErrorResponse</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="request-error.js.html">request-error.js</a>, <a href="request-error.js.html#line52">line 52</a>
     </li></ul></dd>
     
 

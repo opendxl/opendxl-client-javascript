@@ -578,12 +578,21 @@ Object.defineProperty(Client.prototype, 'subscriptions', {
 /**
  * Sends a {@link Request} message to a remote DXL service asynchronously. An
  * optional response callback can be specified. This callback will be invoked
- * when the corresponding {@link Response} message is received by the client.
+ * when the corresponding {@link Response} message (or an error) is received by
+ * the client.
  * @param {Request} request - The request message to send to a remote DXL
  *   service.
- * @param {Function} [responseCallback=null] - An optional response callback
- *   that will be invoked when the corresponding {@link Response} message is
- *   received by the client.
+ * @param {Function} [responseCallback] - An optional response callback
+ *   that will be invoked with the result of the request.
+ *
+ *   If an error occurs during the request, the first parameter supplied to the
+ *   callback contains an {@link Error} with failure details. If the response
+ *   from the DXL fabric to the request includes an {@link ErrorResponse}, the
+ *   first parameter is a {@link RequestError} (which contains the error
+ *   response in its {@link RequestError#dxlErrorResponse} property).
+ *
+ *   If the request is successful, the second parameter includes a
+ *   {@link Response} message.
  * @throws {DxlError} If no prior attempt has been made to connect the client
  *   via a call to {@link Client#connect}.
  */
@@ -723,7 +732,7 @@ module.exports = Client
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Broker.html">Broker</a></li><li><a href="Client.html">Client</a></li><li><a href="Config.html">Config</a></li><li><a href="DxlError.html">DxlError</a></li><li><a href="ErrorResponse.html">ErrorResponse</a></li><li><a href="Event.html">Event</a></li><li><a href="MalformedBrokerError.html">MalformedBrokerError</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageError.html">MessageError</a></li><li><a href="Request.html">Request</a></li><li><a href="Response.html">Response</a></li><li><a href="ServiceRegistrationInfo.html">ServiceRegistrationInfo</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-installation.html">Installation</a></li><li><a href="tutorial-provisioning.html">Provisioning</a></li><li><a href="tutorial-samples.html">Samples</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-ResponseErrorCode.html">ResponseErrorCode</a></li></ul><h3>Classes</h3><ul><li><a href="Broker.html">Broker</a></li><li><a href="Client.html">Client</a></li><li><a href="Config.html">Config</a></li><li><a href="DxlError.html">DxlError</a></li><li><a href="ErrorResponse.html">ErrorResponse</a></li><li><a href="Event.html">Event</a></li><li><a href="MalformedBrokerError.html">MalformedBrokerError</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageError.html">MessageError</a></li><li><a href="Request.html">Request</a></li><li><a href="RequestError.html">RequestError</a></li><li><a href="Response.html">Response</a></li><li><a href="ServiceRegistrationInfo.html">ServiceRegistrationInfo</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-installation.html">Installation</a></li><li><a href="tutorial-provisioning.html">Provisioning</a></li><li><a href="tutorial-samples.html">Samples</a></li></ul>
 </nav>
 
 <br class="clear">

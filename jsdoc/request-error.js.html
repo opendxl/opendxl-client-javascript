@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: malformed-broker-error.js</title>
+    <title>JSDoc: Source: request-error.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: malformed-broker-error.js</h1>
+    <h1 class="page-title">Source: request-error.js</h1>
 
     
 
@@ -29,22 +29,67 @@
             <pre class="prettyprint source linenums"><code>'use strict'
 
 var inherits = require('inherits')
+var ResponseErrorCode = require('./response-error-code')
 var errorUtil = require('./error-util')
 
+var errorCodesToNames = {
+  0x80000001: ResponseErrorCode.SERVICE_UNAVAILABLE,
+  0x80000002: ResponseErrorCode.SERVICE_OVERLOADED,
+  0x80000003: ResponseErrorCode.RESPONSE_TIMEOUT
+}
+
 /**
- * @classdesc An exception raised when a URL related to a DXL broker is
- *   malformed.
- * @param {String} message - The error message.
+ * @classdesc An exception which can be passed in a response callback to
+ *   a failed {@link Client#asyncRequest} call.
+ * @param {ErrorResponse} errorResponse - The DXL {@link ErrorResponse}
+ *   returned from the DXL fabric for the failed request.
  * @augments Error
  * @constructor
  */
-function MalformedBrokerError (message) {
-  errorUtil.initializeError(this, message)
+function RequestError (errorResponse) {
+  if (!errorResponse) {
+    throw new TypeError('Error did not include an errorResponse')
+  }
+
+  var errorMessage = errorResponse.errorMessage || errorResponse.payload
+
+  // Map a string for the error code if if the error is well-known.
+  var errorCodeString
+  if (errorResponse.hasOwnProperty('errorCode')) {
+    var normalizedErrorCode = errorResponse.errorCode
+    if (normalizedErrorCode &lt; 0) {
+      normalizedErrorCode = 0xFFFFFFFF + normalizedErrorCode + 1
+    }
+    errorCodeString = errorCodesToNames[normalizedErrorCode]
+  }
+
+  /**
+   * String label that identifies the kind of error. See
+   * [ResponseErrorCode]{@link module:ResponseErrorCode}
+   * for a list of possible string constants.
+   * @name RequestError#code
+   * @type {String}
+   */
+
+  errorUtil.initializeError(this, errorMessage, errorCodeString)
+
+  /**
+   * The DXL {@link ErrorResponse} with more detail for the error.
+   * @type {ErrorResponse}
+   */
+  this.dxlErrorResponse = errorResponse
+
+  /**
+   * The DXL {@link ErrorResponse} with more detail for the error.
+   * @type {ErrorResponse}
+   * @deprecated in favor of {@link RequestError#dxlErrorResponse}
+   */
+  this.detail = this.dxlErrorResponse
 }
 
-inherits(MalformedBrokerError, Error)
+inherits(RequestError, Error)
 
-module.exports = MalformedBrokerError
+module.exports = RequestError
 </code></pre>
         </article>
     </section>
