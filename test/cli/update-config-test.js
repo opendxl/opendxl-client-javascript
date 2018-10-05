@@ -235,7 +235,6 @@ describe('updateconfig CLI command @cli', function () {
 
       var command = cliHelpers.cliCommand(
         function (error) {
-          console.log('chunk!')
           expect(error).to.be.an.instanceof(DxlError)
           expect(error.message).to.have.string('Unable to read config file')
           done()
