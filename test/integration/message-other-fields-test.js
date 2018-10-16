@@ -21,7 +21,10 @@ describe('"other fields" in an event message @integration', function () {
 
       client.addEventCallback(topic, function (eventReceived) {
         client.shutdown(null, function () {
-          expect(eventReceived.otherFields).to.eql(eventToSend.otherFields)
+          for (var i = 0; i < otherFieldsCount; i++) {
+            expect(eventReceived.otherFields['key' + i]).to.eql(
+              eventToSend.otherFields['key' + i])
+          }
           done()
         })
       })
