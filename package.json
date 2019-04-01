@@ -17,7 +17,7 @@
     "README.md"
   ],
   "engines": {
-    "node": ">=4.0.0"
+    "node": ">=6.0.0"
   },
   "dependencies": {
     "bl": "^1.2.1",
