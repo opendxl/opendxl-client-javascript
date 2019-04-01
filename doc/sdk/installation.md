@@ -6,18 +6,7 @@ be satisfied:
 * DXL brokers (3.0.1 or later) deployed with an ePO managed environment or an
   [OpenDXL broker](https://github.com/opendxl/opendxl-broker).
 
-* Node.js 4.0 or higher installed.
-
-  >  **Note:** With versions of Node.js older than 4.8.1, you may encounter an
-  > error with the following text when your client attempts to connect to the
-  > broker:
-
-  ```sh
-  Error: unable to get issuer certificate
-  ```
-
-  > No workaround for this issue on the older Node.js versions is known at this
-  > time.
+* Node.js 6.0 or higher installed.
 
 * If you intend to use the
   [OpenDXL JavaScript CLI tool]{@tutorial basic-cli-provisioning} for
