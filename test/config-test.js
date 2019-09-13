@@ -130,6 +130,136 @@ describe('Config', function () {
         fs.existsSync.restore()
         readStub.restore()
       })
+
+    it('should return the proxy info from the file',
+      function () {
+        var fileName = 'withproxy.config'
+        var configFile = [
+          '# Comment that should be ignored',
+          '[General]',
+          'ClientId=myclientid',
+          '',
+          '; Another comment that should be ignored',
+          '[Certs]',
+          'BrokerCertChain=mycertchain.crt',
+          'CertFile=mycert.crt',
+          'PrivateKey=mykey.key',
+          '',
+          '[Brokers]',
+          'broker1=broker1;8883;127.0.0.1',
+          'broker2=broker2;9883;localhost;127.0.0.2',
+          'broker3=10883;127.0.0.3',
+          '',
+          '[BrokersWebSockets]',
+          'broker2=broker2;8443;test;10.25.10.11',
+          '',
+          '[Proxy]',
+          'Address=10.25.0.1',
+          'Port=3128',
+          'User=user',
+          'Password=Welcome2dxl'
+        ].join('\n')
+
+        sinon.stub(fs, 'existsSync').returns(true)
+
+        var readStub = sinon.stub(fs, 'readFileSync')
+        readStub.withArgs('withproxy.config').returns(configFile)
+        readStub.withArgs('mycertchain.crt').returns('the cert chain')
+        readStub.withArgs('mycert.crt').returns('the cert')
+        readStub.withArgs('mykey.key').returns('the private key')
+
+        var config = Config.createDxlConfigFromFile(fileName)
+
+        fs.existsSync.restore()
+        readStub.restore()
+        // validate websockets
+        var broker = config._webSocketBrokers[0]
+        expect(broker.hosts).to.eql(['test', '10.25.10.11'])
+        expect(broker.uniqueId).to.equal('broker2')
+        expect(broker.port).to.equal(8443)
+        // validate proxy
+        var proxy = config.proxy
+        expect(proxy.address).to.equal('10.25.0.1')
+        expect(proxy.port).to.equal(3128)
+        expect(proxy.user).to.equal('user')
+        expect(proxy.password).to.equal('Welcome2dxl')
+      })
+
+    it('should raise an error for a missing proxy port number',
+      function () {
+        var fileName = 'no_proxy_port.config'
+        var configFile = [
+          '# Comment that should be ignored',
+          '[General]',
+          'ClientId=myclientid',
+          '',
+          '; Another comment that should be ignored',
+          '[Certs]',
+          'BrokerCertChain=mycertchain.crt',
+          'CertFile=mycert.crt',
+          'PrivateKey=mykey.key',
+          '',
+          '[Brokers]',
+          'broker1=broker1;8883;127.0.0.1',
+          '',
+          '[Proxy]',
+          'Address=10.25.0.1',
+          'User=user',
+          'Password=Welcome2dxl'
+        ].join('\n')
+
+        sinon.stub(fs, 'existsSync').returns(true)
+
+        var readStub = sinon.stub(fs, 'readFileSync')
+        readStub.withArgs('no_proxy_port.config').returns(configFile)
+        readStub.withArgs('mycertchain.crt').returns('the cert chain')
+        readStub.withArgs('mycert.crt').returns('the cert')
+        readStub.withArgs('mykey.key').returns('the private key')
+
+        expect(function () { Config.createDxlConfigFromFile(fileName) }).to
+          .throw(DxlError)
+
+        fs.existsSync.restore()
+        readStub.restore()
+      })
+
+    it('should raise an error for a missing proxy password',
+      function () {
+        var fileName = 'no_proxy_password.config'
+        var configFile = [
+          '# Comment that should be ignored',
+          '[General]',
+          'ClientId=myclientid',
+          '',
+          '; Another comment that should be ignored',
+          '[Certs]',
+          'BrokerCertChain=mycertchain.crt',
+          'CertFile=mycert.crt',
+          'PrivateKey=mykey.key',
+          '',
+          '[Brokers]',
+          'broker1=broker1;8883;127.0.0.1',
+          '',
+          '[Proxy]',
+          'Address=10.25.0.1',
+          'Port=8080',
+          'User=user'
+        ].join('\n')
+
+        sinon.stub(fs, 'existsSync').returns(true)
+
+        var readStub = sinon.stub(fs, 'readFileSync')
+        readStub.withArgs('no_proxy_password.config').returns(configFile)
+        readStub.withArgs('mycertchain.crt').returns('the cert chain')
+        readStub.withArgs('mycert.crt').returns('the cert')
+        readStub.withArgs('mykey.key').returns('the private key')
+
+        expect(function () { Config.createDxlConfigFromFile(fileName) }).to
+          .throw(DxlError)
+
+        fs.existsSync.restore()
+        readStub.restore()
+      })
   })
   context('when specifying settings during construction', function () {
     var config = new Config('the cert chain', 'the cert', 'the private key',
@@ -223,8 +353,12 @@ describe('Config', function () {
             // Validate that a CSR with the expected common name was generated
             var csrFileName = path.join(tmpDir, 'client3.csr')
             expect(fs.existsSync(csrFileName)).to.be.true
-            expect(pkiHelpers.getCsrSubject(csrFileName)).to.equal(
-              '/CN=client2')
+            // format is different for version of openssl used
+            try {
+              expect(pkiHelpers.getCsrSubject(csrFileName)).to.equal('/CN=client2')
+            } catch (e) {
+              expect(pkiHelpers.getCsrSubject(csrFileName)).to.equal('CN = client2')
+            }
             // Validate that a proper RSA private key was generated
             var privateKeyFileName = path.join(tmpDir, 'client3.key')
             pkiHelpers.validateRsaPrivateKey(privateKeyFileName)
@@ -237,6 +371,8 @@ describe('Config', function () {
             // the expected content.
             var actualRequestData = JSON.parse(querystring.unescape(
               fs.readFileSync(caBundleFileName)))
+            // ignore agent/proxy settings when comparing
+            delete actualRequestData.agent
             var expectedRequestPath = pkiHelpers.PROVISION_COMMAND +
               '?csrString=' + querystring.escape(fs.readFileSync(csrFileName)) +
               '&%3Aoutput=json'
@@ -259,13 +395,18 @@ describe('Config', function () {
             // management service request contained the expected content.
             var configFile = path.join(tmpDir, 'dxlclient.config')
             expect(fs.existsSync(configFile)).to.be.true
-            var expectedConfigFile = ['[Certs]',
+            var expectedConfigFile = ['[General]',
+              '#UseWebSockets=false',
+              '',
+              '[Certs]',
               'BrokerCertChain=ca-bundle.crt',
               'CertFile=client3.crt',
               'PrivateKey=client3.key',
               '',
               '[Brokers]']
             Array.prototype.push.apply(expectedConfigFile, expectedBrokers)
+            expectedConfigFile.push('')
+            expectedConfigFile.push('[BrokersWebSockets]')
             expectedConfigFile.push('')
             expectedConfigFile = expectedConfigFile.join(os.EOL)
             expect(fs.readFileSync(configFile, 'utf-8')).to.equal(

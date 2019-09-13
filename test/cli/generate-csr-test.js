@@ -41,7 +41,11 @@ describe('generatecsr CLI command @cli', function () {
         expect(error).to.be.null
         var csrFileName = path.join(tmpDir, 'client.csr')
         expect(fs.existsSync(csrFileName)).to.be.true
-        expect(pkiHelpers.getCsrSubject(csrFileName)).to.equal('/CN=client1')
+        try {
+          expect(pkiHelpers.getCsrSubject(csrFileName)).to.equal('/CN=client1')
+        } catch (e) {
+          expect(pkiHelpers.getCsrSubject(csrFileName)).to.equal('CN = client1')
+        }
         var privateKeyFileName = path.join(tmpDir, 'client.key')
         pkiHelpers.validateRsaPrivateKey(privateKeyFileName)
         done()
@@ -57,7 +61,11 @@ describe('generatecsr CLI command @cli', function () {
           expect(error).to.be.null
           var csrFileName = path.join(tmpDir, 'client3.csr')
           expect(fs.existsSync(csrFileName)).to.be.true
-          expect(pkiHelpers.getCsrSubject(csrFileName)).to.equal('/CN=client2')
+          try {
+            expect(pkiHelpers.getCsrSubject(csrFileName)).to.equal('/CN=client2')
+          } catch (e) {
+            expect(pkiHelpers.getCsrSubject(csrFileName)).to.equal('CN = client2')
+          }
           var privateKeyFileName = path.join(tmpDir, 'client3.key')
           pkiHelpers.validateRsaPrivateKey(privateKeyFileName)
           done()
@@ -72,9 +80,16 @@ describe('generatecsr CLI command @cli', function () {
       var command = cliHelpers.cliCommand(
         function (error) {
           expect(error).to.be.null
-          expect(pkiHelpers.getCsrSubject(path.join(tmpDir, 'client.csr'))).to
-            .equal('/CN=client/C=US/ST=OR/L=Hillsboro/O=McAfee' +
-              '/OU=DXL Team/emailAddress=jane.doe@mcafee.com')
+          // format is different based on openssl version
+          try {
+            expect(pkiHelpers.getCsrSubject(path.join(tmpDir, 'client.csr'))).to
+              .equal('/CN=client/C=US/ST=OR/L=Hillsboro/O=McAfee' +
+                '/OU=DXL Team/emailAddress=jane.doe@mcafee.com')
+          } catch (e) {
+            expect(pkiHelpers.getCsrSubject(path.join(tmpDir, 'client.csr'))).to
+              .equal('CN = client, C = US, ST = OR, L = Hillsboro, O = McAfee, ' +
+                'OU = DXL Team, emailAddress = jane.doe@mcafee.com')
+          }
           done()
         }
       )
