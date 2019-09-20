@@ -13,6 +13,7 @@ exports.RequestError = require('./lib/request-error')
 exports.Response = require('./lib/response')
 exports.ResponseErrorCode = require('./lib/response-error-code')
 exports.ServiceRegistrationInfo = require('./lib/service-registration-info')
+exports.Proxy = require('./lib/proxy')
 
 // Leaving this for backward compatibility for now
 exports.MessageError = exports.RequestError

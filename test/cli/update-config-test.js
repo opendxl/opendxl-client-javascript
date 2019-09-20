@@ -127,6 +127,8 @@ describe('updateconfig CLI command @cli', function () {
         }
         var caBundleRequest = JSON.parse(querystring.unescape(fs.readFileSync(
           caBundleFileName)))
+        // ignore agent/proxy settings when comparing if exists
+        delete caBundleRequest.agent
         expectedRequest.path = CLIENT_CA_BUNDLE_COMMAND + '?:output=json'
         expect(caBundleRequest).to.eql(expectedRequest)
 
@@ -135,8 +137,10 @@ describe('updateconfig CLI command @cli', function () {
         // that the request had the expected content.
         expectedRequest.path = BROKER_LIST_COMMAND + '?%3Aoutput=json'
         expect(fs.existsSync(tmpBrokerRequestFile)).to.be.true
-        expect(JSON.parse(fs.readFileSync(tmpBrokerRequestFile, 'utf-8'))).to
-          .eql(expectedRequest)
+        var brokerRequest = JSON.parse(fs.readFileSync(tmpBrokerRequestFile, 'utf-8'))
+        // ignore agent/proxy settings when comparing if exists
+        delete brokerRequest.agent
+        expect(brokerRequest).to.eql(expectedRequest)
 
         expect(fs.existsSync(configFile)).to.be.true
         expect(fs.readFileSync(configFile, 'utf-8')).to.equal(expectedConfigFile)

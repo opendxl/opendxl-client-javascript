@@ -13,13 +13,13 @@ Here is an example usage of `provisionconfig` operation for a Mac or Linux-based
 operating system:
 
 ```sh
-node_modules/.bin/dxlclient config myserver client1
+node_modules/.bin/dxlclient provisionconfig config myserver client1
 ```
 
 For Windows, the equivalent command would be:
 
 ```sh
-node_modules\.bin\dxlclient config myserver client1
+node_modules\.bin\dxlclient provisionconfig config myserver client1
 ```
 
 The parameters are as follows:
@@ -46,7 +46,7 @@ environment variable, you can also provide the path to the openssl executable
 as a separate parameter. For example:
 
 ```sh
-node_modules\.bin\dxlclient --opensslbin D:\custom\openssl.exe config myserver client1
+node_modules\.bin\dxlclient --opensslbin D:\custom\openssl.exe provisionconfig config myserver client1
 ```
 
 When prompted, provide credentials for the OpenDXL Broker Management Console

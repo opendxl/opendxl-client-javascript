@@ -52,7 +52,12 @@ describe('provisionconfig CLI command @cli', function () {
         // Validate that a CSR with the expected common name was generated
         var csrFileName = path.join(tmpDir, 'client3.csr')
         expect(fs.existsSync(csrFileName)).to.be.true
-        expect(pkiHelpers.getCsrSubject(csrFileName)).to.equal('/CN=client2')
+        // format is different based on openssl version
+        try {
+          expect(pkiHelpers.getCsrSubject(csrFileName)).to.equal('/CN=client2')
+        } catch (e) {
+          expect(pkiHelpers.getCsrSubject(csrFileName)).to.equal('CN = client2')
+        }
         // Validate that a proper RSA private key was generated
         var privateKeyFileName = path.join(tmpDir, 'client3.key')
         pkiHelpers.validateRsaPrivateKey(privateKeyFileName)
@@ -65,6 +70,8 @@ describe('provisionconfig CLI command @cli', function () {
         // the expected content.
         var actualRequestData = JSON.parse(querystring.unescape(fs.readFileSync(
           caBundleFileName)))
+        // ignore agent/proxy settings when comparing if exists
+        delete actualRequestData.agent
         var expectedRequestPath = pkiHelpers.PROVISION_COMMAND +
           '?csrString=' + querystring.escape(fs.readFileSync(csrFileName)) +
           '&%3Aoutput=json'
@@ -87,13 +94,18 @@ describe('provisionconfig CLI command @cli', function () {
         // service request contained the expected content.
         var configFile = path.join(tmpDir, 'dxlclient.config')
         expect(fs.existsSync(configFile)).to.be.true
-        var expectedConfigFile = ['[Certs]',
+        var expectedConfigFile = ['[General]',
+          '#UseWebSockets=false',
+          '',
+          '[Certs]',
           'BrokerCertChain=ca-bundle.crt',
           'CertFile=client3.crt',
           'PrivateKey=client3.key',
           '',
           '[Brokers]']
         Array.prototype.push.apply(expectedConfigFile, expectedBrokers)
+        expectedConfigFile.push('')
+        expectedConfigFile.push('[BrokersWebSockets]')
         expectedConfigFile.push('')
         expectedConfigFile = expectedConfigFile.join(os.EOL)
         expect(fs.readFileSync(configFile, 'utf-8')).to.equal(expectedConfigFile)
