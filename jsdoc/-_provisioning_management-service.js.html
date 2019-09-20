@@ -33,6 +33,7 @@ var https = require('https')
 var querystring = require('querystring')
 var url = require('url')
 var provisionUtil = require('./provision-util')
+var HttpsProxyAgent = require('https-proxy-agent')
 
 var HTTP_MAX_REDIRECTS = 5
 
@@ -256,6 +257,21 @@ ManagementService.prototype.request = function (description, path, queryString,
   } else {
     requestOptions.rejectUnauthorized = false
     requestOptions.requestCert = false
+  }
+
+  // use proxy specified in the env
+  var proxy
+  if (process.env.http_proxy != null) { proxy = process.env.http_proxy }
+  if (process.env.HTTP_PROXY != null) { proxy = process.env.HTTP_PROXY }
+
+  if (proxy) {
+    // if there is no protocol set in the env variable add the http://
+    proxy = (proxy.indexOf('://') === -1) ? 'http://' + proxy : proxy
+    var proxyOptions = url.parse(proxy)
+    proxyOptions.secureEndpoint = true
+    console.log('Connecting via Proxy:', proxy)
+    // set proxy agent in requestOptions
+    requestOptions.agent = new HttpsProxyAgent(proxyOptions)
   }
 
   var requestUrl = toUrlString(requestOptions)

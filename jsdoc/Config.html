@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>Config<span class="signature">(brokerCaBundle, cert, privateKey, brokers)</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>Config<span class="signature">(brokerCaBundle, cert, privateKey, brokers, webSocketBrokers, useWebSockets, proxy)</span><span class="type-signature"></span></h2>
         
     
 </header>
@@ -41,7 +41,7 @@
     
 
     
-    <h4 class="name" id="Config"><span class="type-signature"></span>new Config<span class="signature">(brokerCaBundle, cert, privateKey, brokers)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Config"><span class="type-signature"></span>new Config<span class="signature">(brokerCaBundle, cert, privateKey, brokers, webSocketBrokers, useWebSockets, proxy)</span><span class="type-signature"></span></h4>
     
 
     
@@ -180,6 +180,78 @@ brokers that are available to connect to on the fabric.</p>
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>webSocketBrokers</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;<a href="Broker.html">Broker</a>></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An array of <a href="Broker.html">Broker</a> objects
+  representing brokers on the DXL fabric supporting DXL connections over WebSockets.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>useWebSockets</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>If true and webSocketBrokers are defined,
+client will attempt to connect over WebSockets.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>proxy</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">proxy</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Information- If non null the proxy settings will be used. This is for
+WebSocket connections only.</p></td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -217,7 +289,7 @@ brokers that are available to connect to on the fabric.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="config.js.html">config.js</a>, <a href="config.js.html#line106">line 106</a>
+        <a href="config.js.html">config.js</a>, <a href="config.js.html#line155">line 155</a>
     </li></ul></dd>
     
 
@@ -279,6 +351,78 @@ client.connect()</code></pre>
 
         
             
+<h4 class="name" id="_proxy"><span class="type-signature"></span>_proxy<span class="type-signature"> :<a href="Proxy.html">Proxy</a></span></h4>
+
+
+
+
+<div class="description">
+    <p>The proxy information for the Connection via WebSockets only</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="Proxy.html">Proxy</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="config.js.html">config.js</a>, <a href="config.js.html#line227">line 227</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
 <h4 class="name" id="brokerCaBundle"><span class="type-signature"></span>brokerCaBundle<span class="type-signature"> :String</span></h4>
 
 
@@ -333,7 +477,7 @@ client.connect()</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="config.js.html">config.js</a>, <a href="config.js.html#line107">line 107</a>
+        <a href="config.js.html">config.js</a>, <a href="config.js.html#line156">line 156</a>
     </li></ul></dd>
     
 
@@ -358,7 +502,7 @@ client.connect()</code></pre>
 
 <div class="description">
     <p>An array of <a href="Broker.html">Broker</a> objects representing brokers comprising the
-DXL fabric.</p>
+DXL fabric. This could be webSockets brokers depending on configuration</p>
 </div>
 
 
@@ -406,7 +550,7 @@ DXL fabric.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="config.js.html">config.js</a>, <a href="config.js.html#line125">line 125</a>
+        <a href="config.js.html">config.js</a>, <a href="config.js.html#line190">line 190</a>
     </li></ul></dd>
     
 
@@ -478,7 +622,7 @@ DXL fabric.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="config.js.html">config.js</a>, <a href="config.js.html#line113">line 113</a>
+        <a href="config.js.html">config.js</a>, <a href="config.js.html#line162">line 162</a>
     </li></ul></dd>
     
 
@@ -558,7 +702,7 @@ the rate at which the client will send ping messages to the
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="config.js.html">config.js</a>, <a href="config.js.html#line139">line 139</a>
+        <a href="config.js.html">config.js</a>, <a href="config.js.html#line210">line 210</a>
     </li></ul></dd>
     
 
@@ -630,7 +774,7 @@ the rate at which the client will send ping messages to the
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="config.js.html">config.js</a>, <a href="config.js.html#line119">line 119</a>
+        <a href="config.js.html">config.js</a>, <a href="config.js.html#line168">line 168</a>
     </li></ul></dd>
     
 
@@ -707,7 +851,79 @@ the rate at which the client will send ping messages to the
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="config.js.html">config.js</a>, <a href="config.js.html#line132">line 132</a>
+        <a href="config.js.html">config.js</a>, <a href="config.js.html#line203">line 203</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="useWebSockets"><span class="type-signature"></span>useWebSockets<span class="type-signature"> :String</span></h4>
+
+
+
+
+<div class="description">
+    <p>Flag to use websocketBrokers if defined in the config</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">String</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="config.js.html">config.js</a>, <a href="config.js.html#line197">line 197</a>
     </li></ul></dd>
     
 
@@ -846,7 +1062,7 @@ mybroker2=mybroker2;8883;mybroker2.mcafee.com;192.168.1.13</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="config.js.html">config.js</a>, <a href="config.js.html#line182">line 182</a>
+        <a href="config.js.html">config.js</a>, <a href="config.js.html#line259">line 259</a>
     </li></ul></dd>
     
 
@@ -1884,7 +2100,7 @@ by the management service.</li>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="config.js.html">config.js</a>, <a href="config.js.html#line307">line 307</a>
+        <a href="config.js.html">config.js</a>, <a href="config.js.html#line391">line 391</a>
     </li></ul></dd>
     
 

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Tutorial: Samples</title>
+    <title>JSDoc: Source: proxy.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,35 +17,60 @@
 
 <div id="main">
 
-    <h1 class="page-title">Tutorial: Samples</h1>
+    <h1 class="page-title">Source: proxy.js</h1>
 
+    
+
+
+
+    
     <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict'
 
-<header>
-    
-    <ul>
-        <li><a href="tutorial-basic-events-sample.html">Basic Events Sample</a></li>
-    
-        <li><a href="tutorial-basic-service-sample.html">Basic Service Sample</a></li>
-    </ul>
-    
+/**
+ * @classdesc Proxy information for WebSockets Connection (Optional)
+ * @private
+ * @param {String} address - The proxy IP address or host
+ * @param {Integer} port - The proxy port
+ * @param {String} user - The proxy user (optional)
+ * @param {String} password - The proxy password. Required if user is specified
+ * @augments Message
+ * @constructor
+ */
+function Proxy (address, port, user, password) {
+  /**
+   * The Proxy IP address or host name
+   * @type {String}
+   * @name Proxy#address
+   */
+  this.address = address
+  /**
+   * The Proxy port
+   * @type {Integer}
+   * @name Proxy#port
+   */
+  this.port = port
+  /**
+   * The Proxy user
+   * @type {String}
+   * @name Proxy#user
+   */
+  this.user = user
+  /**
+   * The Proxy password
+   * @type {String}
+   * @name Proxy#password
+   */
+  this.password = password
+}
+module.exports = Proxy
+</code></pre>
+        </article>
+    </section>
 
-    <h2>Samples</h2>
-</header>
 
-<article>
-    <p>Prior to running any of the examples, you must complete the following:</p>
-<ul>
-<li>Install the OpenDXL JavaScript Client (Node.js) (<a href="tutorial-installation.html">Installation</a>)</li>
-<li>Provision the client to use with the samples (<a href="tutorial-provisioning.html">Provisioning</a>)</li>
-</ul>
-<p>The <code>dxlclient.config</code> file located in the <code>sample</code> sub-directory of the
-JavaScript DXL SDK must be populated.</p>
-<p>NOTE: If <a href="tutorial-basic-cli-provisioning.html">Command Line Provisioning (Basic)</a> Command Line Interface (CLI) provisioning is being performed, specify the 
-<code>sample</code> directory as the output location for the provisioning operation.</p>
-</article>
 
-</section>
 
 </div>
 

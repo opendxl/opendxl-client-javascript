@@ -40,8 +40,8 @@ DXL ePO extensions installed.</p>
 </blockquote>
 <p>Here is an example usage of <code>provisionconfig</code> operation for a Mac or Linux-based
 operating system:</p>
-<pre class="prettyprint source lang-sh"><code>node_modules/.bin/dxlclient config myserver client1</code></pre><p>For Windows, the equivalent command would be:</p>
-<pre class="prettyprint source lang-sh"><code>node_modules\.bin\dxlclient config myserver client1</code></pre><p>The parameters are as follows:</p>
+<pre class="prettyprint source lang-sh"><code>node_modules/.bin/dxlclient provisionconfig config myserver client1</code></pre><p>For Windows, the equivalent command would be:</p>
+<pre class="prettyprint source lang-sh"><code>node_modules\.bin\dxlclient provisionconfig config myserver client1</code></pre><p>The parameters are as follows:</p>
 <ul>
 <li><code>config</code> is the directory to contain the results of the provisioning
 operation.</li>
@@ -64,7 +64,7 @@ locate the openssl executable from your environment variable <code>PATH</code>. 
 have installed openssl in a location which is not listed in your <code>PATH</code>
 environment variable, you can also provide the path to the openssl executable
 as a separate parameter. For example:</p>
-<pre class="prettyprint source lang-sh"><code>node_modules\.bin\dxlclient --opensslbin D:\custom\openssl.exe config myserver client1</code></pre><p>When prompted, provide credentials for the OpenDXL Broker Management Console
+<pre class="prettyprint source lang-sh"><code>node_modules\.bin\dxlclient --opensslbin D:\custom\openssl.exe provisionconfig config myserver client1</code></pre><p>When prompted, provide credentials for the OpenDXL Broker Management Console
 or ePO (the ePO user must be an administrator):</p>
 <pre class="prettyprint source lang-sh"><code>Enter server username:
 Enter server password:</code></pre><p>On success, output similar to the following should be displayed:</p>
