@@ -30,6 +30,12 @@ jobs:
         node-version: ${{ matrix.node-version }}       
       env:
         CXX: g++-4.8
+      
+    - name: Install broker
+      run: |
+        docker pull opendxl/opendxl-broker
+        docker run -d -p 8883:8883 -p 8443:8443 -p 443:443 opendxl/opendxl-broker
+        docker ps -a
         
     - name: Install dependencies
       run: |
