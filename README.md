@@ -1,6 +1,6 @@
 # OpenDXL JavaScript Client (Node.js)
 [![Latest NPM Version](https://img.shields.io/npm/v/@opendxl/dxl-client.svg)](https://www.npmjs.com/package/@opendxl/dxl-client)
-[![Build Status](https://img.shields.io/travis/opendxl/opendxl-client-javascript/master.svg)](https://travis-ci.org/opendxl/opendxl-client-javascript)
+[![Actions Status](https://github.com/opendxl/opendxl-client-javascript/workflows/Build/badge.svg)](https://github.com/opendxl/opendxl-client-javascript)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
