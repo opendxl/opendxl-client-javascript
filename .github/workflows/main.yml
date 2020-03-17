@@ -1,0 +1,60 @@
+
+name: Build
+
+on: 
+  push:
+    branches:
+      - master
+  pull_request:
+  schedule:
+    - cron:  '0 0 * * *'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [8.x, 9.x, 10.x, 12.x]
+      fail-fast: false
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+      with:
+        submodules: recursive
+        
+    - name: Set up Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}       
+      env:
+        CXX: g++-4.8
+      
+    - name: Install broker
+      run: |
+        docker pull opendxl/opendxl-broker
+        docker run -d -p 8883:8883 -p 8443:8443 -p 443:443 opendxl/opendxl-broker
+        docker ps -a
+        
+    - name: Install dependencies
+      run: |
+        sudo -E apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
+        sudo -E apt-get update
+        sudo -E apt-get -yq --no-install-suggests --no-install-recommends install g++-4.8
+        npm install
+        
+    - name: Configure Client
+      run: |
+        bin/dxlclient.js provisionconfig -u admin -p password test/integration 127.0.0.1 client
+        cp test/integration/dxlclient.config test/integration/client_config.cfg
+        cat test/integration/client_config.cfg
+        
+    - name: Execute CI
+      run: |
+        echo Running tests with MQTT
+        npm run ci
+        sed -i -e "s/#UseWebSockets=false/UseWebSockets=true/g" test/integration/client_config.cfg
+        cat test/integration/client_config.cfg
+        echo Running tests with WebSockets
+        npm run test
