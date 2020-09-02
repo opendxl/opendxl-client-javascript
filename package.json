@@ -20,7 +20,7 @@
     "node": ">=6.0.0"
   },
   "dependencies": {
-    "bl": "^1.2.1",
+    "bl": "^4.0.3",
     "commander": "^2.13.0",
     "https-proxy-agent": "^2.2.1",
     "inherits": "^2.0.3",
