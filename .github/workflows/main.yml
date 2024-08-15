@@ -1,4 +1,3 @@
-
 name: Build
 
 on: 
@@ -7,7 +6,7 @@ on:
       - master
   pull_request:
   schedule:
-    - cron:  '0 0 * * *'
+    - cron:  '0 0 * * *'  # Runs daily at midnight UTC
 
 jobs:
   build:
@@ -15,21 +14,19 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [8.x, 9.x, 10.x, 12.x]
+        node-version: [16.x, 18.x, 20.x]  # Updated Node.js versions
       fail-fast: false
     
     steps:
     - name: Checkout
-      uses: actions/checkout@v1
+      uses: actions/checkout@v3  # Updated to latest version
       with:
         submodules: recursive
         
     - name: Set up Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v3  # Updated to latest version
       with:
         node-version: ${{ matrix.node-version }}       
-      env:
-        CXX: g++-4.8
       
     - name: Install broker
       run: |
