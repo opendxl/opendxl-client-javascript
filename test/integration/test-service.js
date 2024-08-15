@@ -1,8 +1,8 @@
 'use strict'
 
-var dxl = require('../..')
-var ErrorResponse = dxl.ErrorResponse
-var Response = dxl.Response
+const dxl = require('../..')
+const ErrorResponse = dxl.ErrorResponse
+const Response = dxl.Response
 
 /**
  * @classdesc Test service for integration testing
@@ -11,7 +11,7 @@ var Response = dxl.Response
  * @constructor
  */
 function TestService (client) {
-  var that = this
+  const that = this
   /**
    * Client to which responses received should be delivered.
    * @type {Client}
@@ -50,7 +50,7 @@ function TestService (client) {
    * @name TestService#callback
    */
   this.callback = function (request) {
-    var response
+    let response
     if (that.returnError) {
       response = new ErrorResponse(request, that.errorCode, that.errorMessage)
     } else {

@@ -5,12 +5,12 @@
 
 'use strict'
 
-var program = require('commander')
-var inherits = require('inherits')
-var stream = require('stream')
-var cli = require('../../lib/_cli')
+const program = require('commander')
+const inherits = require('inherits')
+const stream = require('stream')
+const cli = require('../../lib/_cli')
 
-var CLI_OUTPUT_VERBOSITY = 0
+const CLI_OUTPUT_VERBOSITY = 0
 
 /**
  * @classdesc Readable stream which replaces process.stdin with itself. Each
@@ -114,7 +114,7 @@ module.exports = {
    * @returns {Command}
    */
   cliCommand: function (doneCallback) {
-    var command = new program.Command()
+    const command = new program.Command()
     command.verbose = CLI_OUTPUT_VERBOSITY
     if (!CLI_OUTPUT_VERBOSITY) {
       command.quiet = true
@@ -122,6 +122,6 @@ module.exports = {
     cli(command, doneCallback)
     return command
   },
-  StdinStub: StdinStub,
-  StdoutStub: StdoutStub
+  StdinStub,
+  StdoutStub
 }

@@ -1,14 +1,14 @@
 'use strict'
 
-var fs = require('fs')
-var path = require('path')
+const fs = require('fs')
+const path = require('path')
 
 // Base name of the DXL configuration file used by the SDK samples in
 // establishing a client connection
-var CONFIG_FILE_NAME = 'dxlclient.config'
+const CONFIG_FILE_NAME = 'dxlclient.config'
 
 // Value in the 'name' field in the SDK package's 'package.json' file
-var SDK_PACKAGE_NAME = '@opendxl/dxl-client'
+const SDK_PACKAGE_NAME = '@opendxl/dxl-client'
 
 module.exports = {
   /**
@@ -36,9 +36,9 @@ module.exports = {
    */
   require: function (module) {
     if (module === SDK_PACKAGE_NAME) {
-      var packageFile = path.join(__dirname, '..', 'package.json')
+      const packageFile = path.join(__dirname, '..', 'package.json')
       if (fs.existsSync(packageFile)) {
-        var packageInfo = JSON.parse(fs.readFileSync(packageFile))
+        const packageInfo = JSON.parse(fs.readFileSync(packageFile))
         if (packageInfo.name === SDK_PACKAGE_NAME) {
           // Use local library sources if the example is being run from source.
           module = '..'

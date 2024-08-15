@@ -5,7 +5,7 @@
  * @private
  * */
 
-var Buffer = require('safe-buffer').Buffer
+const Buffer = require('safe-buffer').Buffer
 
 module.exports = {
   /**
@@ -16,7 +16,7 @@ module.exports = {
    */
   decodePayload: function (message, encoding) {
     encoding = (typeof encoding === 'undefined') ? 'utf8' : encoding
-    var payload = message.payload
+    let payload = message.payload
     if (Buffer.isBuffer(payload)) {
       payload = payload.toString(encoding)
     }

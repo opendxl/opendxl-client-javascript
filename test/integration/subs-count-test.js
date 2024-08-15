@@ -1,26 +1,26 @@
 'use strict'
 /* eslint no-unused-expressions: "off" */ // for chai expect assertions
 
-var expect = require('chai').expect
-var Request = require('../..').Request
-var util = require('../../lib/util')
-var TestClient = require('./test-client')
-var testHelpers = require('../test-helpers')
+const expect = require('chai').expect
+const Request = require('../..').Request
+const util = require('../../lib/util')
+const TestClient = require('./test-client')
+const testHelpers = require('../test-helpers')
 
 describe('broker subs count @integration', function () {
   it('should return expected values for topic subscriptions', function (done) {
-    var maxTestTime = 5000
+    const maxTestTime = 5000
 
-    var baseTopic = 'subs_count_test'
-    var random1 = util.generateIdAsString()
-    var random2 = util.generateIdAsString()
-    var topic1 = baseTopic + '/foo/' + random1 + '/' + random2
-    var topic2 = baseTopic + '/bar/' + random2
+    const baseTopic = 'subs_count_test'
+    const random1 = util.generateIdAsString()
+    const random2 = util.generateIdAsString()
+    const topic1 = baseTopic + '/foo/' + random1 + '/' + random2
+    const topic2 = baseTopic + '/bar/' + random2
 
     // Each item in this array corresponds to a client connection which should
     // be established and a subarray of topic names to which the client should
     // subscribe.
-    var topicsByClient = [
+    const topicsByClient = [
       [],
       [topic1],
       [topic1, topic2],
@@ -30,31 +30,31 @@ describe('broker subs count @integration', function () {
       ['#']
     ]
 
-    var clientsToConnect = topicsByClient.length
-    var subscriptionsToAttempt = topicsByClient.reduce(function (acc, current) {
+    const clientsToConnect = topicsByClient.length
+    const subscriptionsToAttempt = topicsByClient.reduce(function (acc, current) {
       return acc + current.length
     }, 0)
-    var subscriptionAttemptsSent = 0
-    var subscriptionMessagesToBeAcked = 0
-    var infoByClient = []
+    let subscriptionAttemptsSent = 0
+    let subscriptionMessagesToBeAcked = 0
+    const infoByClient = []
 
-    var connectedClients = 0
-    var subscriptionMessagesAcked = 0
+    let connectedClients = 0
+    let subscriptionMessagesAcked = 0
 
-    var subsRequest = function (topic) {
-      var request = new Request('/mcafee/service/dxl/broker/subs')
-      request.payload = JSON.stringify({topic: topic})
+    const subsRequest = function (topic) {
+      const request = new Request('/mcafee/service/dxl/broker/subs')
+      request.payload = JSON.stringify({ topic })
       return request
     }
 
-    var testTimeout = null
+    let testTimeout = null
 
     // Iterate over all of the clients which have been created, shutting down
     // each one.
-    var terminateClients = function (callback) {
+    const terminateClients = function (callback) {
       clearTimeout(testTimeout)
-      var clientsToShutdown = infoByClient.length
-      var clientsShutdown = 0
+      const clientsToShutdown = infoByClient.length
+      let clientsShutdown = 0
       infoByClient.forEach(function (info) {
         info.client.shutdown(null, function () {
           clientsShutdown++
@@ -65,7 +65,7 @@ describe('broker subs count @integration', function () {
       })
     }
 
-    var terminateClientsWithError = function (error) {
+    const terminateClientsWithError = function (error) {
       terminateClients(function () { done(error) })
     }
 
@@ -77,10 +77,10 @@ describe('broker subs count @integration', function () {
     }, maxTestTime)
 
     topicsByClient.forEach(function (topics) {
-      var client = new TestClient(this)
+      const client = new TestClient(this)
       infoByClient.push({
-        client: client,
-        topics: topics,
+        client,
+        topics,
         subscriptionMessageIds: []
       })
       client.connect(function () {
@@ -98,7 +98,7 @@ describe('broker subs count @integration', function () {
                 // into the same subscription packet so iterate through each
                 // one of the available topics to count them.
                 packet.subscriptions.forEach(function (subscription) {
-                  var currentSubscriptionAttemptsSent = subscriptionAttemptsSent
+                  const currentSubscriptionAttemptsSent = subscriptionAttemptsSent
                   // Only count this subscription if this is for a topic
                   // that this test specifically subscribed for - i.e., not
                   // the topic that the client subscribes itself for in order
@@ -118,7 +118,7 @@ describe('broker subs count @integration', function () {
             // Listen for packets being received in order to determine when
             // all subscription attempts have been acked from the broker.
             clientInfo.client.on('packetreceive', function (packet) {
-              var subscriptionMessageIds = clientInfo.subscriptionMessageIds
+              const subscriptionMessageIds = clientInfo.subscriptionMessageIds
               if ((packet.cmd === 'suback') &&
                 (subscriptionMessageIds.indexOf(packet.messageId) >= 0)) {
                 subscriptionMessagesAcked++
@@ -129,7 +129,7 @@ describe('broker subs count @integration', function () {
                   // point so it should be safe to query the broker to
                   // determine how many subscriptions it is holding for the
                   // topics that this test uses.
-                  var requestClient = infoByClient[0].client
+                  const requestClient = infoByClient[0].client
                   testHelpers.asyncRequest(requestClient, subsRequest(topic1),
                     terminateClientsWithError,
                     function (topic1Response) {

@@ -1,18 +1,18 @@
 'use strict'
 /* eslint no-unused-expressions: "off" */ // for chai expect assertions
 
-var expect = require('chai').expect
-var dxl = require('../..')
-var Event = dxl.Event
-var TestClient = require('./test-client')
-var testHelpers = require('../test-helpers')
+const expect = require('chai').expect
+const dxl = require('../..')
+const Event = dxl.Event
+const TestClient = require('./test-client')
+const testHelpers = require('../test-helpers')
 
 describe('callbacks subscribed with wildcard topics @integration', function () {
   it('should be invoked for a matching event', function (done) {
-    var topic = 'wildcard_event_spec'
-    var eventPayload = 'Unit test payload'
+    const topic = 'wildcard_event_spec'
+    const eventPayload = 'Unit test payload'
 
-    var client = new TestClient(this, done)
+    const client = new TestClient(this, done)
     client.connect()
     client.addEventCallback(topic + '/#',
       function (event) {
@@ -23,7 +23,7 @@ describe('callbacks subscribed with wildcard topics @integration', function () {
       }
     )
 
-    var event = new Event(topic + '/foo')
+    const event = new Event(topic + '/foo')
     event.payload = eventPayload
     client.sendEvent(event)
   })

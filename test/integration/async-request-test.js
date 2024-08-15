@@ -1,41 +1,39 @@
 'use strict'
 /* eslint no-unused-expressions: "off" */ // for chai expect assertions
 
-var expect = require('chai').expect
-var dxl = require('../..')
-var Request = dxl.Request
-var ServiceRegistrationInfo = dxl.ServiceRegistrationInfo
-var util = require('../../lib/util')
-var TestClient = require('./test-client')
-var TestService = require('./test-service')
-var testHelpers = require('../test-helpers')
+const expect = require('chai').expect
+const dxl = require('../..')
+const Request = dxl.Request
+const ServiceRegistrationInfo = dxl.ServiceRegistrationInfo
+const util = require('../../lib/util')
+const TestClient = require('./test-client')
+const TestService = require('./test-service')
+const testHelpers = require('../test-helpers')
 
 describe('async requests @integration', function () {
   it('should receive a response for every request made', function (done) {
-    var requestCount = 100
-    var expectedRequestCount = requestCount * 2
-    var expectedResponseCount = requestCount * 3
-    var totalResponseCount = 0
-    var requests = {}
+    const requestCount = 100
+    const expectedRequestCount = requestCount * 2
+    const expectedResponseCount = requestCount * 3
+    let totalResponseCount = 0
+    const requests = {}
 
-    var client = new TestClient(this, done)
+    const client = new TestClient(this, done)
     client.connect(function () {
-      var testService = new TestService(client)
-      var topic = 'async_request_test_' + util.generateIdAsString()
-      var regInfo = new ServiceRegistrationInfo(client,
+      const testService = new TestService(client)
+      const topic = 'async_request_test_' + util.generateIdAsString()
+      const regInfo = new ServiceRegistrationInfo(client,
         'async_request_test_service')
       regInfo.addTopic(topic, testService.callback)
       client.registerServiceAsync(regInfo)
 
-      var responseCallback = function (response) {
-        if (requests.hasOwnProperty(response.requestMessageId)) {
-          requests[response.requestMessageId] =
-            requests[response.requestMessageId] + 1
+      const responseCallback = function (response) {
+        if (Object.prototype.hasOwnProperty.call(requests, response.requestMessageId)) {
+          requests[response.requestMessageId] = requests[response.requestMessageId] + 1
           totalResponseCount++
           if (totalResponseCount === expectedResponseCount) {
             client.shutdown(null, function () {
-              expect(Object.keys(requests).length).to.be
-                .equal(expectedRequestCount)
+              expect(Object.keys(requests).length).to.be.equal(expectedRequestCount)
               done()
             })
           }
@@ -44,9 +42,9 @@ describe('async requests @integration', function () {
 
       client.addResponseCallback('', responseCallback)
 
-      var responseHandler = function (response) { responseCallback(response) }
-      for (var i = 0; i < requestCount; i++) {
-        var request = new Request(topic)
+      const responseHandler = function (response) { responseCallback(response) }
+      for (let i = 0; i < requestCount; i++) {
+        let request = new Request(topic)
         requests[request.messageId] = 0
         client.asyncRequest(request)
 

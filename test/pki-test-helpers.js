@@ -5,16 +5,16 @@
 
 'use strict'
 
-var fs = require('fs')
-var events = require('events')
-var inherits = require('inherits')
-var querystring = require('querystring')
-var pki = require('../lib/_provisioning/pki')
+const fs = require('fs')
+const events = require('events')
+const inherits = require('inherits')
+const querystring = require('querystring')
+const pki = require('../lib/_provisioning/pki')
 
-var PROVISION_COMMAND =
+const PROVISION_COMMAND =
   '/remote/DxlBrokerMgmt.generateOpenDXLClientProvisioningPackageCmd'
 
-var OUTPUT_VERBOSITY = 0
+const OUTPUT_VERBOSITY = 0
 
 function runOpenSslCommand (description, openSslCliArgs, input) {
   return pki.runOpenSslCommand(description, openSslCliArgs, null,
@@ -42,9 +42,9 @@ module.exports = {
    * @param {String} csrFileName - Name of the CSR file to read.
    */
   getCsrSubject: function (csrFileName) {
-    var result = runOpenSslCommand('Getting csr subject', ['req', '-in',
+    const result = runOpenSslCommand('Getting csr subject', ['req', '-in',
       csrFileName, '-noout', '-subject'])
-    var subject = result.match(/^subject=(.*)/)
+    const subject = result.match(/^subject=(.*)/)
     if (!subject) {
       throw new Error('Invalid subject format for csr (' + csrFileName + '): ' +
         result)
@@ -58,11 +58,11 @@ module.exports = {
    * @returns {Array<String>} - List of subject alternative names
    */
   getSubjectAlternativeNames: function (csrFileName) {
-    var result = runOpenSslCommand('Getting csr subjAltNames', ['req', '-in',
+    const result = runOpenSslCommand('Getting csr subjAltNames', ['req', '-in',
       csrFileName, '-noout', '-text'])
-    var subjectAltNameExtension = result.match(
+    const subjectAltNameExtension = result.match(
       /X509v3 Subject Alternative Name:[^\n]*[\s]*([^\n]*)/)
-    var subjectAltNames = []
+    let subjectAltNames = []
     if (subjectAltNameExtension) {
       subjectAltNames = subjectAltNameExtension[1].split(', ')
     }
@@ -80,13 +80,13 @@ module.exports = {
     if (!fs.existsSync(privateKeyFileName)) {
       throw new Error('Cannot find private key file: ' + privateKeyFileName)
     }
-    var privateKey = fs.readFileSync(privateKeyFileName)
-    var checkArgs = ['rsa', '-in', privateKeyFileName, '-check']
+    const privateKey = fs.readFileSync(privateKeyFileName)
+    const checkArgs = ['rsa', '-in', privateKeyFileName, '-check']
     if (privateKey.indexOf('ENCRYPTED PRIVATE KEY-') > -1) {
       checkArgs.push('-passin')
       checkArgs.push('stdin')
     }
-    var result = runOpenSslCommand('Checking private key', checkArgs,
+    const result = runOpenSslCommand('Checking private key', checkArgs,
       input || '')
     if (!result.match('RSA key ok') ||
       !result.match('-BEGIN RSA PRIVATE KEY-')) {
@@ -111,8 +111,8 @@ module.exports = {
       cookie = 'omnomnom'
     }
     return function (requestOptions, responseCallback) {
-      var response = new HttpResponseStub()
-      var responseData = ''
+      const response = new HttpResponseStub()
+      let responseData = ''
 
       // Validate the cookie in the request. If the cookie is present and
       // matches the expected value, the request is considered authorized.
@@ -121,7 +121,7 @@ module.exports = {
       // the redirection and cookie management in the CLI command requests.
       if (requestOptions.headers && requestOptions.headers.cookie) {
         if (requestOptions.headers.cookie === cookie) {
-          var pathMatch = requestOptions.path.match(/(.*)\?/)
+          const pathMatch = requestOptions.path.match(/(.*)\?/)
           if (pathMatch && requestStubs[pathMatch[1]]) {
             // Cookie is valid and the request path matches one of the
             // paths in the requestStubs parameter. Route the request to
@@ -140,7 +140,7 @@ module.exports = {
         }
       } else {
         response.statusCode = 302
-        var nextPath = requestOptions.path.match(/login\?next=(.*)/)
+        const nextPath = requestOptions.path.match(/login\?next=(.*)/)
         if (nextPath) {
           response.headers['set-cookie'] = cookie
           response.headers.location = querystring.unescape(nextPath[1])
@@ -176,7 +176,7 @@ module.exports = {
     if (typeof brokers === 'undefined') {
       brokers = ['local=local;8883;localhost']
     }
-    var requestHandlers = {}
+    const requestHandlers = {}
     requestHandlers[PROVISION_COMMAND] = function (requestOptions) {
       return [querystring.escape(JSON.stringify(requestOptions)),
         clientCert, brokers.join('\n')].join(',')
@@ -187,5 +187,5 @@ module.exports = {
    * URL path for the provision endpoint on the management service.
    * @type {String}
    */
-  PROVISION_COMMAND: PROVISION_COMMAND
+  PROVISION_COMMAND
 }

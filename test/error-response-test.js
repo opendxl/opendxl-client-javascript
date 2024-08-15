@@ -1,27 +1,27 @@
 'use strict'
 /* eslint no-unused-expressions: "off" */ // for chai expect assertions
 
-var expect = require('chai').expect
-var Buffer = require('safe-buffer').Buffer
-var decodeMessage = require('../lib/decode-message')
-var dxl = require('..')
-var Request = dxl.Request
-var ErrorResponse = dxl.ErrorResponse
-var util = require('../lib/util')
-var testHelpers = require('./test-helpers')
+const expect = require('chai').expect
+const Buffer = require('safe-buffer').Buffer
+const decodeMessage = require('../lib/decode-message')
+const dxl = require('..')
+const Request = dxl.Request
+const ErrorResponse = dxl.ErrorResponse
+const util = require('../lib/util')
+const testHelpers = require('./test-helpers')
 
 describe('ErrorResponse', function () {
   context('when fields are mostly set to defaults', function () {
     it('should preserve all data through serialization', function () {
-      var errorResponse = new ErrorResponse()
+      const errorResponse = new ErrorResponse()
 
       expect(errorResponse.errorCode).to.equal(0)
       expect(errorResponse.errorMessage).to.be.empty
 
-      var encodedResponse = errorResponse._toBytes()
+      const encodedResponse = errorResponse._toBytes()
       expect(Buffer.isBuffer(encodedResponse)).to.be.true
 
-      var decodedResponse = decodeMessage(encodedResponse)
+      const decodedResponse = decodeMessage(encodedResponse)
       decodedResponse.destinationTopic = errorResponse.destinationTopic
       decodedResponse.payload = testHelpers.decodePayload(decodedResponse)
       expect(decodedResponse).to.be.eql(errorResponse)
@@ -30,16 +30,16 @@ describe('ErrorResponse', function () {
 
   context('when all fields have non-default values', function () {
     it('should preserve all data through serialization', function () {
-      var request = new Request('my_request_topic')
+      const request = new Request('my_request_topic')
       request.replyToTopic = 'my reply topic'
       request.serviceId = util.generateIdAsString()
       request.sourceClientId = util.generateIdAsString()
       request.sourceBrokerId = util.generateIdAsString()
 
-      var errorCode = 999
-      var errorMessage = 'Some error occurred'
+      const errorCode = 999
+      const errorMessage = 'Some error occurred'
 
-      var errorResponse = new ErrorResponse(request, errorCode, errorMessage)
+      const errorResponse = new ErrorResponse(request, errorCode, errorMessage)
 
       expect(errorResponse.errorCode).to.equal(errorCode)
       expect(errorResponse.errorMessage).to.equal(errorMessage)
@@ -58,12 +58,12 @@ describe('ErrorResponse', function () {
         respField2: 'respVal2'
       }
       errorResponse.sourceTenantGuid = util.generateIdAsString()
-      errorResponse.destinationTenantGuids = [ util.generateIdAsString() ]
+      errorResponse.destinationTenantGuids = [util.generateIdAsString()]
 
-      var encodedResponse = errorResponse._toBytes()
+      const encodedResponse = errorResponse._toBytes()
       expect(Buffer.isBuffer(encodedResponse)).to.be.true
 
-      var decodedResponse = decodeMessage(encodedResponse)
+      const decodedResponse = decodeMessage(encodedResponse)
       decodedResponse.destinationTopic = errorResponse.destinationTopic
       decodedResponse.payload = testHelpers.decodePayload(decodedResponse)
       errorResponse.request = null
