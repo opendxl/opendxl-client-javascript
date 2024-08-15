@@ -80,18 +80,25 @@ module.exports = {
     if (!fs.existsSync(privateKeyFileName)) {
       throw new Error('Cannot find private key file: ' + privateKeyFileName)
     }
-    const privateKey = fs.readFileSync(privateKeyFileName)
-    const checkArgs = ['rsa', '-in', privateKeyFileName, '-check']
-    if (privateKey.indexOf('ENCRYPTED PRIVATE KEY-') > -1) {
+    const privateKey = fs.readFileSync(privateKeyFileName, 'utf8')
+    const checkArgs = ['rsa', '-in', privateKeyFileName, '-check', '-noout']
+
+    if (privateKey.includes('ENCRYPTED')) {
       checkArgs.push('-passin')
       checkArgs.push('stdin')
     }
-    const result = runOpenSslCommand('Checking private key', checkArgs,
-      input || '')
-    if (!result.match('RSA key ok') ||
-      !result.match('-BEGIN RSA PRIVATE KEY-')) {
-      throw new Error('Invalid RSA private key (' + privateKeyFileName + '): ' +
-        result)
+
+    try {
+      const result = runOpenSslCommand('Checking private key', checkArgs, input || '')
+      if (result.includes('RSA key ok')) {
+        // The key is valid, so we should not throw an error
+        return true
+      } else {
+        throw new Error('OpenSSL did not confirm the RSA key is ok')
+      }
+    } catch (error) {
+      // If we get here, it means the OpenSSL command itself failed
+      throw new Error('Error validating RSA private key: ' + error.message)
     }
   },
   /**
