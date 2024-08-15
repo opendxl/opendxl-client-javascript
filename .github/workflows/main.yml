@@ -38,7 +38,7 @@ jobs:
       run: |
         sudo -E apt-add-repository -y "ppa:ubuntu-toolchain-r/test"
         sudo -E apt-get update
-        sudo -E apt-get -yq --no-install-suggests --no-install-recommends install g++-4.8
+        sudo -E apt-get -yq --no-install-suggests --no-install-recommends install g++-9
         npm install
         
     - name: Configure Client
