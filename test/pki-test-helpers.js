@@ -81,25 +81,20 @@ module.exports = {
       throw new Error('Cannot find private key file: ' + privateKeyFileName)
     }
     const privateKey = fs.readFileSync(privateKeyFileName, 'utf8')
-    const checkArgs = ['rsa', '-in', privateKeyFileName, '-check', '-noout']
+    const checkArgs = ['rsa', '-in', privateKeyFileName, '-check']
 
-    if (privateKey.includes('ENCRYPTED')) {
+    if (privateKey.includes('ENCRYPTED PRIVATE KEY-')) {
       checkArgs.push('-passin')
       checkArgs.push('stdin')
     }
 
-    try {
-      const result = runOpenSslCommand('Checking private key', checkArgs, input || '')
-      if (result.includes('RSA key ok')) {
-        // The key is valid, so we should not throw an error
-        return true
-      } else {
-        throw new Error('OpenSSL did not confirm the RSA key is ok')
-      }
-    } catch (error) {
-      // If we get here, it means the OpenSSL command itself failed
-      throw new Error('Error validating RSA private key: ' + error.message)
+    const result = runOpenSslCommand('Checking private key', checkArgs, input || '')
+    if (result.includes('RSA key ok')) {
+      // The key is valid, so we should not throw an error
+    } else {
+      throw new Error('OpenSSL did not confirm the RSA key is ok')
     }
+    
   },
   /**
    * Returns a function which, when called, creates a stub for mocking responses
