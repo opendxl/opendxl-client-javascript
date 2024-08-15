@@ -94,7 +94,6 @@ module.exports = {
     } else {
       throw new Error('OpenSSL did not confirm the RSA key is ok')
     }
-    
   },
   /**
    * Returns a function which, when called, creates a stub for mocking responses
