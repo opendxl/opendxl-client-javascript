@@ -1,29 +1,29 @@
 'use strict'
 /* eslint no-unused-expressions: "off" */ // for chai expect assertions
 
-var expect = require('chai').expect
-var dxl = require('..')
-var Client = dxl.Client
-var Config = dxl.Config
-var ErrorResponse = dxl.ErrorResponse
-var Event = dxl.Event
-var Request = dxl.Request
-var Response = dxl.Response
+const expect = require('chai').expect
+const dxl = require('..')
+const Client = dxl.Client
+const Config = dxl.Config
+const ErrorResponse = dxl.ErrorResponse
+const Event = dxl.Event
+const Request = dxl.Request
+const Response = dxl.Response
 
 describe('remove callback call to client', function () {
-  var client = new Client(
+  const client = new Client(
     new Config('fake bundle', 'fake cert', 'fake key', [])
   )
 
   context('for event', function () {
     it('should prevent further messages from being delivered', function () {
-      var callbackDeliveredWhileRegistered = false
-      var callbackDeliveredAfterUnregistered = false
-      var callbackRegistered = false
+      let callbackDeliveredWhileRegistered = false
+      let callbackDeliveredAfterUnregistered = false
+      let callbackRegistered = false
 
-      var topic = 'event_callback_test_topic'
+      const topic = 'event_callback_test_topic'
 
-      var callback = function () {
+      const callback = function () {
         if (callbackRegistered) {
           callbackDeliveredWhileRegistered = true
         } else {
@@ -45,13 +45,13 @@ describe('remove callback call to client', function () {
 
   context('for request', function () {
     it('should prevent further messages from being delivered', function () {
-      var callbackDeliveredWhileRegistered = false
-      var callbackDeliveredAfterUnregistered = false
-      var callbackRegistered = false
+      let callbackDeliveredWhileRegistered = false
+      let callbackDeliveredAfterUnregistered = false
+      let callbackRegistered = false
 
-      var topic = 'request_callback_test_topic'
+      const topic = 'request_callback_test_topic'
 
-      var callback = function () {
+      const callback = function () {
         if (callbackRegistered) {
           callbackDeliveredWhileRegistered = true
         } else {
@@ -73,13 +73,13 @@ describe('remove callback call to client', function () {
 
   context('for response', function () {
     it('should prevent further messages from being delivered', function () {
-      var callbackDeliveredWhileRegistered = false
-      var callbackDeliveredAfterUnregistered = false
-      var callbackRegistered = false
+      let callbackDeliveredWhileRegistered = false
+      let callbackDeliveredAfterUnregistered = false
+      let callbackRegistered = false
 
-      var topic = 'response_callback_test_topic'
+      const topic = 'response_callback_test_topic'
 
-      var callback = function () {
+      const callback = function () {
         if (callbackRegistered) {
           callbackDeliveredWhileRegistered = true
         } else {
@@ -89,14 +89,14 @@ describe('remove callback call to client', function () {
 
       client.addResponseCallback(topic, callback)
       callbackRegistered = true
-      var responseWhileCallbackRegistered = new Response()
+      const responseWhileCallbackRegistered = new Response()
       responseWhileCallbackRegistered.destinationTopic = topic
       client._callbackManager.onMessage(responseWhileCallbackRegistered)
       expect(callbackDeliveredWhileRegistered).to.be.true
 
       client.removeResponseCallback(topic, callback)
       callbackRegistered = false
-      var responseAfterCallbackUnregistered = new Response()
+      const responseAfterCallbackUnregistered = new Response()
       responseAfterCallbackUnregistered.destinationTopic = topic
       client._callbackManager.onMessage(responseAfterCallbackUnregistered)
       expect(callbackDeliveredAfterUnregistered).to.be.false
@@ -105,13 +105,13 @@ describe('remove callback call to client', function () {
 
   context('for error response', function () {
     it('should prevent further messages from being delivered', function () {
-      var callbackDeliveredWhileRegistered = false
-      var callbackDeliveredAfterUnregistered = false
-      var callbackRegistered = false
+      let callbackDeliveredWhileRegistered = false
+      let callbackDeliveredAfterUnregistered = false
+      let callbackRegistered = false
 
-      var topic = 'error_response_callback_test_topic'
+      const topic = 'error_response_callback_test_topic'
 
-      var callback = function () {
+      const callback = function () {
         if (callbackRegistered) {
           callbackDeliveredWhileRegistered = true
         } else {
@@ -121,14 +121,14 @@ describe('remove callback call to client', function () {
 
       client.addResponseCallback(topic, callback)
       callbackRegistered = true
-      var errorResponseWhileCallbackRegistered = new ErrorResponse()
+      const errorResponseWhileCallbackRegistered = new ErrorResponse()
       errorResponseWhileCallbackRegistered.destinationTopic = topic
       client._callbackManager.onMessage(errorResponseWhileCallbackRegistered)
       expect(callbackDeliveredWhileRegistered).to.be.true
 
       client.removeResponseCallback(topic, callback)
       callbackRegistered = false
-      var errorResponseAfterCallbackUnregistered = new ErrorResponse()
+      const errorResponseAfterCallbackUnregistered = new ErrorResponse()
       errorResponseAfterCallbackUnregistered.destinationTopic = topic
       client._callbackManager.onMessage(errorResponseAfterCallbackUnregistered)
       expect(callbackDeliveredAfterUnregistered).to.be.false

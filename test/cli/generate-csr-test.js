@@ -1,20 +1,20 @@
 'use strict'
 /* eslint no-unused-expressions: "off" */ // for chai expect assertions
 
-var childProcess = require('child_process')
-var expect = require('chai').expect
-var fs = require('fs')
-var path = require('path')
-var rimraf = require('rimraf')
-var sinon = require('sinon')
-var tmp = require('tmp')
-var DxlError = require('../..').DxlError
-var cliHelpers = require('./cli-test-helpers')
-var pkiHelpers = require('../pki-test-helpers')
+const childProcess = require('child_process')
+const expect = require('chai').expect
+const fs = require('fs')
+const path = require('path')
+const rimraf = require('rimraf')
+const sinon = require('sinon')
+const tmp = require('tmp')
+const DxlError = require('../..').DxlError
+const cliHelpers = require('./cli-test-helpers')
+const pkiHelpers = require('../pki-test-helpers')
 
 describe('generatecsr CLI command @cli', function () {
-  var tmpDirSync
-  var tmpDir
+  let tmpDirSync
+  let tmpDir
 
   beforeEach(function () {
     tmpDirSync = tmp.dirSync()
@@ -36,17 +36,17 @@ describe('generatecsr CLI command @cli', function () {
   }
 
   it('should generate a proper csr and private key', function (done) {
-    var command = cliHelpers.cliCommand(
+    const command = cliHelpers.cliCommand(
       function (error) {
         expect(error).to.be.null
-        var csrFileName = path.join(tmpDir, 'client.csr')
+        const csrFileName = path.join(tmpDir, 'client.csr')
         expect(fs.existsSync(csrFileName)).to.be.true
         try {
           expect(pkiHelpers.getCsrSubject(csrFileName)).to.equal('/CN=client1')
         } catch (e) {
           expect(pkiHelpers.getCsrSubject(csrFileName)).to.equal('CN = client1')
         }
-        var privateKeyFileName = path.join(tmpDir, 'client.key')
+        const privateKeyFileName = path.join(tmpDir, 'client.key')
         pkiHelpers.validateRsaPrivateKey(privateKeyFileName)
         done()
       }
@@ -56,17 +56,17 @@ describe('generatecsr CLI command @cli', function () {
 
   it('should name csr and private key files with a specified file prefix',
     function (done) {
-      var command = cliHelpers.cliCommand(
+      const command = cliHelpers.cliCommand(
         function (error) {
           expect(error).to.be.null
-          var csrFileName = path.join(tmpDir, 'client3.csr')
+          const csrFileName = path.join(tmpDir, 'client3.csr')
           expect(fs.existsSync(csrFileName)).to.be.true
           try {
             expect(pkiHelpers.getCsrSubject(csrFileName)).to.equal('/CN=client2')
           } catch (e) {
             expect(pkiHelpers.getCsrSubject(csrFileName)).to.equal('CN = client2')
           }
-          var privateKeyFileName = path.join(tmpDir, 'client3.key')
+          const privateKeyFileName = path.join(tmpDir, 'client3.key')
           pkiHelpers.validateRsaPrivateKey(privateKeyFileName)
           done()
         }
@@ -77,7 +77,7 @@ describe('generatecsr CLI command @cli', function () {
 
   it('should generate a csr subject with specified DN attributes',
     function (done) {
-      var command = cliHelpers.cliCommand(
+      const command = cliHelpers.cliCommand(
         function (error) {
           expect(error).to.be.null
           // format is different based on openssl version
@@ -103,7 +103,7 @@ describe('generatecsr CLI command @cli', function () {
 
   it('should generate a csr with specified subject alternative names',
     function (done) {
-      var command = cliHelpers.cliCommand(
+      const command = cliHelpers.cliCommand(
         function (error) {
           expect(error).to.be.null
           expect(pkiHelpers.getSubjectAlternativeNames(path.join(tmpDir,
@@ -117,12 +117,12 @@ describe('generatecsr CLI command @cli', function () {
 
   it('should encrypt a private key with a specified passphrase',
     function (done) {
-      var passphrase = 'itsasecret'
-      var command = cliHelpers.cliCommand(
+      const passphrase = 'itsasecret'
+      const command = cliHelpers.cliCommand(
         function (error) {
           expect(error).to.be.null
-          var privateKeyFileName = path.join(tmpDir, 'client.key')
-          var stderrStub = sinon.stub(console, 'error')
+          const privateKeyFileName = path.join(tmpDir, 'client.key')
+          const stderrStub = sinon.stub(console, 'error')
           // Validate that supplying no decryption password throws an error
           expect(pkiHelpers.validateRsaPrivateKey.bind(null, privateKeyFileName))
             .to.throw(DxlError)
@@ -140,12 +140,12 @@ describe('generatecsr CLI command @cli', function () {
   )
 
   it('should prompt for passphrase option with no value', function (done) {
-    var passphrase = 'supersecret'
-    var stdinStub = new cliHelpers.StdinStub(['', passphrase + 'nomatch1',
+    const passphrase = 'supersecret'
+    const stdinStub = new cliHelpers.StdinStub(['', passphrase + 'nomatch1',
       passphrase + 'nomatch2', passphrase, passphrase])
-    var stdoutStub = new cliHelpers.StdoutStub()
+    const stdoutStub = new cliHelpers.StdoutStub()
 
-    var command = cliHelpers.cliCommand(
+    const command = cliHelpers.cliCommand(
       function (error) {
         stdinStub.restore()
         stdoutStub.restore()
@@ -157,8 +157,8 @@ describe('generatecsr CLI command @cli', function () {
           'Values for private key passphrase do not match. Try again.\n' +
           'Enter private key passphrase: ' +
           'Confirm private key passphrase: ')
-        var privateKeyFileName = path.join(tmpDir, 'client.key')
-        var stderrStub = sinon.stub(console, 'error')
+        const privateKeyFileName = path.join(tmpDir, 'client.key')
+        const stderrStub = sinon.stub(console, 'error')
         // Validate that supplying no decryption password throws an error
         expect(pkiHelpers.validateRsaPrivateKey.bind(
           null, privateKeyFileName)).to.throw(DxlError)
@@ -173,18 +173,18 @@ describe('generatecsr CLI command @cli', function () {
 
   it('should use an explicit path to the openssl command when specified',
     function (done) {
-      var dummySslBinPath = path.join(tmpDir, 'openssl.exe')
-      var csrFileName = path.join(tmpDir, 'client.csr')
-      var privateKeyFileName = path.join(tmpDir, 'client.key')
-      var expectedText = 'Written by custom openssl'
+      const dummySslBinPath = path.join(tmpDir, 'openssl.exe')
+      const csrFileName = path.join(tmpDir, 'client.csr')
+      const privateKeyFileName = path.join(tmpDir, 'client.key')
+      const expectedText = 'Written by custom openssl'
       sinon.stub(fs, 'existsSync').withArgs(dummySslBinPath).returns(true)
       sinon.stub(childProcess, 'spawnSync').callsFake(
         function () {
           fs.writeFileSync(csrFileName, expectedText)
           fs.writeFileSync(privateKeyFileName, expectedText)
-          return {status: 0}
+          return { status: 0 }
         })
-      var command = cliHelpers.cliCommand(
+      const command = cliHelpers.cliCommand(
         function (error) {
           expect(error).to.be.null
           fs.existsSync.restore()
@@ -202,8 +202,8 @@ describe('generatecsr CLI command @cli', function () {
 
   it('should deliver an error for a non-existent openssl command',
     function (done) {
-      var invalidOpensslBin = path.join(tmpDir, 'does-not-exist.exe')
-      var command = cliHelpers.cliCommand(
+      const invalidOpensslBin = path.join(tmpDir, 'does-not-exist.exe')
+      const command = cliHelpers.cliCommand(
         function (error) {
           expect(error).to.be.an.instanceof(DxlError)
           expect(error.message).to.equal(

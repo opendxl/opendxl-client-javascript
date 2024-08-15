@@ -1,23 +1,23 @@
 'use strict'
 /* eslint no-unused-expressions: "off" */ // for chai expect assertions
 
-var expect = require('chai').expect
-var fs = require('fs')
-var https = require('https')
-var os = require('os')
-var path = require('path')
-var querystring = require('querystring')
-var rimraf = require('rimraf')
-var sinon = require('sinon')
-var tmp = require('tmp')
-var DxlError = require('../..').DxlError
-var util = require('../../lib/util')
-var cliHelpers = require('./cli-test-helpers')
-var pkiHelpers = require('../pki-test-helpers')
+const expect = require('chai').expect
+const fs = require('fs')
+const https = require('https')
+const os = require('os')
+const path = require('path')
+const querystring = require('querystring')
+const rimraf = require('rimraf')
+const sinon = require('sinon')
+const tmp = require('tmp')
+const DxlError = require('../..').DxlError
+const util = require('../../lib/util')
+const cliHelpers = require('./cli-test-helpers')
+const pkiHelpers = require('../pki-test-helpers')
 
 describe('provisionconfig CLI command @cli', function () {
-  var tmpDirSync
-  var tmpDir
+  let tmpDirSync
+  let tmpDir
 
   beforeEach(function () {
     tmpDirSync = tmp.dirSync()
@@ -41,16 +41,16 @@ describe('provisionconfig CLI command @cli', function () {
   }
 
   it('should store a config provisioned from the server', function (done) {
-    var expectedClientCert = 'myclientcert' + os.EOL
-    var expectedBrokers = ['local=local;8883;localhost;127.0.0.1',
+    const expectedClientCert = 'myclientcert' + os.EOL
+    const expectedBrokers = ['local=local;8883;localhost;127.0.0.1',
       'external=external;8883;127.0.0.1;127.0.0.1']
-    var expectedCookie = util.generateIdAsString()
+    const expectedCookie = util.generateIdAsString()
     stubProvisionCommand(expectedClientCert, expectedBrokers, expectedCookie)
-    var command = cliHelpers.cliCommand(
+    const command = cliHelpers.cliCommand(
       function (error) {
         expect(error).to.be.null
         // Validate that a CSR with the expected common name was generated
-        var csrFileName = path.join(tmpDir, 'client3.csr')
+        const csrFileName = path.join(tmpDir, 'client3.csr')
         expect(fs.existsSync(csrFileName)).to.be.true
         // format is different based on openssl version
         try {
@@ -59,20 +59,20 @@ describe('provisionconfig CLI command @cli', function () {
           expect(pkiHelpers.getCsrSubject(csrFileName)).to.equal('CN = client2')
         }
         // Validate that a proper RSA private key was generated
-        var privateKeyFileName = path.join(tmpDir, 'client3.key')
+        const privateKeyFileName = path.join(tmpDir, 'client3.key')
         pkiHelpers.validateRsaPrivateKey(privateKeyFileName)
         // Validate that the 'CA certificate bundle' returned by the management
         // service stub was stored. This stub sets the content of the bundle
         // to the full request for convenience in testing.
-        var caBundleFileName = path.join(tmpDir, 'ca-bundle.crt')
+        const caBundleFileName = path.join(tmpDir, 'ca-bundle.crt')
         expect(fs.existsSync(caBundleFileName)).to.be.true
         // Validate that the request to the provisioning endpoint contained
         // the expected content.
-        var actualRequestData = JSON.parse(querystring.unescape(fs.readFileSync(
+        const actualRequestData = JSON.parse(querystring.unescape(fs.readFileSync(
           caBundleFileName)))
         // ignore agent/proxy settings when comparing if exists
         delete actualRequestData.agent
-        var expectedRequestPath = pkiHelpers.PROVISION_COMMAND +
+        const expectedRequestPath = pkiHelpers.PROVISION_COMMAND +
           '?csrString=' + querystring.escape(fs.readFileSync(csrFileName)) +
           '&%3Aoutput=json'
         expect({
@@ -82,19 +82,19 @@ describe('provisionconfig CLI command @cli', function () {
           auth: 'myuser:mypass',
           rejectUnauthorized: false,
           requestCert: false,
-          headers: {cookie: expectedCookie}
+          headers: { cookie: expectedCookie }
         }).to.eql(actualRequestData)
         // Validate that the 'client certificate' returned by the management
         // service stub was stored.
-        var certFileName = path.join(tmpDir, 'client3.crt')
+        const certFileName = path.join(tmpDir, 'client3.crt')
         expect(fs.existsSync(certFileName)).to.be.true
         expect(fs.readFileSync(certFileName, 'utf-8')).to.equal(
           expectedClientCert)
         // Validate that the DXL client config file stored from the management
         // service request contained the expected content.
-        var configFile = path.join(tmpDir, 'dxlclient.config')
+        const configFile = path.join(tmpDir, 'dxlclient.config')
         expect(fs.existsSync(configFile)).to.be.true
-        var expectedConfigFile = ['[General]',
+        let expectedConfigFile = ['[General]',
           '#UseWebSockets=false',
           '',
           '[Certs]',
@@ -117,11 +117,11 @@ describe('provisionconfig CLI command @cli', function () {
   })
 
   it('should avoid regenerating a csr when one is provided', function (done) {
-    var csrText = 'fakecsr'
-    var csrFileName = path.join(tmpDir, 'test.csr')
+    const csrText = 'fakecsr'
+    const csrFileName = path.join(tmpDir, 'test.csr')
     fs.writeFileSync(csrFileName, csrText)
     stubProvisionCommand()
-    var command = cliHelpers.cliCommand(
+    const command = cliHelpers.cliCommand(
       function (error) {
         expect(error).to.be.null
         // Validate that the CSR file still has the same contents as it did
@@ -130,11 +130,11 @@ describe('provisionconfig CLI command @cli', function () {
         expect(fs.readFileSync(csrFileName, 'utf-8')).to.equal(csrText)
         // Validate that the CSR sent to the management service was the one
         // specified as a command line argument.
-        var caBundleFileName = path.join(tmpDir, 'ca-bundle.crt')
+        const caBundleFileName = path.join(tmpDir, 'ca-bundle.crt')
         expect(fs.existsSync(caBundleFileName)).to.be.true
-        var actualRequestData = JSON.parse(querystring.unescape(fs.readFileSync(
+        const actualRequestData = JSON.parse(querystring.unescape(fs.readFileSync(
           caBundleFileName)))
-        var expectedRequestPath = pkiHelpers.PROVISION_COMMAND +
+        const expectedRequestPath = pkiHelpers.PROVISION_COMMAND +
           '?csrString=' + querystring.escape(csrText) + '&%3Aoutput=json'
         expect(actualRequestData).to.have.property('path', expectedRequestPath)
         done()
@@ -145,16 +145,16 @@ describe('provisionconfig CLI command @cli', function () {
   })
 
   it('should use a trusted ca cert and port when provided', function (done) {
-    var trustedCaText = 'fakecacert'
-    var trustedCaCert = path.join(tmpDir, 'trustedca.crt')
+    const trustedCaText = 'fakecacert'
+    const trustedCaCert = path.join(tmpDir, 'trustedca.crt')
     fs.writeFileSync(trustedCaCert, trustedCaText)
     stubProvisionCommand()
-    var command = cliHelpers.cliCommand(
+    const command = cliHelpers.cliCommand(
       function (error) {
         expect(error).to.be.null
-        var caBundleFileName = path.join(tmpDir, 'ca-bundle.crt')
+        const caBundleFileName = path.join(tmpDir, 'ca-bundle.crt')
         expect(fs.existsSync(caBundleFileName)).to.be.true
-        var actualRequestData = JSON.parse(querystring.unescape(fs.readFileSync(
+        const actualRequestData = JSON.parse(querystring.unescape(fs.readFileSync(
           caBundleFileName)))
         expect(actualRequestData).to.have.property('port', '9443')
         expect(actualRequestData).to.have.property('rejectUnauthorized', true)
@@ -170,21 +170,21 @@ describe('provisionconfig CLI command @cli', function () {
 
   it('should prompt for server username and password options with no value',
     function (done) {
-      var userName = 'testuser'
-      var password = 'testpassword'
+      const userName = 'testuser'
+      const password = 'testpassword'
       stubProvisionCommand()
-      var stdinStub = new cliHelpers.StdinStub([userName, password])
-      var stdoutStub = new cliHelpers.StdoutStub()
-      var command = cliHelpers.cliCommand(
+      const stdinStub = new cliHelpers.StdinStub([userName, password])
+      const stdoutStub = new cliHelpers.StdoutStub()
+      const command = cliHelpers.cliCommand(
         function (error) {
           expect(error).to.be.null
           stdinStub.restore()
           stdoutStub.restore()
           expect(stdoutStub.data).to.equal(
             'Enter server user: Enter server password: ')
-          var caBundleFileName = path.join(tmpDir, 'ca-bundle.crt')
+          const caBundleFileName = path.join(tmpDir, 'ca-bundle.crt')
           expect(fs.existsSync(caBundleFileName)).to.be.true
-          var actualRequestData = JSON.parse(querystring.unescape(fs.readFileSync(
+          const actualRequestData = JSON.parse(querystring.unescape(fs.readFileSync(
             caBundleFileName)))
           expect(actualRequestData).to.have.property('auth',
             userName + ':' + password)
@@ -201,7 +201,7 @@ describe('provisionconfig CLI command @cli', function () {
       // error
       sinon.stub(https, 'get').callsFake(
         pkiHelpers.createManagementServiceStub([]))
-      var command = cliHelpers.cliCommand(
+      const command = cliHelpers.cliCommand(
         function (error) {
           expect(error).to.be.an.instanceof(DxlError)
           expect(error.message).to.have.string('HTTP error code: 404')

@@ -1,30 +1,30 @@
 'use strict'
 
- // This sample demonstrates how to register a callback to receive Event
- // from the DXL fabric. Once the callback is registered, the sample sends a
- // set number of Event messages to the fabric and waits for them all to be
- // received by the callback.
+// This sample demonstrates how to register a callback to receive Event
+// from the DXL fabric. Once the callback is registered, the sample sends a
+// set number of Event messages to the fabric and waits for them all to be
+// received by the callback.
 
-var common = require('../common')
-var dxl = common.require('@opendxl/dxl-client')
+const common = require('../common')
+const dxl = common.require('@opendxl/dxl-client')
 
 // The topic to publish to
-var EVENT_TOPIC = '/isecg/sample/basicevent'
+const EVENT_TOPIC = '/isecg/sample/basicevent'
 
 // The total number of events to send
-var TOTAL_EVENTS = 1000
+const TOTAL_EVENTS = 1000
 
 // Create DXL configuration from file
-var config = dxl.Config.createDxlConfigFromFile(common.CONFIG_FILE)
+const config = dxl.Config.createDxlConfigFromFile(common.CONFIG_FILE)
 
 // Create the client
-var client = new dxl.Client(config)
+const client = new dxl.Client(config)
 
 // The number of events received
-var eventCount = 0
+let eventCount = 0
 
 // Record the start time
-var start = Date.now()
+const start = Date.now()
 
 // Create and add event listener
 client.addEventCallback(EVENT_TOPIC,
@@ -49,9 +49,9 @@ client.addEventCallback(EVENT_TOPIC,
 // when the connection has been established
 client.connect(function () {
   // Loop and send the events
-  for (var eventId = 0; eventId < TOTAL_EVENTS; eventId++) {
+  for (let eventId = 0; eventId < TOTAL_EVENTS; eventId++) {
     // Create the event
-    var event = new dxl.Event(EVENT_TOPIC)
+    const event = new dxl.Event(EVENT_TOPIC)
     // Set the payload
     event.payload = eventId.toString()
     // Send the event

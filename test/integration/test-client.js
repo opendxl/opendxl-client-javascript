@@ -1,16 +1,16 @@
 'use strict'
 
-var fs = require('fs')
-var inherits = require('inherits')
-var os = require('os')
-var path = require('path')
-var dxl = require('../..')
-var Client = dxl.Client
-var Config = dxl.Config
-var DxlError = dxl.DxlError
+const fs = require('fs')
+const inherits = require('inherits')
+const os = require('os')
+const path = require('path')
+const dxl = require('../..')
+const Client = dxl.Client
+const Config = dxl.Config
+const DxlError = dxl.DxlError
 
-var DEFAULT_TIMEOUT = 5000
-var CLIENT_CONFIG_FILE = 'client_config.cfg'
+const DEFAULT_TIMEOUT = 5000
+const CLIENT_CONFIG_FILE = 'client_config.cfg'
 
 /**
  * @classdesc Creates a test {@link Client} for integration testing.
@@ -23,13 +23,13 @@ var CLIENT_CONFIG_FILE = 'client_config.cfg'
  * @constructor
  */
 function TestClient (test, errorCallback, timeout) {
-  var that = this
+  const that = this
 
-  var configDirs = [ __dirname, os.homedir() ]
-  var configFile = null
+  const configDirs = [__dirname, os.homedir()]
+  let configFile = null
 
   configDirs.forEach(function (configDir) {
-    var candidateConfigFile = path.join(configDir, CLIENT_CONFIG_FILE)
+    const candidateConfigFile = path.join(configDir, CLIENT_CONFIG_FILE)
     if (fs.existsSync(candidateConfigFile)) {
       configFile = candidateConfigFile
     }
