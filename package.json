@@ -1,6 +1,6 @@
 {
   "name": "@opendxl/dxl-client",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "author": "Musarubra US LLC",
   "description": "An OpenDXL client library for JavaScript",
   "license": "Apache-2.0",
