@@ -8,7 +8,7 @@
 
 The OpenDXL JavaScript Client (Node.js) enables the development of applications
 that connect to the
-[Data Exchange Layer](https://www.trellix.com/assets/docs/data-sheets/trellix-dataexchangelayer-datasheet.pdf)
+[Trellix Data Exchange Layer](https://www.trellix.com/assets/docs/data-sheets/trellix-dataexchangelayer-datasheet.pdf)
 messaging fabric for the purposes of sending/receiving events and
 invoking/providing services.
 
